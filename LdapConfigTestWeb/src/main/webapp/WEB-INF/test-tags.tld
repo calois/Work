@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	version="2.0"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd">
+	<description><![CDATA["Tag Libs"]]></description>
+	<display-name>Tag Lib</display-name>
+	<tlib-version>1.0</tlib-version>
+	<short-name>test</short-name>
+	<uri>/test-tags</uri>
+	<tag>
+		<description>JavaScript static file import</description>
+		<name>js</name>
+		<tag-class>com.nasdaqomx.ldapconfig.test.web.tag.JavaScriptTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<name>src</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<tag>
+		<description>URL with context root append</description>
+		<name>url</name>
+		<tag-class>com.nasdaqomx.ldapconfig.test.web.tag.UrlTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<name>src</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<tag>
+		<description>CSS static file import</description>
+		<name>css</name>
+		<tag-class>com.nasdaqomx.ldapconfig.test.web.tag.CssTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<name>src</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>media</name>
+			<required>false</required>
+		</attribute>
+	</tag>
+</taglib>

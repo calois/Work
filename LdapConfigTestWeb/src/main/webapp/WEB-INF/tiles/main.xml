@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	<!--*************************************** Site Template ******************************************** -->
+	<definition name="siteTemplate" template="/WEB-INF/views/siteTemplate.jsp">
+	</definition>
+	<definition name="home" extends="siteTemplate">
+		<put-attribute name="body" value="/WEB-INF/views/home.bd.jsp" />
+	</definition>
+	<definition name="testCase" extends="siteTemplate">
+		<put-attribute name="body" value="/WEB-INF/views/testCase.bd.jsp" />
+	</definition>
+	<definition name="testCaseResult" extends="siteTemplate">
+		<put-attribute name="body"
+			value="/WEB-INF/views/testCaseResult.bd.jsp" />
+	</definition>
+</tiles-definitions>
