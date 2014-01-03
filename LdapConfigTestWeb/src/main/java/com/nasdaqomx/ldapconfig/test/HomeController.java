@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import br.eti.kinoshita.testlinkjavaapi.model.TestPlan;
+import br.eti.kinoshita.testlinkjavaapi.model.TestProject;
 
 import com.nasdaqomx.ldapconfig.test.base.DriverType;
 import com.nasdaqomx.ldapconfig.test.base.TestData;
 import com.nasdaqomx.ldapconfig.test.base.TestResult;
 import com.nasdaqomx.ldapconfig.test.base.TestService;
-import com.nasdaqomx.ldapconfig.test.testlink.NasdaqTestCase;
+import com.nasdaqomx.ldapconfig.test.testlink.AutomationTestCase;
 import com.nasdaqomx.ldapconfig.test.testlink.TestLinkService;
 
 /**
@@ -36,27 +37,37 @@ public class HomeController {
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
+		model.addAttribute("testProjects", testLinkService.getTestProjects());
 		return "home";
 	}
 
 	@RequestMapping(value = "/testCases", method = RequestMethod.GET)
-	public String testCase(@RequestParam String projectName,
-			@RequestParam String planName, Model model) {
+	public String testCase(@RequestParam String url,
+			@RequestParam String projectName, @RequestParam String planName,
+			Model model) {
+		testService.getProp().setProperty("baseUrl", url);
+		TestProject testProject = testLinkService
+				.getTestProjectByName(projectName);
 		TestPlan testPlan = testLinkService.getTestPlanByName(projectName,
 				planName);
-		NasdaqTestCase[] testCases = testLinkService
-				.getTestCasesForTestPlan(testPlan.getId());
-		model.addAttribute("testPlans", testPlan);
+		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan(
+				testPlan.getId(), testProject.getId());
+		model.addAttribute("testProject", testProject);
+		model.addAttribute("testPlan", testPlan);
 		model.addAttribute("testCases", testCases);
 		return "testCase";
 	}
 
-	@RequestMapping(value = "/testCase/{testCaseId}", method = RequestMethod.GET)
-	public String runTestCase(@PathVariable Integer testCaseId, Model model) {
-		NasdaqTestCase testCase = testLinkService.getTestCase(testCaseId);
-		TestResult result = testService.test(DriverType.CHROME, testCase
-				.getTestKey(), new TestData(testCase.getDataProperties(),
-				testCase.getExceptProperties()));
+	@RequestMapping(value = "/{testProjectId}/testCase/{testCaseId}", method = RequestMethod.GET)
+	public String runTestCase(@PathVariable Integer testProjectId,
+			@PathVariable Integer testCaseId, Model model) {
+		AutomationTestCase testCase = testLinkService.getTestCase(testCaseId,
+				testProjectId);
+		TestResult result = testService.test(
+				DriverType.CHROME,
+				testCase.getAutomationKey(),
+				new TestData(testCase.getInputDataProperties(), testCase
+						.getOutputProperties()));
 		model.addAttribute("result", result);
 		return "testCaseResult";
 	}

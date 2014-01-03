@@ -334,12 +334,12 @@ public abstract class AbstractTest {
 		return sb.toString();
 	}
 
-	protected String getData(String key) {
-		return testData.getData(key);
+	protected String getInputData(String key) {
+		return testData.getInputData(key);
 	}
 
-	protected String getExpect(String key) {
-		return testData.getExpect(key);
+	protected String getOutputData(String key) {
+		return testData.getOutputData(key);
 	}
 
 	/**

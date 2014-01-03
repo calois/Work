@@ -14,13 +14,17 @@ public class TestService {
 		this.prop = prop;
 	}
 
+	public Properties getProp() {
+		return this.prop;
+	}
+
 	public TestResult test(DriverType driverType, String testKey,
 			TestData testData) {
 		WebDriver webDriver = TestUtils.getWebDriver(driverType, prop);
 		TestResult result = new TestResult();
-		if (webDriver == null) {
+		if (null == webDriver) {
 			result.setStatus(TestResultStatus.INVALID);
-			result.setMessage("Invalid driver parameter.");
+			result.setMessage("Invalid Web Browser");
 			return result;
 		}
 		try {
@@ -31,20 +35,20 @@ public class TestService {
 					.getProperty("defaultWait")));
 			testObject.setPresentWait(Long.parseLong(prop
 					.getProperty("presentWait")));
-
 			String className = testKey.substring(0, testKey.lastIndexOf("."));
-			String testCase = testKey.substring(testKey.lastIndexOf(".") + 1);
+			String methodName = testKey.substring(testKey.lastIndexOf(".") + 1);
 			try {
 				Class<?> clazz = Class.forName(className);
 				AbstractTest test = (AbstractTest) clazz.newInstance();
 				test.setTestData(testData);
 				test.setTestObject(testObject);
-				Method method = clazz.getDeclaredMethod(testCase);
+				Method method = clazz.getDeclaredMethod(methodName);
 				try {
 					method.invoke(test);
 				} catch (InvocationTargetException ie) {
+					ie.printStackTrace();
 					if (ie.getTargetException() instanceof TestException) {
-						result.setStatus(TestResultStatus.FAIL);
+						result.setStatus(TestResultStatus.INVALID);
 						result.setMessage(TestUtils.getStackTrace(ie
 								.getTargetException()));
 						return result;
@@ -53,14 +57,14 @@ public class TestService {
 					}
 				}
 			} catch (Throwable e) {
+				e.printStackTrace();
 				result.setStatus(TestResultStatus.INVALID);
 				result.setMessage(TestUtils.getStackTrace(e));
 				return result;
 			}
 			return result;
 		} finally {
-			webDriver.close();
+			// webDriver.close();
 		}
 	}
-
 }

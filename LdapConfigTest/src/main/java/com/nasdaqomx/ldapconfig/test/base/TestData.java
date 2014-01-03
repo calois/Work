@@ -3,19 +3,19 @@ package com.nasdaqomx.ldapconfig.test.base;
 import java.util.Properties;
 
 public class TestData {
-	private Properties data;
-	private Properties expect;
+	private Properties inputData;
+	private Properties outputData;
 
-	public TestData(Properties data, Properties expect) {
-		this.data = data;
-		this.expect = expect;
+	public TestData(Properties inputData, Properties outputData) {
+		this.inputData = inputData;
+		this.outputData = outputData;
 	}
 
-	public String getData(String key) {
-		return data.getProperty(key);
+	public String getInputData(String key) {
+		return inputData.getProperty(key);
 	}
 
-	public String getExpect(String key) {
-		return expect.getProperty(key);
+	public String getOutputData(String key) {
+		return outputData.getProperty(key);
 	}
 }

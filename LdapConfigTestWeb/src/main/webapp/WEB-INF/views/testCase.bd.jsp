@@ -15,10 +15,10 @@
 			<tr>
 				<td>${testCase.id}</td>
 				<td>${testCase.name}</td>
-				<td>${testCase.testKey}</td>
-				<td>${testCase.data}</td>
-				<td>${testCase.expect}</td>
-				<td><a href='<test:url src="/testCase/${testCase.id}"/>' class="btn btn-primary btn-lg" role="button">Run</a></td>
+				<td>${testCase.automationKey}</td>
+				<td>${testCase.inputData}</td>
+				<td>${testCase.outputData}</td>
+				<td><a href='<test:url src="/${testProject.id}/testCase/${testCase.id}"/>' class="btn btn-primary btn-lg" role="button">Run</a></td>
 			</tr>
 		</c:forEach>
 	</tbody>

@@ -9,14 +9,13 @@
 	<context:component-scan base-package="com.nasdaqomx.ldapconfig.test" />
 	<bean class="com.nasdaqomx.ldapconfig.test.testlink.TestLinkService">
 		<property name="url"
-			value="http://127.0.0.1/testlink/lib/api/xmlrpc/v1/xmlrpc.php" />
+			value="http://au03smbcqa02.dev.smbc.nasdaqomx.com/testlink/lib/api/xmlrpc/v1/xmlrpc.php" />
 		<property name="devKey" value="6ab4b64c40af9cb23d72a1f25885b9f2" />
 	</bean>
 	<bean class="com.nasdaqomx.ldapconfig.test.base.TestService">
 		<property name="prop">
 			<props>
-				<prop key="baseUrl">http://www.google.com</prop>
-				<prop key="webdriver.chrome.driver">C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe</prop>
+				<prop key="webdriver.chrome.driver">C:\\Work\\automation2\\chromedriver.exe</prop>
 				<prop key="defaultWait">30</prop>
 				<prop key="presentWait">10</prop>
 			</props>
