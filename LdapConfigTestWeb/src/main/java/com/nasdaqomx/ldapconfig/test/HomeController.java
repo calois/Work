@@ -38,14 +38,27 @@ public class HomeController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		model.addAttribute("testProjects", testLinkService.getTestProjects());
+		//model.addAttribute("testPlans", testLinkService.getTestPlansForProject(2));
+		//model.addAttribute("builds", testLinkService.getBuildsForPlan(3732));
+		return "home";
+	}
+	
+	@RequestMapping(value = "/{testProjectId}/testPlan", method = RequestMethod.GET)
+	public String getTestPlans(@PathVariable Integer testProjectId, Model model) {
+		model.addAttribute("testPlans", testLinkService.getTestPlansForProject(testProjectId));
+		return "home";
+	}
+	@RequestMapping(value = "/{testPlanId}/build", method = RequestMethod.GET)
+	public String getBuilds(@PathVariable Integer testPlanId, Model model) {
+		model.addAttribute("builds", testLinkService.getBuildsForPlan(testPlanId));
 		return "home";
 	}
 
 	@RequestMapping(value = "/testCases", method = RequestMethod.GET)
-	public String testCase(@RequestParam String url,
+	public String testCase(@RequestParam String baseUrl,
 			@RequestParam String projectName, @RequestParam String planName,
 			Model model) {
-		testService.getProp().setProperty("baseUrl", url);
+		testService.getProp().setProperty("baseUrl", baseUrl);
 		TestProject testProject = testLinkService
 				.getTestProjectByName(projectName);
 		TestPlan testPlan = testLinkService.getTestPlanByName(projectName,
