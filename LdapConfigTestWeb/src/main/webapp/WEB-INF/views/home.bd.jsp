@@ -35,20 +35,26 @@
 	</form>
 </div>
 <script>
-	var defaultProject = "LDAP Config";
-	$('#projectName option:contains(' + defaultProject + ')').prop({
-		selected : true
-	});
-	var planName = $('#planName');
-	var build = $('#build');
 	$('#projectName').change(function() {
 		$.ajax({
 			  type: "get",
 			  url: '<test:url src="/'+$(this).val()+'/testPlan"/>'
 			})
-			  .done(function( msg ) {
-				  console.log( planName.text() );
+			  .done(function( plans ) {
+				  planName.empty();
+				  for(var i in plans){
+					  planName.append($("<option></option>")
+							     .attr("value", plans[i].id).text(plans[i].name));
+				  }
 			  });
 		console.log($(this).val());
 	});
+	var defaultProject = "LDAP Config";
+	
+	$('#projectName option:contains(' + defaultProject + ')').prop({
+		selected : true
+	});
+	var planName = $('#planName');
+	var build = $('#build');
+	
 </script>
