@@ -18,7 +18,7 @@ public class TestService {
 		return this.prop;
 	}
 
-	public TestResult test(DriverType driverType, String automationKey,
+	public TestResult run(DriverType driverType, String automationKey,
 			TestData testData) {
 		WebDriver webDriver = TestUtils.getWebDriver(driverType, prop);
 		TestResult result = new TestResult();
@@ -44,36 +44,26 @@ public class TestService {
 				AbstractTest test = (AbstractTest) clazz.newInstance();
 				test.setTestData(testData);
 				test.setTestObject(testObject);
-
-				Method beforeMethod = TestUtils.getTestBeforeMethod(test
+				Method precondition = TestUtils.getTestBeforeMethod(test
 						.getClass());
-				if (null != beforeMethod) {
+				// run precondition first
+				if (null != precondition) {
 					try {
-						beforeMethod.invoke(test);
-						test.checkForVerificationErrors();
-						test.clearVerificationErrors();
-					} catch (TestException e) {
-						result.setStatus(TestResultStatus.BLOCKED);
-						result.setMessage(TestUtils.getStackTrace(e));
-						return result;
+						precondition.invoke(test);
 					} catch (InvocationTargetException ie) {
 						if (ie.getTargetException() instanceof TestException) {
 							result.setStatus(TestResultStatus.BLOCKED);
 							result.setMessage(TestUtils.getStackTrace(ie
 									.getTargetException()));
+							result.setScreenshot(TestUtils
+									.takeScreenshot(webDriver));
+							return result;
 						} else {
-							result.setStatus(TestResultStatus.INVALID);
-							result.setMessage(TestUtils.getStackTrace(ie
-									.getTargetException()));
+							throw ie.getTargetException();
 						}
-						return result;
-					} catch (Throwable e) {
-						result.setStatus(TestResultStatus.INVALID);
-						result.setMessage(TestUtils.getStackTrace(e));
-						return result;
 					}
 				}
-
+				// run test steps
 				Method method = clazz.getDeclaredMethod(methodName);
 				try {
 					method.invoke(test);
@@ -84,13 +74,9 @@ public class TestService {
 					Method afterMethod = TestUtils.getTestAfterMethod(test
 							.getClass());
 					if (null != afterMethod) {
-						try {
-							test.clearVerificationErrors();
-							afterMethod.invoke(test);
-							test.checkForVerificationErrors();
-						} catch (Throwable e) {
-							e.printStackTrace();
-						}
+						test.clearVerificationErrors();
+						afterMethod.invoke(test);
+						test.checkForVerificationErrors();
 					}
 				}
 			} catch (TestException e) {
@@ -104,11 +90,12 @@ public class TestService {
 				result.setMessage(TestUtils.getStackTrace(e));
 				return result;
 			}
-			//No exception means passed
 			result.setStatus(TestResultStatus.PASSED);
 			return result;
 		} finally {
-			webDriver.close();
+			if (null != webDriver) {
+				webDriver.close();
+			}
 		}
 	}
 }

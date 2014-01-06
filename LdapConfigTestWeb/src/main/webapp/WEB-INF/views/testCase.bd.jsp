@@ -22,7 +22,7 @@
 				<td>${testCase.outputData}</td>
 				<td>${testCase.testResult.status}</td>
 				<td>${testCase.testResult.message}</td>
-				<td><a href='<test:url src="/${testProject.id}/testCase/${testCase.id}"/>' class="btn btn-primary btn-lg" role="button">Rerun</a></td>
+				<td><a href='<test:url src="/${testProject.id}/testCase/${testCase.id}"/>' class="btn btn-primary" role="button">Run</a></td>
 			</tr>
 		</c:forEach>
 	</tbody>

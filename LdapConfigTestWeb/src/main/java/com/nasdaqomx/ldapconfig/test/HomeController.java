@@ -69,17 +69,19 @@ public class HomeController {
 		if (null != testCases) {
 			boolean hasBuild = false;
 			Build[] builds = testLinkService.getBuildsForPlan(testPlanId);
-			for (int i = 0; i < builds.length; i++) {
-				if (build.equals(builds[i].getName())) {
-					hasBuild = true;
-					break;
+			if(null != builds){
+				for (int i = 0; i < builds.length; i++) {
+					if (build.equals(builds[i].getName())) {
+						hasBuild = true;
+						break;
+					}
 				}
 			}
 			if (!hasBuild) {
 				testLinkService.createBuild(testPlanId, build);
 			}
 			for (int i = 0; i < testCases.length; i++) {
-				TestResult result = testService.test(DriverType
+				TestResult result = testService.run(DriverType
 						.valueOf(browserType), testCases[i].getAutomationKey(),
 						new TestData(testCases[i].getInputDataProperties(),
 								testCases[i].getOutputProperties()));
@@ -103,7 +105,7 @@ public class HomeController {
 			@PathVariable Integer testCaseId, Model model) {
 		AutomationTestCase testCase = testLinkService.getTestCase(testCaseId,
 				testProjectId);
-		TestResult result = testService.test(
+		TestResult result = testService.run(
 				DriverType.CHROME,
 				testCase.getAutomationKey(),
 				new TestData(testCase.getInputDataProperties(), testCase
