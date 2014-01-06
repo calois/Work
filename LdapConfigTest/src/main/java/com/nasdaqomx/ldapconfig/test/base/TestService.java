@@ -45,6 +45,7 @@ public class TestService {
 				Method method = clazz.getDeclaredMethod(methodName);
 				try {
 					method.invoke(test);
+					test.checkForVerificationErrors();
 				} catch (InvocationTargetException ie) {
 					ie.printStackTrace();
 					if (ie.getTargetException() instanceof TestException) {
