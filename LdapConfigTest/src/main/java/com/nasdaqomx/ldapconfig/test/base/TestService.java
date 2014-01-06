@@ -47,17 +47,13 @@ public class TestService {
 					method.invoke(test);
 					test.checkForVerificationErrors();
 				} catch (InvocationTargetException ie) {
-					ie.printStackTrace();
-					if (ie.getTargetException() instanceof TestException) {
-						//Try to capture the screen here.
-						result.setStatus(TestResultStatus.FAILED);
-						result.setMessage(TestUtils.getStackTrace(ie
-								.getTargetException()));
-						return result;
-					} else {
-						throw ie.getTargetException();
-					}
+					throw ie.getTargetException();
 				}
+			} catch (TestException e) {
+				//Try to capture the screen here.
+				result.setStatus(TestResultStatus.FAILED);
+				result.setMessage(TestUtils.getStackTrace(e));
+				return result;
 			} catch (Throwable e) {
 				e.printStackTrace();
 				result.setStatus(TestResultStatus.INVALID);
