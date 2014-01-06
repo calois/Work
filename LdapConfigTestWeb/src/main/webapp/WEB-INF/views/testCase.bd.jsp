@@ -1,12 +1,14 @@
-<h1>Test Case</h1>
+<h1>Test Result List</h1>
 <table class="table table-striped">
 	<thead>
 		<tr>
 			<th>Id</th>
 			<th>Name</th>
-			<th>Test Key</th>
-			<th>Data</th>
-			<th>Expect</th>
+			<th>Automation Key</th>
+			<th>Input Data</th>
+			<th>Output Data</th>
+			<th>Test Result</th>
+			<th>Result Note</th>
 			<th>Action</th>
 		</tr>
 	</thead>
@@ -18,7 +20,9 @@
 				<td>${testCase.automationKey}</td>
 				<td>${testCase.inputData}</td>
 				<td>${testCase.outputData}</td>
-				<td><a href='<test:url src="/${testProject.id}/testCase/${testCase.id}"/>' class="btn btn-primary btn-lg" role="button">Run</a></td>
+				<td>${testCase.testResult.status}</td>
+				<td>${testCase.testResult.message}</td>
+				<td><a href='<test:url src="/${testProject.id}/testCase/${testCase.id}"/>' class="btn btn-primary btn-lg" role="button">Rerun</a></td>
 			</tr>
 		</c:forEach>
 	</tbody>

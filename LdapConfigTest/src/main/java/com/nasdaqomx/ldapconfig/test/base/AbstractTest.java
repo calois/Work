@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 import com.nasdaqomx.ldapconfig.test.base.page.AbstractPageObject;
 
 public abstract class AbstractTest {
+	
 	private TestObject testObject;
 	private TestData testData;
 

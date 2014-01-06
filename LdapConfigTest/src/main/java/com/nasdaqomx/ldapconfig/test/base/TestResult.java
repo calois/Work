@@ -1,9 +1,10 @@
 package com.nasdaqomx.ldapconfig.test.base;
 
+
 public class TestResult {
 
 	private TestResultStatus status;
-
+	private String screenshot;
 	private String message;
 
 	@Override
@@ -25,5 +26,13 @@ public class TestResult {
 
 	public void setStatus(TestResultStatus status) {
 		this.status = status;
+	}
+
+	public String getScreenshot() {
+		return screenshot;
+	}
+
+	public void setScreenshot(String screenshot) {
+		this.screenshot = screenshot;
 	}
 }

@@ -18,7 +18,7 @@ public class TestService {
 		return this.prop;
 	}
 
-	public TestResult test(DriverType driverType, String testKey,
+	public TestResult test(DriverType driverType, String automationKey,
 			TestData testData) {
 		WebDriver webDriver = TestUtils.getWebDriver(driverType, prop);
 		TestResult result = new TestResult();
@@ -35,8 +35,8 @@ public class TestService {
 					.getProperty("defaultWait")));
 			testObject.setPresentWait(Long.parseLong(prop
 					.getProperty("presentWait")));
-			String className = testKey.substring(0, testKey.lastIndexOf("."));
-			String methodName = testKey.substring(testKey.lastIndexOf(".") + 1);
+			String className = automationKey.substring(0, automationKey.lastIndexOf("."));
+			String methodName = automationKey.substring(automationKey.lastIndexOf(".") + 1);
 			try {
 				Class<?> clazz = Class.forName(className);
 				AbstractTest test = (AbstractTest) clazz.newInstance();
@@ -50,9 +50,9 @@ public class TestService {
 					throw ie.getTargetException();
 				}
 			} catch (TestException e) {
-				//Try to capture the screen here.
 				result.setStatus(TestResultStatus.FAILED);
 				result.setMessage(TestUtils.getStackTrace(e));
+				result.setScreenshot(TestUtils.takeScreenshot(webDriver));
 				return result;
 			} catch (Throwable e) {
 				e.printStackTrace();

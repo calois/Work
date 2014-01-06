@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import br.eti.kinoshita.testlinkjavaapi.model.Build;
 import br.eti.kinoshita.testlinkjavaapi.model.TestPlan;
-import br.eti.kinoshita.testlinkjavaapi.model.TestProject;
 
 import com.nasdaqomx.ldapconfig.test.base.DriverType;
 import com.nasdaqomx.ldapconfig.test.base.TestData;
@@ -38,35 +39,61 @@ public class HomeController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		model.addAttribute("testProjects", testLinkService.getTestProjects());
-		//model.addAttribute("testPlans", testLinkService.getTestPlansForProject(2));
-		//model.addAttribute("builds", testLinkService.getBuildsForPlan(3732));
-		return "home";
-	}
-	
-	@RequestMapping(value = "/{testProjectId}/testPlan", method = RequestMethod.GET)
-	public String getTestPlans(@PathVariable Integer testProjectId, Model model) {
-		model.addAttribute("testPlans", testLinkService.getTestPlansForProject(testProjectId));
-		return "home";
-	}
-	@RequestMapping(value = "/{testPlanId}/build", method = RequestMethod.GET)
-	public String getBuilds(@PathVariable Integer testPlanId, Model model) {
-		model.addAttribute("builds", testLinkService.getBuildsForPlan(testPlanId));
+		model.addAttribute("testPlans",
+				testLinkService.getTestPlansForProject(2));
 		return "home";
 	}
 
-	@RequestMapping(value = "/testCases", method = RequestMethod.GET)
-	public String testCase(@RequestParam String baseUrl,
-			@RequestParam String projectName, @RequestParam String planName,
+	@RequestMapping(value = "/{testProjectId}/testPlan", method = RequestMethod.GET)
+	@ResponseBody
+	public TestPlan[] getTestPlans(@PathVariable Integer testProjectId,
 			Model model) {
-		testService.getProp().setProperty("baseUrl", baseUrl);
-		TestProject testProject = testLinkService
-				.getTestProjectByName(projectName);
-		TestPlan testPlan = testLinkService.getTestPlanByName(projectName,
-				planName);
+		return testLinkService.getTestPlansForProject(testProjectId);
+	}
+
+	@RequestMapping(value = "/{testPlanId}/build", method = RequestMethod.GET)
+	@ResponseBody
+	public Build[] getBuilds(@PathVariable Integer testPlanId, Model model) {
+		return testLinkService.getBuildsForPlan(testPlanId);
+	}
+
+	@RequestMapping(value = "/executeTestCases", method = RequestMethod.GET)
+	public String executeTestCases(@RequestParam String browserType,
+			@RequestParam String url, @RequestParam String projectId,
+			@RequestParam String planId, @RequestParam String build, Model model) {
+		Integer testProjectId = Integer.valueOf(projectId);
+		Integer testPlanId = Integer.valueOf(planId);
+		testService.getProp().setProperty("baseUrl", url);
 		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan(
-				testPlan.getId(), testProject.getId());
-		model.addAttribute("testProject", testProject);
-		model.addAttribute("testPlan", testPlan);
+				testPlanId, testProjectId);
+		if (null != testCases) {
+			boolean hasBuild = false;
+			Build[] builds = testLinkService.getBuildsForPlan(testPlanId);
+			for (int i = 0; i < builds.length; i++) {
+				if (build.equals(builds[i].getName())) {
+					hasBuild = true;
+					break;
+				}
+			}
+			if (!hasBuild) {
+				testLinkService.createBuild(testPlanId, build);
+			}
+			for (int i = 0; i < testCases.length; i++) {
+				TestResult result = testService.test(DriverType
+						.valueOf(browserType), testCases[i].getAutomationKey(),
+						new TestData(testCases[i].getInputDataProperties(),
+								testCases[i].getOutputProperties()));
+				testCases[i].setTestResult(result);
+				Integer executionId = testLinkService.reportResult(
+						testCases[i].getId(), Integer.valueOf(planId), build,
+						result);
+				if (null != result.getScreenshot()) {
+					testLinkService.uploadExecutionAttachment(executionId,
+							"Screenshot_" + System.currentTimeMillis(),
+							result.getScreenshot());
+				}
+			}
+		}
 		model.addAttribute("testCases", testCases);
 		return "testCase";
 	}

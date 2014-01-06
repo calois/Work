@@ -9,7 +9,6 @@ import br.eti.kinoshita.testlinkjavaapi.constants.ExecutionStatus;
 import br.eti.kinoshita.testlinkjavaapi.constants.ExecutionType;
 import br.eti.kinoshita.testlinkjavaapi.model.Attachment;
 import br.eti.kinoshita.testlinkjavaapi.model.Build;
-import br.eti.kinoshita.testlinkjavaapi.model.ReportTCResultResponse;
 import br.eti.kinoshita.testlinkjavaapi.model.TestCase;
 import br.eti.kinoshita.testlinkjavaapi.model.TestPlan;
 import br.eti.kinoshita.testlinkjavaapi.model.TestProject;
@@ -19,15 +18,17 @@ import com.nasdaqomx.ldapconfig.test.base.TestResult;
 import com.nasdaqomx.ldapconfig.test.base.TestResultStatus;
 
 public class TestLinkService {
+
+	private final ExecutionType AUTOMATED = ExecutionType.AUTOMATED;
+	private final boolean GETSTEPINFO = true;
+
 	private URL testLinkUrl;
 	private String devKey;
 	private TestLinkAPI api;
-	private String automationKeyFieldName = "Automation Key";
-	private String inputDataFieldName = "Input Data";
-	private String outputDataFieldName = "Output Data";
-	private boolean overwriteTestResult = true;
-	private ExecutionType AUTOMATED = ExecutionType.AUTOMATED;
-	private boolean GETSTEPINFO = true;
+	private String automationKeyFieldName;
+	private String inputDataFieldName;
+	private String outputDataFieldName;
+	private boolean overwriteTestResult;
 
 	@PostConstruct
 	public void init() {
@@ -40,6 +41,22 @@ public class TestLinkService {
 
 	public void setDevKey(String devKey) {
 		this.devKey = devKey;
+	}
+
+	public void setAutomationKeyFieldName(String name) {
+		this.automationKeyFieldName = name;
+	}
+
+	public void setInputDataFieldName(String name) {
+		this.inputDataFieldName = name;
+	}
+
+	public void setOutputDataFieldName(String name) {
+		this.outputDataFieldName = name;
+	}
+
+	public void setOverwriteTestResult(boolean overwriteTestResult) {
+		this.overwriteTestResult = overwriteTestResult;
 	}
 
 	public AutomationTestCase[] getTestCasesForSuite(Integer testSuiteId,
@@ -94,34 +111,22 @@ public class TestLinkService {
 
 	}
 
-	public ReportTCResultResponse reportResult(Integer testCaseId,
-			Integer testPlanId, String buildName, TestResult result) {
+	public Integer reportResult(Integer testCaseId, Integer testPlanId,
+			String buildName, TestResult result) {
 		if (TestResultStatus.INVALID.equals(result.getStatus())) {
 			return null;
 		} else {
-			boolean hasBuild = false;
-			Build[] builds = getBuildsForPlan(testPlanId);
-			for (int i = 0; i < builds.length; i++) {
-				if (buildName.equals(builds[i].getName())) {
-					hasBuild = true;
-					break;
-				}
-			}
-			if (!hasBuild) {
-				createBuild(testPlanId, buildName);
-			}
 			return api.reportTCResult(testCaseId, null, testPlanId,
 					ExecutionStatus.valueOf(result.getStatus().toString()),
 					null, buildName, result.getMessage(), false, null, null,
-					null, null, overwriteTestResult);
+					null, null, overwriteTestResult).getExecutionId();
 		}
 	}
 
 	public Attachment uploadExecutionAttachment(Integer executionId,
-			String title, String description, String fileName,
-			String fileContent) {
-		return api.uploadExecutionAttachment(executionId, title, description,
-				fileName, "image/jpg", fileContent);
+			String fileName, String fileContent) {
+		return api.uploadExecutionAttachment(executionId, null, null, fileName,
+				"image/png", fileContent);
 	}
 
 	public TestProject[] getTestProjects() {

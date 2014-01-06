@@ -17,6 +17,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -61,6 +63,10 @@ public class TestUtils {
 		default:
 			return null;
 		}
+	}
+
+	public static String takeScreenshot(WebDriver driver) {
+		return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
 	}
 
 	public static Properties toProperties(String s) {

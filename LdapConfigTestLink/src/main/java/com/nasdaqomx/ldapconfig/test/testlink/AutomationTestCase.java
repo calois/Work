@@ -7,6 +7,7 @@ import br.eti.kinoshita.testlinkjavaapi.constants.TestImportance;
 import br.eti.kinoshita.testlinkjavaapi.model.TestCase;
 import br.eti.kinoshita.testlinkjavaapi.model.TestCaseStep;
 
+import com.nasdaqomx.ldapconfig.test.base.TestResult;
 import com.nasdaqomx.ldapconfig.test.base.TestUtils;
 
 public class AutomationTestCase {
@@ -15,6 +16,11 @@ public class AutomationTestCase {
 	private String automationKey;
 	private String inputData;
 	private String outputData;
+	private TestResult result;
+
+	public AutomationTestCase(TestCase testCase) {
+		this.testCase = testCase;
+	}
 
 	public String getAutomationKey() {
 		return automationKey;
@@ -120,7 +126,11 @@ public class AutomationTestCase {
 		testCase.setFullExternalId(externalId);
 	}
 
-	public AutomationTestCase(TestCase testCase) {
-		this.testCase = testCase;
+	public TestResult getTestResult() {
+		return result;
+	}
+
+	public void setTestResult(TestResult result) {
+		this.result = result;
 	}
 }
