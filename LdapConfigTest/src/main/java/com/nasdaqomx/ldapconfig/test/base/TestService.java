@@ -48,7 +48,7 @@ public class TestService {
 				} catch (InvocationTargetException ie) {
 					ie.printStackTrace();
 					if (ie.getTargetException() instanceof TestException) {
-						result.setStatus(TestResultStatus.INVALID);
+						result.setStatus(TestResultStatus.FAILED);
 						result.setMessage(TestUtils.getStackTrace(ie
 								.getTargetException()));
 						return result;
@@ -64,7 +64,7 @@ public class TestService {
 			}
 			return result;
 		} finally {
-			// webDriver.close();
+			webDriver.close();
 		}
 	}
 }
