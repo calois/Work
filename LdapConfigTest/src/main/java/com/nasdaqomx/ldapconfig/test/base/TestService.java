@@ -42,12 +42,39 @@ public class TestService {
 				AbstractTest test = (AbstractTest) clazz.newInstance();
 				test.setTestData(testData);
 				test.setTestObject(testObject);
+
+				Method beforeMethod = TestUtils.getTestBeforeMethod(test
+						.getClass());
+				if (null != beforeMethod) {
+					try {
+						beforeMethod.invoke(test);
+						test.checkForVerificationErrors();
+						test.clearVerificationErrors();
+					} catch (Exception e) {
+						result.setStatus(TestResultStatus.BLOCKED);
+						result.setMessage(TestUtils.getStackTrace(e));
+						return result;
+					}
+				}
+
 				Method method = clazz.getDeclaredMethod(methodName);
 				try {
 					method.invoke(test);
 					test.checkForVerificationErrors();
 				} catch (InvocationTargetException ie) {
 					throw ie.getTargetException();
+				} finally {
+					Method afterMethod = TestUtils.getTestAfterMethod(test
+							.getClass());
+					if (null != afterMethod) {
+						try {
+							test.clearVerificationErrors();
+							afterMethod.invoke(test);
+							test.checkForVerificationErrors();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
 				}
 			} catch (TestException e) {
 				//Try to capture the screen here.

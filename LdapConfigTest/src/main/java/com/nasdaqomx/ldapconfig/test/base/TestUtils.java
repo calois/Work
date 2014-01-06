@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Method;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -21,6 +22,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
+
+import com.nasdaqomx.ldapconfig.test.base.anno.TestAfter;
+import com.nasdaqomx.ldapconfig.test.base.anno.TestBefore;
 
 public class TestUtils {
 	private static final Log LOGGER = LogFactory.getLog(TestUtils.class);
@@ -147,5 +151,23 @@ public class TestUtils {
 
 	public static String formatDateString(Date date, String pattern) {
 		return new SimpleDateFormat(pattern).format(date);
+	}
+
+	public static Method getTestBeforeMethod(Class<? extends AbstractTest> clazz) {
+		for (Method method : clazz.getDeclaredMethods()) {
+			if (method.getAnnotation(TestBefore.class) != null) {
+				return method;
+			}
+		}
+		return null;
+	}
+
+	public static Method getTestAfterMethod(Class<? extends AbstractTest> clazz) {
+		for (Method method : clazz.getDeclaredMethods()) {
+			if (method.getAnnotation(TestAfter.class) != null) {
+				return method;
+			}
+		}
+		return null;
 	}
 }
