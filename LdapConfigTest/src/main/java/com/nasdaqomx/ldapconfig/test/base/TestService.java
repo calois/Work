@@ -48,6 +48,7 @@ public class TestService {
 				} catch (InvocationTargetException ie) {
 					ie.printStackTrace();
 					if (ie.getTargetException() instanceof TestException) {
+						//Try to capture the screen here.
 						result.setStatus(TestResultStatus.FAILED);
 						result.setMessage(TestUtils.getStackTrace(ie
 								.getTargetException()));
@@ -62,6 +63,8 @@ public class TestService {
 				result.setMessage(TestUtils.getStackTrace(e));
 				return result;
 			}
+			//No exception means passed
+			result.setStatus(TestResultStatus.PASSED);
 			return result;
 		} finally {
 			webDriver.close();
