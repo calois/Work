@@ -61,10 +61,16 @@ public class TestService {
 							result.setStatus(TestResultStatus.BLOCKED);
 							result.setMessage(TestUtils.getStackTrace(ie
 									.getTargetException()));
+						} else {
+							result.setStatus(TestResultStatus.INVALID);
+							result.setMessage(TestUtils.getStackTrace(ie
+									.getTargetException()));
 						}
+						return result;
 					} catch (Throwable e) {
 						result.setStatus(TestResultStatus.INVALID);
 						result.setMessage(TestUtils.getStackTrace(e));
+						return result;
 					}
 				}
 
