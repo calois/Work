@@ -35,8 +35,10 @@ public class TestService {
 					.getProperty("defaultWait")));
 			testObject.setPresentWait(Long.parseLong(prop
 					.getProperty("presentWait")));
-			String className = automationKey.substring(0, automationKey.lastIndexOf("."));
-			String methodName = automationKey.substring(automationKey.lastIndexOf(".") + 1);
+			String className = automationKey.substring(0,
+					automationKey.lastIndexOf("."));
+			String methodName = automationKey.substring(automationKey
+					.lastIndexOf(".") + 1);
 			try {
 				Class<?> clazz = Class.forName(className);
 				AbstractTest test = (AbstractTest) clazz.newInstance();
@@ -50,10 +52,19 @@ public class TestService {
 						beforeMethod.invoke(test);
 						test.checkForVerificationErrors();
 						test.clearVerificationErrors();
-					} catch (Exception e) {
+					} catch (TestException e) {
 						result.setStatus(TestResultStatus.BLOCKED);
 						result.setMessage(TestUtils.getStackTrace(e));
 						return result;
+					} catch (InvocationTargetException ie) {
+						if (ie.getTargetException() instanceof TestException) {
+							result.setStatus(TestResultStatus.BLOCKED);
+							result.setMessage(TestUtils.getStackTrace(ie
+									.getTargetException()));
+						}
+					} catch (Throwable e) {
+						result.setStatus(TestResultStatus.INVALID);
+						result.setMessage(TestUtils.getStackTrace(e));
 					}
 				}
 
@@ -71,7 +82,7 @@ public class TestService {
 							test.clearVerificationErrors();
 							afterMethod.invoke(test);
 							test.checkForVerificationErrors();
-						} catch (Exception e) {
+						} catch (Throwable e) {
 							e.printStackTrace();
 						}
 					}
