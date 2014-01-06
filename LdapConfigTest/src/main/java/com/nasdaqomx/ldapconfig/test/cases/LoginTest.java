@@ -20,6 +20,6 @@ public class LoginTest extends AbstractTest {
 	public void testLogin() {
 		LoginPage loginPage = createPageObject(LoginPage.class);
 		loginPage.login(getInputData("username"), getInputData("password"));
-		// assertEquals("asdasd", getOutputData("test1"));
+		assertEquals("asdasd", getOutputData("test1"));
 	}
 }
