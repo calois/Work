@@ -160,7 +160,11 @@ public class TestUtils {
 	}
 
 	public static Method getTestBeforeMethod(Class<? extends AbstractTest> clazz) {
+		System.out.println(clazz.getName());
 		for (Method method : clazz.getDeclaredMethods()) {
+			System.out.println(method.getName() + " "
+					+ method.getAnnotation(TestBefore.class) + " "
+					+ method.getAnnotations().length);
 			if (method.getAnnotation(TestBefore.class) != null) {
 				return method;
 			}
