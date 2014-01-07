@@ -17,7 +17,7 @@ public class MainPage extends AbstractPageObject {
 	private final String REPORTS_LOCATOR = "//div[@id='mainMenu']//a[text()='Reports']";
 	private final String NOTIFICATIONS_LOCATOR = "//div[@id='mainMenu']//a[text()='Notifications']";
 	private final String REMOTE_ADMIN_LOCATOR = "//div[@id='mainMenu']//a[text()='Remote Admin']";
-	private final String LOGOUT_LOCATOR = "//div[@id='mainMenu']//a[text()='Logout']";
+	private final String LOGOUT_LOCATOR = "logout";
 
 	private WebElement managers;
 	private WebElement markets;
@@ -38,7 +38,7 @@ public class MainPage extends AbstractPageObject {
 			reports = getBy(By.xpath(REPORTS_LOCATOR));
 			notifications = getBy(By.xpath(NOTIFICATIONS_LOCATOR));
 			remoteAdmin = getBy(By.xpath(REMOTE_ADMIN_LOCATOR));
-			logout = getBy(By.xpath(LOGOUT_LOCATOR));
+			logout = getBy(By.id(LOGOUT_LOCATOR));
 		} catch (NoSuchElementException e) {
 			AbstractTest.fail(e.getMessage());
 		}

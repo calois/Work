@@ -13,7 +13,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.nasdaqomx.ldapconfig.test.base.TestException;
 import com.nasdaqomx.ldapconfig.test.base.TestObject;
 
 public abstract class AbstractPageObject {
@@ -32,7 +31,8 @@ public abstract class AbstractPageObject {
 					testObject);
 			return o;
 		} catch (Exception e) {
-			throw new TestException("Fail to create page object", e);
+			throw new RuntimeException("Fail to create page object: "
+					+ clazz.getSimpleName(), e);
 		}
 	}
 
