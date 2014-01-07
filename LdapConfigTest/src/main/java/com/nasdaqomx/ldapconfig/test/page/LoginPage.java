@@ -21,13 +21,16 @@ public class LoginPage extends AbstractPageObject {
 	private final String PASSWORD_LOCATOR = "j_password";
 	// <input type="submit" value="Login">
 	private final String LOGIN_LOCATOR = "//input[@type='submit']";
+	private final String INFO_MSG_LOCATOR = "infomessage";
 	// <a href="forgottenPassword.view">Forgotten your password?</a>
-	private final String FORGOTTEN_PASSWORD_LOCATOR = "Forgotten your password";
+	// private final String FORGOTTEN_PASSWORD_LOCATOR =
+	// "Forgotten your password";
 
 	private WebElement userName;
 	private WebElement password;
 	private WebElement loginButton;
-	private WebElement forgottenPassword;
+
+	// private WebElement forgottenPassword;
 
 	/*
 	 * <div id="LdapFooter"> <div id="ProductInfo"> <ul>
@@ -40,16 +43,22 @@ public class LoginPage extends AbstractPageObject {
 	 */
 	public LoginPage(TestObject testObject) {
 		super(testObject);
-		load("/");
+		load();
 		try {
 			userName = getBy(By.name(USER_NAME_LOCATOR));
 			password = getBy(By.name(PASSWORD_LOCATOR));
 			loginButton = getBy(By.xpath(LOGIN_LOCATOR));
-			forgottenPassword = getBy(By
-					.partialLinkText(FORGOTTEN_PASSWORD_LOCATOR));
+			/*
+			 * forgottenPassword = getBy(By
+			 * .partialLinkText(FORGOTTEN_PASSWORD_LOCATOR));
+			 */
 		} catch (NoSuchElementException e) {
 			AbstractTest.fail(e.getMessage());
 		}
+	}
+
+	public String getInfoMsg() {
+		return getBy(By.id(INFO_MSG_LOCATOR)).getText();
 	}
 
 	public void typeUserName(String name) {
@@ -67,18 +76,25 @@ public class LoginPage extends AbstractPageObject {
 	public String getPassword() {
 		return this.password.getText();
 	}
-	
-	public void clickLogin(){
+
+	public MainPage submitLogin() {
 		this.loginButton.click();
+		return createPageObject(MainPage.class);
 	}
-	
-	public void clickForgottenPassword(){
-		this.forgottenPassword.click();
+
+	public LoginPage submitLoginExpectingFailure() {
+		this.loginButton.click();
+		return this;
 	}
-	
-	public void login(String name, String pwd){
+
+	/*
+	 * public void clickForgottenPassword(){ this.forgottenPassword.click(); }
+	 */
+
+	public MainPage loginAs(String name, String pwd) {
 		typeUserName(name);
 		typePassword(pwd);
-		clickLogin();
+		submitLogin();
+		return createPageObject(MainPage.class);
 	}
 }

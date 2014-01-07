@@ -40,12 +40,20 @@ public abstract class AbstractPageObject {
 		return getDriver().getCurrentUrl();
 	}
 
+	public String getUrl() {
+		return getCurrentUrl().substring(getCurrentUrl().lastIndexOf("/") + 1);
+	}
+
 	protected String getTitle() {
 		return getDriver().getTitle();
 	}
 
 	protected void load(String url) {
 		getDriver().get(testObject.getBaseUrl() + url);
+	}
+
+	protected void load() {
+		getDriver().get(testObject.getBaseUrl());
 	}
 
 	protected WebDriver getDriver() {

@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 import com.nasdaqomx.ldapconfig.test.base.page.AbstractPageObject;
 
 public abstract class AbstractTest {
-	
+
 	private TestObject testObject;
 	private TestData testData;
 
@@ -63,10 +63,6 @@ public abstract class AbstractTest {
 		} catch (TestException e) {
 			verificationErrors.append(TestUtils.getStackTrace(e));
 		}
-	}
-
-	public void setTestObject(TestObject testObject) {
-		this.testObject = testObject;
 	}
 
 	/** Like JUnit's Assert.assertEquals, but knows how to compare string arrays */
@@ -343,10 +339,10 @@ public abstract class AbstractTest {
 		return testData.getOutputData(key);
 	}
 
-	/**
-	 * @param testData
-	 *            the testData to set
-	 */
+	public void setTestObject(TestObject testObject) {
+		this.testObject = testObject;
+	}
+
 	public void setTestData(TestData testData) {
 		this.testData = testData;
 	}
