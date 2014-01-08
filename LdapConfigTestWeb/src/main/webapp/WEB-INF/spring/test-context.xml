@@ -16,7 +16,7 @@
 		<property name="outputDataFieldName" value="Output Data" />
 		<property name="overwriteTestResult" value="true" />
 	</bean>
-	<bean class="com.nasdaqomx.selenium.test.base.TestService">
+	<bean class="com.nasdaqomx.selenium.test.base.TestService" scope="session">
 		<property name="chromeDriver" value="C:\\Work\\automation2\\chromedriver.exe" />
 		<property name="defaultWait" value="30" />
 		<property name="presentWait" value="10" />
