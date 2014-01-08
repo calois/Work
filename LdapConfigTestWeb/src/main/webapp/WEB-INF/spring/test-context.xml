@@ -17,12 +17,8 @@
 		<property name="overwriteTestResult" value="true" />
 	</bean>
 	<bean class="com.nasdaqomx.ldapconfig.test.base.TestService">
-		<property name="prop">
-			<props>
-				<prop key="webdriver.chrome.driver">C:\\Work\\automation2\\chromedriver.exe</prop>
-				<prop key="defaultWait">30</prop>
-				<prop key="presentWait">10</prop>
-			</props>
-		</property>
+		<property name="chromeDriver" value="C:\\Work\\automation2\\chromedriver.exe" />
+		<property name="defaultWait" value="30" />
+		<property name="presentWait" value="10" />
 	</bean>
 </beans>
