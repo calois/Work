@@ -9,7 +9,6 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Properties;
@@ -31,28 +30,18 @@ import com.nasdaqomx.ldapconfig.test.base.anno.TestBefore;
 public class TestUtils {
 	private static final Log LOGGER = LogFactory.getLog(TestUtils.class);
 
-	public static WebDriver getWebDriver(DriverType driverType, Properties prop) {
+	public static WebDriver getWebDriver(String driverType,
+			String chromeDriver, String defaultWait) {
 		DesiredCapabilities capabilities;
 		WebDriver driver;
-		switch (driverType) {
+		switch (DriverType.valueOf(driverType)) {
 		case CHROME:
-			System.setProperty("webdriver.chrome.driver",
-					prop.getProperty("webdriver.chrome.driver"));
+			System.setProperty("webdriver.chrome.driver", chromeDriver);
 			capabilities = DesiredCapabilities.chrome();
-			if (!isEmpty(prop.getProperty("chrome.binary"))) {
-				capabilities.setCapability("chrome.binary",
-						prop.getProperty("chrome.binary"));
-			}
-			String switches = prop.getProperty("chrome.switches");
-			if (!isEmpty(switches)) {
-				capabilities.setCapability("chrome.switches",
-						Arrays.asList(switches.split(",")));
-			}
 			driver = new ChromeDriver(capabilities);
 			driver.manage()
 					.timeouts()
-					.implicitlyWait(
-							Long.parseLong(prop.getProperty("defaultWait")),
+					.implicitlyWait(Long.parseLong(defaultWait),
 							TimeUnit.SECONDS);
 			return driver;
 		case FIREFOX:
@@ -60,8 +49,7 @@ public class TestUtils {
 			driver = new FirefoxDriver(capabilities);
 			driver.manage()
 					.timeouts()
-					.implicitlyWait(
-							Long.parseLong(prop.getProperty("defaultWait")),
+					.implicitlyWait(Long.parseLong(defaultWait),
 							TimeUnit.SECONDS);
 			return driver;
 		default:

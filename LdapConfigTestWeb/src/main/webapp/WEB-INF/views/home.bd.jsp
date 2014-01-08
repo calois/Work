@@ -1,8 +1,7 @@
 <div class="container">
 	<h2>Test Config</h2>
 	<br>
-	<form role="form" style="width: 600px;"
-		action='<test:url src="/executeTestCases"/>'>
+	<form role="form" style="width: 600px;">
 		<div class="form-group">
 			<label for="browser">Test Browser:</label> <select required
 				class="form-control" id="browser" name="browserType">
@@ -41,7 +40,8 @@
 			<span class="help-block">Build/Release will be created
 				automatically in TestLink if not existing.</span>
 		</div>
-		<button type="submit" class="btn btn-default">Submit</button>
+		<button type="submit" formaction='<test:url src="/viewTestCases"/>' class="btn btn-default">View Test Cases</button>
+		<button type="submit" formaction='<test:url src="/runTestCases"/>' class="btn btn-default">Run Test Cases</button>
 	</form>
 </div>
 <script>

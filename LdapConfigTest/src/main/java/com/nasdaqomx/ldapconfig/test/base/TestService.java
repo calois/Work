@@ -2,25 +2,61 @@ package com.nasdaqomx.ldapconfig.test.base;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Properties;
 
 import org.openqa.selenium.WebDriver;
 
 public class TestService {
 
-	private Properties prop;
+	private String chromeDriver;
+	private String driverType;
+	private String defaultWait;
+	private String presentWait;
+	private String baseUrl;
 
-	public void setProp(Properties prop) {
-		this.prop = prop;
+	public String getChromeDriver() {
+		return chromeDriver;
 	}
 
-	public Properties getProp() {
-		return this.prop;
+	public void setChromeDriver(String chromeDriver) {
+		this.chromeDriver = chromeDriver;
 	}
 
-	public TestResult run(DriverType driverType, String automationKey,
+	public String getDriverType() {
+		return driverType;
+	}
+
+	public void setDriverType(String driverType) {
+		this.driverType = driverType;
+	}
+
+	public String getDefaultWait() {
+		return defaultWait;
+	}
+
+	public void setDefaultWait(String defaultWait) {
+		this.defaultWait = defaultWait;
+	}
+
+	public String getPresentWait() {
+		return presentWait;
+	}
+
+	public void setPresentWait(String presentWait) {
+		this.presentWait = presentWait;
+	}
+
+	public String getBaseUrl() {
+		return baseUrl;
+	}
+
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
+	}
+
+	public TestResult run(String automationKey,
 			TestData testData) {
-		WebDriver webDriver = TestUtils.getWebDriver(driverType, prop);
+		WebDriver webDriver = TestUtils.getWebDriver(driverType, chromeDriver,
+				defaultWait);
 		TestResult result = new TestResult();
 		if (null == webDriver) {
 			result.setStatus(TestResultStatus.INVALID);
@@ -30,11 +66,9 @@ public class TestService {
 		try {
 			TestObject testObject = new TestObject();
 			testObject.setWebDriver(webDriver);
-			testObject.setBaseUrl(prop.getProperty("baseUrl"));
-			testObject.setDefaultWait(Long.parseLong(prop
-					.getProperty("defaultWait")));
-			testObject.setPresentWait(Long.parseLong(prop
-					.getProperty("presentWait")));
+			testObject.setBaseUrl(baseUrl);
+			testObject.setDefaultWait(Long.parseLong(defaultWait));
+			testObject.setPresentWait(Long.parseLong(presentWait));
 			String className = automationKey.substring(0,
 					automationKey.lastIndexOf("."));
 			String methodName = automationKey.substring(automationKey

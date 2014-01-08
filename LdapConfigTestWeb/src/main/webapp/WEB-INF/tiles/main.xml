@@ -9,11 +9,7 @@
 	<definition name="home" extends="siteTemplate">
 		<put-attribute name="body" value="/WEB-INF/views/home.bd.jsp" />
 	</definition>
-	<definition name="testCase" extends="siteTemplate">
+	<definition name="testList" extends="siteTemplate">
 		<put-attribute name="body" value="/WEB-INF/views/testCase.bd.jsp" />
-	</definition>
-	<definition name="testCaseResult" extends="siteTemplate">
-		<put-attribute name="body"
-			value="/WEB-INF/views/testCaseResult.bd.jsp" />
 	</definition>
 </tiles-definitions>

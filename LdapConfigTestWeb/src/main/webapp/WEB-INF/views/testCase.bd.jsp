@@ -1,4 +1,6 @@
-<h1>Test Result List</h1>
+<h1>Test List</h1>
+<a href='<test:url src="/${projectId}/${planId}/${build}/testCases"/>'
+	class="btn btn-primary btn-lg" role="button">Run All Test Cases</a>
 <table class="table table-striped">
 	<thead>
 		<tr>
@@ -20,10 +22,29 @@
 				<td>${testCase.automationKey}</td>
 				<td>${testCase.inputData}</td>
 				<td>${testCase.outputData}</td>
-				<td>${testCase.testResult.status}</td>
-				<td>${testCase.testResult.message}</td>
-				<td><a href='<test:url src="/${testProject.id}/testCase/${testCase.id}"/>' class="btn btn-primary" role="button">Run</a></td>
+				<td id="${testCase.id}_status">${testCase.testResult.status}</td>
+				<td id="${testCase.id}_message">${testCase.testResult.message}</td>
+				<td><button
+					url='<test:url src="/${projectId}/${planId}/${build}/testCase/${testCase.id}"/>'
+					class="btn btn-primary" role="button">Run</button></td>
 			</tr>
 		</c:forEach>
 	</tbody>
 </table>
+<script>
+	$('button[url]').click(
+			function() {
+				$.ajax({
+					type : "get",
+					url : $(this).attr("url")
+				}).done(
+						function(testCase) {
+							$('#' + testCase.id + '_status').text(
+									testCase.testResult.status);
+							if (null != testCase.testResult.message) {
+								$('#' + testCase.id + '_message').text(
+										testCase.testResult.message);
+							}
+						});
+			});
+</script>

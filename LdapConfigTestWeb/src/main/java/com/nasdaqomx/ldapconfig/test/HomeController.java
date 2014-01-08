@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import br.eti.kinoshita.testlinkjavaapi.model.Build;
 import br.eti.kinoshita.testlinkjavaapi.model.TestPlan;
 
-import com.nasdaqomx.ldapconfig.test.base.DriverType;
 import com.nasdaqomx.ldapconfig.test.base.TestData;
 import com.nasdaqomx.ldapconfig.test.base.TestResult;
 import com.nasdaqomx.ldapconfig.test.base.TestService;
@@ -57,19 +56,20 @@ public class HomeController {
 		return testLinkService.getBuildsForPlan(testPlanId);
 	}
 
-	@RequestMapping(value = "/executeTestCases", method = RequestMethod.GET)
-	public String executeTestCases(@RequestParam String browserType,
+	@RequestMapping(value = "/runTestCases", method = RequestMethod.GET)
+	public String runTestCases(@RequestParam String browserType,
 			@RequestParam String url, @RequestParam String projectId,
 			@RequestParam String planId, @RequestParam String build, Model model) {
 		Integer testProjectId = Integer.valueOf(projectId);
 		Integer testPlanId = Integer.valueOf(planId);
-		testService.getProp().setProperty("baseUrl", url);
+		testService.setBaseUrl(url);
+		testService.setDriverType(browserType);
 		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan(
 				testPlanId, testProjectId);
 		if (null != testCases) {
 			boolean hasBuild = false;
 			Build[] builds = testLinkService.getBuildsForPlan(testPlanId);
-			if(null != builds){
+			if (null != builds) {
 				for (int i = 0; i < builds.length; i++) {
 					if (build.equals(builds[i].getName())) {
 						hasBuild = true;
@@ -81,8 +81,8 @@ public class HomeController {
 				testLinkService.createBuild(testPlanId, build);
 			}
 			for (int i = 0; i < testCases.length; i++) {
-				TestResult result = testService.run(DriverType
-						.valueOf(browserType), testCases[i].getAutomationKey(),
+				TestResult result = testService.run(testCases[i]
+						.getAutomationKey(),
 						new TestData(testCases[i].getInputDataProperties(),
 								testCases[i].getOutputProperties()));
 				testCases[i].setTestResult(result);
@@ -97,20 +97,74 @@ public class HomeController {
 			}
 		}
 		model.addAttribute("testCases", testCases);
-		return "testCase";
+		model.addAttribute("projectId", projectId);
+		model.addAttribute("planId", planId);
+		model.addAttribute("build", build);
+		return "testList";
 	}
 
-	@RequestMapping(value = "/{testProjectId}/testCase/{testCaseId}", method = RequestMethod.GET)
-	public String runTestCase(@PathVariable Integer testProjectId,
+	@RequestMapping(value = "/viewTestCases", method = RequestMethod.GET)
+	public String viewTestCases(@RequestParam String browserType,
+			@RequestParam String url, @RequestParam String projectId,
+			@RequestParam String planId, @RequestParam String build, Model model) {
+		Integer testProjectId = Integer.valueOf(projectId);
+		Integer testPlanId = Integer.valueOf(planId);
+		testService.setBaseUrl(url);
+		testService.setDriverType(browserType);
+		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan(
+				testPlanId, testProjectId);
+		model.addAttribute("testCases", testCases);
+		model.addAttribute("projectId", projectId);
+		model.addAttribute("planId", planId);
+		model.addAttribute("build", build);
+		return "testList";
+	}
+
+	@RequestMapping(value = "/{projectId}/{planId}/{build}/testCase/{testCaseId}", method = RequestMethod.GET)
+	@ResponseBody
+	public AutomationTestCase runTestCase(@PathVariable Integer projectId,
+			@PathVariable Integer planId, @PathVariable String build,
 			@PathVariable Integer testCaseId, Model model) {
 		AutomationTestCase testCase = testLinkService.getTestCase(testCaseId,
-				testProjectId);
+				projectId);
 		TestResult result = testService.run(
-				DriverType.CHROME,
 				testCase.getAutomationKey(),
 				new TestData(testCase.getInputDataProperties(), testCase
 						.getOutputProperties()));
-		model.addAttribute("result", result);
-		return "testCaseResult";
+		testCase.setTestResult(result);
+		Integer executionId = testLinkService.reportResult(testCase.getId(),
+				Integer.valueOf(planId), build, result);
+		if (null != result.getScreenshot()) {
+			testLinkService.uploadExecutionAttachment(executionId,
+					"Screenshot_" + System.currentTimeMillis(),
+					result.getScreenshot());
+		}
+		return testCase;
+	}
+	@RequestMapping(value = "/{projectId}/{planId}/{build}/testCases", method = RequestMethod.GET)
+	public String runTestCases(@PathVariable Integer projectId,
+			@PathVariable Integer planId, @PathVariable String build, Model model) {
+		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan(
+				planId, projectId);
+		for (int i = 0; i < testCases.length; i++) {
+			TestResult result = testService.run(testCases[i]
+					.getAutomationKey(),
+					new TestData(testCases[i].getInputDataProperties(),
+							testCases[i].getOutputProperties()));
+			testCases[i].setTestResult(result);
+			Integer executionId = testLinkService.reportResult(
+					testCases[i].getId(), Integer.valueOf(planId), build,
+					result);
+			if (null != result.getScreenshot()) {
+				testLinkService.uploadExecutionAttachment(executionId,
+						"Screenshot_" + System.currentTimeMillis(),
+						result.getScreenshot());
+			}
+		}
+		model.addAttribute("testCases", testCases);
+		model.addAttribute("projectId", projectId);
+		model.addAttribute("planId", planId);
+		model.addAttribute("build", build);
+		return "testList";
 	}
 }
