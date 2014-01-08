@@ -3,8 +3,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.nasdaqomx</groupId>
-	<artifactId>LdapConfigTestWeb</artifactId>
-	<name>LdapConfigTestWeb</name>
+	<artifactId>AutomationTestWeb</artifactId>
+	<name>AutomationTestWeb</name>
 	<packaging>war</packaging>
 	<version>0.0.1</version>
 	<properties>
@@ -16,7 +16,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.nasdaqomx</groupId>
-			<artifactId>LdapConfigTestLink</artifactId>
+			<artifactId>TestLinkAccess</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 

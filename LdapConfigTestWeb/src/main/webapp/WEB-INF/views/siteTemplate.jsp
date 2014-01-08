@@ -4,10 +4,10 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="For LDAP Config Automation Test">
+	<meta name="description" content="For Nasdaq OMXAutomation Test">
 	<meta name="author" content="Joy Chiu">
 	<link rel="shortcut icon"
-		href="/LdapConfigTestWeb/resources/img/favicon.ico" />
+		href="/AutomationTestWeb/resources/img/favicon.ico" />
 	<title>Automation Test Web</title>
 	<test:css src="/resources/css/bootstrap.min.css" />
 	<style>

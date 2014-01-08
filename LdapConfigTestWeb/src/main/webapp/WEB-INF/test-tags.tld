@@ -10,7 +10,7 @@
 	<tag>
 		<description>JavaScript static file import</description>
 		<name>js</name>
-		<tag-class>com.nasdaqomx.ldapconfig.test.web.tag.JavaScriptTag</tag-class>
+		<tag-class>com.nasdaqomx.test.web.tag.JavaScriptTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>src</name>
@@ -21,7 +21,7 @@
 	<tag>
 		<description>URL with context root append</description>
 		<name>url</name>
-		<tag-class>com.nasdaqomx.ldapconfig.test.web.tag.UrlTag</tag-class>
+		<tag-class>com.nasdaqomx.test.web.tag.UrlTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>src</name>
@@ -32,7 +32,7 @@
 	<tag>
 		<description>CSS static file import</description>
 		<name>css</name>
-		<tag-class>com.nasdaqomx.ldapconfig.test.web.tag.CssTag</tag-class>
+		<tag-class>com.nasdaqomx.test.web.tag.CssTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<name>src</name>
