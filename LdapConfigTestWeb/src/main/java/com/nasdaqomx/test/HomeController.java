@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import br.eti.kinoshita.testlinkjavaapi.model.Build;
 import br.eti.kinoshita.testlinkjavaapi.model.TestPlan;
 
+import com.nasdaqomx.selenium.test.base.DriverType;
 import com.nasdaqomx.selenium.test.base.TestData;
 import com.nasdaqomx.selenium.test.base.TestResult;
 import com.nasdaqomx.selenium.test.base.TestService;
@@ -40,6 +41,8 @@ public class HomeController {
 		model.addAttribute("testProjects", testLinkService.getTestProjects());
 		model.addAttribute("testPlans",
 				testLinkService.getTestPlansForProject(2));
+		model.addAttribute("explicitWait", testService.getExplicitWait());
+		model.addAttribute("implicitWait", testService.getImplicitWait());
 		return "home";
 	}
 
@@ -57,12 +60,15 @@ public class HomeController {
 	}
 
 	@RequestMapping(value = "/runTestCases", method = RequestMethod.GET)
-	public String runTestCases(@RequestParam String browserType,
+	public String runTestCases(@RequestParam DriverType browserType,
+			@RequestParam Long explicitWait, @RequestParam Long implicitWait,
 			@RequestParam String url, @RequestParam Integer projectId,
 			@RequestParam Integer planId, @RequestParam String build,
 			Model model) {
 		testService.setBaseUrl(url);
 		testService.setDriverType(browserType);
+		testService.setExplicitWait(explicitWait);
+		testService.setImplicitWait(implicitWait);
 		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan(
 				planId, projectId);
 		if (null != testCases) {
@@ -80,7 +86,7 @@ public class HomeController {
 	}
 
 	@RequestMapping(value = "/viewTestCases", method = RequestMethod.GET)
-	public String viewTestCases(@RequestParam String browserType,
+	public String viewTestCases(@RequestParam DriverType browserType,
 			@RequestParam String url, @RequestParam Integer projectId,
 			@RequestParam Integer planId, @RequestParam String build,
 			Model model) {

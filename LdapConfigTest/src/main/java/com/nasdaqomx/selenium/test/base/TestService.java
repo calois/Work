@@ -7,11 +7,11 @@ import org.openqa.selenium.WebDriver;
 
 public class TestService {
 
-	private String BASE_PACKAGE = "com.nasdaqomx.selenium.test.cases.";
+	private static final String BASE_PACKAGE = "com.nasdaqomx.selenium.test.cases.";
 	private String chromeDriver;
-	private String driverType;
-	private String defaultWait;
-	private String presentWait;
+	private DriverType driverType;
+	private Long implicitWait;
+	private Long explicitWait;
 	private String baseUrl;
 
 	public String getChromeDriver() {
@@ -22,28 +22,28 @@ public class TestService {
 		this.chromeDriver = chromeDriver;
 	}
 
-	public String getDriverType() {
+	public DriverType getDriverType() {
 		return driverType;
 	}
 
-	public void setDriverType(String driverType) {
+	public void setDriverType(DriverType driverType) {
 		this.driverType = driverType;
 	}
 
-	public String getDefaultWait() {
-		return defaultWait;
+	public Long getImplicitWait() {
+		return implicitWait;
 	}
 
-	public void setDefaultWait(String defaultWait) {
-		this.defaultWait = defaultWait;
+	public void setImplicitWait(Long implicitWait) {
+		this.implicitWait = implicitWait;
 	}
 
-	public String getPresentWait() {
-		return presentWait;
+	public Long getExplicitWait() {
+		return explicitWait;
 	}
 
-	public void setPresentWait(String presentWait) {
-		this.presentWait = presentWait;
+	public void setExplicitWait(Long explicitWait) {
+		this.explicitWait = explicitWait;
 	}
 
 	public String getBaseUrl() {
@@ -56,7 +56,7 @@ public class TestService {
 
 	public TestResult run(String automationKey, TestData testData) {
 		WebDriver webDriver = TestUtils.getWebDriver(driverType, chromeDriver,
-				defaultWait);
+				implicitWait);
 		TestResult result = new TestResult();
 		if (null == webDriver) {
 			result.setStatus(TestResultStatus.INVALID);
@@ -67,8 +67,7 @@ public class TestService {
 			TestObject testObject = new TestObject();
 			testObject.setWebDriver(webDriver);
 			testObject.setBaseUrl(baseUrl);
-			testObject.setDefaultWait(Long.parseLong(defaultWait));
-			testObject.setPresentWait(Long.parseLong(presentWait));
+			testObject.setExplicitWait(explicitWait);
 			String className = BASE_PACKAGE.concat(automationKey.substring(0,
 					automationKey.lastIndexOf(".")));
 			String methodName = automationKey.substring(automationKey

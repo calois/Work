@@ -1,3 +1,6 @@
+<h1><ol class="breadcrumb">
+  <li class="active"><a href='<test:url src="/"/>'>Home</a></li>
+</ol></h1>
 <div class="container">
 	<h2>Test Config</h2>
 	<br>
@@ -7,6 +10,18 @@
 				class="form-control" id="browser" name="browserType">
 				<option value="CHROME">Chrome</option>
 			</select>
+		</div>
+		<div class="form-group">
+			<label for="url">Implicit Wait (second):</label> <input required
+				type="number" class="form-control" id="implicitWait"
+				name="implicitWait" value="${implicitWait}"
+				placeholder="Default waiting time for locating elements">
+		</div>
+		<div class="form-group">
+			<label for="url">Explicit Wait (second):</label> <input required
+				type="number" class="form-control" id="explicitWait"
+				name="explicitWait" value="${explicitWait}"
+				placeholder="Extra waiting time for locating elements">
 		</div>
 		<div class="form-group">
 			<label for="url">Test URL:</label> <input required type="text"
@@ -40,8 +55,10 @@
 			<span class="help-block">Build/Release will be created
 				automatically in TestLink if not existing.</span>
 		</div>
-		<button type="submit" formaction='<test:url src="/viewTestCases"/>' class="btn btn-default">View Test Cases</button>
-		<button type="submit" formaction='<test:url src="/runTestCases"/>' class="btn btn-default">Run Test Cases</button>
+		<button type="submit" formaction='<test:url src="/viewTestCases"/>'
+			class="btn btn-default">View Test Cases</button>
+		<button type="submit" formaction='<test:url src="/runTestCases"/>'
+			class="btn btn-default">Run Test Cases</button>
 	</form>
 </div>
 <script>

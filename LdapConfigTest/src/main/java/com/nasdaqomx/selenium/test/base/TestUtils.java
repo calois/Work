@@ -30,27 +30,23 @@ import com.nasdaqomx.selenium.test.base.anno.TestBefore;
 public class TestUtils {
 	private static final Log LOGGER = LogFactory.getLog(TestUtils.class);
 
-	public static WebDriver getWebDriver(String driverType,
-			String chromeDriver, String defaultWait) {
+	public static WebDriver getWebDriver(DriverType driverType,
+			String chromeDriver, Long defaultWait) {
 		DesiredCapabilities capabilities;
 		WebDriver driver;
-		switch (DriverType.valueOf(driverType)) {
+		switch (driverType) {
 		case CHROME:
 			System.setProperty("webdriver.chrome.driver", chromeDriver);
 			capabilities = DesiredCapabilities.chrome();
 			driver = new ChromeDriver(capabilities);
-			driver.manage()
-					.timeouts()
-					.implicitlyWait(Long.parseLong(defaultWait),
-							TimeUnit.SECONDS);
+			driver.manage().timeouts()
+					.implicitlyWait(defaultWait, TimeUnit.SECONDS);
 			return driver;
 		case FIREFOX:
 			capabilities = DesiredCapabilities.firefox();
 			driver = new FirefoxDriver(capabilities);
-			driver.manage()
-					.timeouts()
-					.implicitlyWait(Long.parseLong(defaultWait),
-							TimeUnit.SECONDS);
+			driver.manage().timeouts()
+					.implicitlyWait(defaultWait, TimeUnit.SECONDS);
 			return driver;
 		default:
 			return null;

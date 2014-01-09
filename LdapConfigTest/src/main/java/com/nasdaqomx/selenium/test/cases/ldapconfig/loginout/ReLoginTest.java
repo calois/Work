@@ -15,7 +15,6 @@ public class ReLoginTest extends AbstractTest {
 		logoutPage = createPageObject(LoginPage.class).loginAs(
 				getInputData("username"), getInputData("password"))
 				.clickLogout();
-		assertEquals(getOutputData("logoutUrl"), logoutPage.getUrl());
 	}
 
 	@TestAfter
@@ -23,7 +22,7 @@ public class ReLoginTest extends AbstractTest {
 	}
 
 	public void testLoginLink() {
-		LoginPage loginPage = logoutPage.clickLoginLink();
-		verifyEquals(getOutputData("loginUrl"), loginPage.getUrl());
+		logoutPage.clickLoginLink().loginAs(getInputData("username"),
+				getInputData("password"));
 	}
 }

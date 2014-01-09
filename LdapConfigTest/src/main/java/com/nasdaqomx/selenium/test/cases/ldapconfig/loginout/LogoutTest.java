@@ -13,7 +13,6 @@ public class LogoutTest extends AbstractTest {
 	public void before() {
 		mainPage = createPageObject(LoginPage.class).loginAs(
 				getInputData("username"), getInputData("password"));
-		assertEquals(getOutputData("defaultUrl"), mainPage.getUrl());
 	}
 
 	public void testLogout() {

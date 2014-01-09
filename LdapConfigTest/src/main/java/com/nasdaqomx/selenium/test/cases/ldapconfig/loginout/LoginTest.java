@@ -11,14 +11,12 @@ public class LoginTest extends AbstractTest {
 	@TestBefore
 	public void before() {
 		loginPage = createPageObject(LoginPage.class);
-		assertEquals(getOutputData("loginUrl"), loginPage.getUrl());
 	}
 
 	public void testLoginSuccess() {
-		verifyEquals(
-				getOutputData("defaultUrl"),
-				loginPage.loginAs(getInputData("username"),
-						getInputData("password")).getUrl());
+		loginPage.typeUserName(getInputData("username"));
+		loginPage.typePassword(getInputData("password"));
+		loginPage.submitLogin();
 	}
 
 	public void testLoginFail() {
@@ -30,7 +28,9 @@ public class LoginTest extends AbstractTest {
 		if (null != password) {
 			loginPage.typePassword(password);
 		}
-		verifyEquals(getOutputData("msg"), loginPage
-				.submitLoginExpectingFailure().getInfoMsg());
+		loginPage = loginPage.submitLoginExpectingFailure();
+		verifyEquals(getOutputData("msg"), loginPage.getInfoMsg());
+		loginPage.loginAs(getInputData("usernameAfter"),
+				getInputData("passwordAfter"));
 	}
 }

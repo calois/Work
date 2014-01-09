@@ -17,7 +17,8 @@ public abstract class AbstractTest {
 					testObject);
 			return o;
 		} catch (Exception e) {
-			throw new TestException("Fail to create page object", e);
+			throw new TestException("Fail to create page object"
+					+ clazz.getSimpleName(), e);
 		}
 	}
 
@@ -105,7 +106,7 @@ public abstract class AbstractTest {
 		assertTrue("Expected: \"" + expected + "\" but actual: \"" + actual
 				+ "\"", seleniumEquals(expected, actual));
 	}
-
+	
 	/**
 	 * Like JUnit's Assert.assertEquals, but joins the string array with commas,
 	 * and handles "regexp:" strings like HTML Selenese
@@ -162,20 +163,20 @@ public abstract class AbstractTest {
 		throw new TestException(message);
 	}
 
-	static public void assertTrue(String message, boolean condition) {
+	public static void assertTrue(String message, boolean condition) {
 		if (!condition)
 			fail(message);
 	}
 
-	static public void assertTrue(boolean condition) {
+	public static void assertTrue(boolean condition) {
 		assertTrue(null, condition);
 	}
 
-	static public void assertFalse(String message, boolean condition) {
+	public static void assertFalse(String message, boolean condition) {
 		assertTrue(message, !condition);
 	}
 
-	static public void assertFalse(boolean condition) {
+	public static void assertFalse(boolean condition) {
 		assertTrue(null, !condition);
 	}
 

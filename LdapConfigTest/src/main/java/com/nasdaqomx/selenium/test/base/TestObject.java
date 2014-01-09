@@ -4,8 +4,7 @@ import org.openqa.selenium.WebDriver;
 
 public class TestObject {
 	private WebDriver webDriver;
-	private long presentWait;
-	private long defaultWait;
+	private long explicitWait;
 	private String baseUrl;
 
 	public String getBaseUrl() {
@@ -24,19 +23,11 @@ public class TestObject {
 		this.webDriver = webDriver;
 	}
 
-	public long getPresentWait() {
-		return presentWait;
+	public long getExplicitWait() {
+		return explicitWait;
 	}
 
-	public void setPresentWait(long presentWait) {
-		this.presentWait = presentWait;
-	}
-
-	public long getDefaultWait() {
-		return defaultWait;
-	}
-
-	public void setDefaultWait(long defaultWait) {
-		this.defaultWait = defaultWait;
+	public void setExplicitWait(long explicitWait) {
+		this.explicitWait = explicitWait;
 	}
 }

@@ -1,8 +1,6 @@
 package com.nasdaqomx.selenium.test.base.page;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -10,7 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.nasdaqomx.selenium.test.base.TestObject;
@@ -35,71 +33,76 @@ public abstract class AbstractPageObject {
 					+ clazz.getSimpleName(), e);
 		}
 	}
-
+	
 	protected String getCurrentUrl() {
-		return getDriver().getCurrentUrl();
+		return getWebDriver().getCurrentUrl();
 	}
 
-	public String getUrl() {
+	protected String getSimpleUrl() {
 		return getCurrentUrl().substring(getCurrentUrl().lastIndexOf("/") + 1);
 	}
 
 	protected String getTitle() {
-		return getDriver().getTitle();
+		return getWebDriver().getTitle();
 	}
 
 	protected void load(String url) {
-		getDriver().get(testObject.getBaseUrl() + url);
+		getWebDriver().get(testObject.getBaseUrl() + url);
 	}
 
 	protected void load() {
-		getDriver().get(testObject.getBaseUrl());
+		getWebDriver().get(testObject.getBaseUrl());
 	}
 
-	protected WebDriver getDriver() {
+	protected WebDriver getWebDriver() {
 		return testObject.getWebDriver();
 	}
 
-	protected WebElement getBy(By by) {
-		return getDriver().findElement(by);
+	protected WebDriverWait getWebDriveWait() {
+		return new WebDriverWait(getWebDriver(), testObject.getExplicitWait());
 	}
 
-	protected List<WebElement> getListBy(By by) {
-		return getDriver().findElements(by);
+	protected WebElement getElement(By by) {
+		return getWebDriver().findElement(by);
 	}
 
-	protected boolean isPresentBy(By by) {
-		try {
-			getDriver()
-					.manage()
-					.timeouts()
-					.implicitlyWait(testObject.getPresentWait(),
-							TimeUnit.SECONDS);
-			return !getDriver().findElements(by).isEmpty();
-		} catch (NoSuchElementException e) {
-			return false;
-		} finally {
-			getDriver()
-					.manage()
-					.timeouts()
-					.implicitlyWait(testObject.getDefaultWait(),
-							TimeUnit.SECONDS);
-		}
+	protected List<WebElement> getElements(By by) {
+		return getWebDriver().findElements(by);
 	}
 
-	protected void doubleClickBy(final By by) {
-		(new WebDriverWait(getDriver(), 10))
-				.until(new ExpectedCondition<Boolean>() {
-					public Boolean apply(WebDriver d) {
-						try {
-							d.findElement(by).click();
-							return true;
-						} catch (Throwable e) {
-							return false;
-						}
-					}
-				});
-		new Actions(getDriver()).doubleClick(getBy(by)).build().perform();
+	protected WebElement getElementUntilClickable(By by) {
+		return getWebDriveWait().until(
+				ExpectedConditions.elementToBeClickable(by));
+	}
+
+	protected WebElement getElementUntilVisible(By by) {
+		return getWebDriveWait().until(
+				ExpectedConditions.visibilityOfElementLocated(by));
+	}
+
+	protected WebElement getElementUntilPresent(By by) {
+		return getWebDriveWait().until(
+				ExpectedConditions.presenceOfElementLocated(by));
+	}
+
+	protected List<WebElement> getElementsUntilVisible(By by) {
+		return getWebDriveWait().until(
+				ExpectedConditions.visibilityOfAllElementsLocatedBy(by));
+	}
+
+	protected List<WebElement> getElementsUntilPresent(By by) {
+		return getWebDriveWait().until(
+				ExpectedConditions.presenceOfAllElementsLocatedBy(by));
+	}
+
+	protected boolean isPresent(By by) {
+		return getWebDriveWait().until(
+				ExpectedConditions.invisibilityOfElementLocated(by));
+	}
+
+	protected void doubleClick(final By by) {
+		new Actions(getWebDriver()).doubleClick(getElementUntilClickable(by))
+				.build().perform();
 	}
 
 	protected void pause(long millis) {
@@ -108,5 +111,9 @@ public abstract class AbstractPageObject {
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
 		}
+	}
+
+	protected void fail(String message) {
+		throw new RuntimeException(message);
 	}
 }

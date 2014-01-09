@@ -7,17 +7,18 @@ import org.openqa.selenium.WebElement;
 import com.nasdaqomx.selenium.test.base.AbstractTest;
 import com.nasdaqomx.selenium.test.base.TestObject;
 import com.nasdaqomx.selenium.test.base.page.AbstractPageObject;
+import com.nasdaqomx.selenium.test.page.ldapconfig.clients.ListClients;
 
 public class MainPage extends AbstractPageObject {
 
-	private final String MANAGERS_LOCATOR = "//div[@id='mainMenu']//a[text()='Managers']";
-	private final String MARKETS_LOCATOR = "//div[@id='mainMenu']//a[text()='Markets']";
-	private final String METARMARKETS_LOCATOR = "//div[@id='mainMenu']//a[text()='Metamarkets']";
-	private final String CLIENTS_LOCATOR = "//div[@id='mainMenu']//a[text()='Clients']";
-	private final String REPORTS_LOCATOR = "//div[@id='mainMenu']//a[text()='Reports']";
-	private final String NOTIFICATIONS_LOCATOR = "//div[@id='mainMenu']//a[text()='Notifications']";
-	private final String REMOTE_ADMIN_LOCATOR = "//div[@id='mainMenu']//a[text()='Remote Admin']";
-	private final String LOGOUT_LOCATOR = "logout";
+	private static final String MANAGERS_LOCATOR = "//div[@id='mainMenu']//a[text()='Managers']";
+	private static final String MARKETS_LOCATOR = "//div[@id='mainMenu']//a[text()='Markets']";
+	private static final String METARMARKETS_LOCATOR = "//div[@id='mainMenu']//a[text()='Metamarkets']";
+	private static final String CLIENTS_LOCATOR = "//div[@id='mainMenu']//a[text()='Clients']";
+	private static final String REPORTS_LOCATOR = "//div[@id='mainMenu']//a[text()='Reports']";
+	private static final String NOTIFICATIONS_LOCATOR = "//div[@id='mainMenu']//a[text()='Notifications']";
+	private static final String REMOTE_ADMIN_LOCATOR = "//div[@id='mainMenu']//a[text()='Remote Admin']";
+	private static final String LOGOUT_LOCATOR = "logout";
 
 	private WebElement managers;
 	private WebElement markets;
@@ -31,14 +32,14 @@ public class MainPage extends AbstractPageObject {
 	public MainPage(TestObject testObject) {
 		super(testObject);
 		try {
-			managers = getBy(By.xpath(MANAGERS_LOCATOR));
-			markets = getBy(By.xpath(MARKETS_LOCATOR));
-			metamarkets = getBy(By.xpath(METARMARKETS_LOCATOR));
-			clients = getBy(By.xpath(CLIENTS_LOCATOR));
-			reports = getBy(By.xpath(REPORTS_LOCATOR));
-			notifications = getBy(By.xpath(NOTIFICATIONS_LOCATOR));
-			remoteAdmin = getBy(By.xpath(REMOTE_ADMIN_LOCATOR));
-			logout = getBy(By.id(LOGOUT_LOCATOR));
+			managers = getElement(By.xpath(MANAGERS_LOCATOR));
+			markets = getElement(By.xpath(MARKETS_LOCATOR));
+			metamarkets = getElement(By.xpath(METARMARKETS_LOCATOR));
+			clients = getElement(By.xpath(CLIENTS_LOCATOR));
+			reports = getElement(By.xpath(REPORTS_LOCATOR));
+			notifications = getElement(By.xpath(NOTIFICATIONS_LOCATOR));
+			remoteAdmin = getElement(By.xpath(REMOTE_ADMIN_LOCATOR));
+			logout = getElement(By.id(LOGOUT_LOCATOR));
 		} catch (NoSuchElementException e) {
 			AbstractTest.fail(e.getMessage());
 		}
@@ -56,8 +57,9 @@ public class MainPage extends AbstractPageObject {
 		this.metamarkets.click();
 	}
 
-	public void clickClients() {
+	public ListClients clickClients() {
 		this.clients.click();
+		return createPageObject(ListClients.class);
 	}
 
 	public void clickReports() {

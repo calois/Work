@@ -21,10 +21,10 @@ public class TestLinkService {
 
 	private final ExecutionType AUTOMATED = ExecutionType.AUTOMATED;
 	private final boolean GETSTEPINFO = true;
+	private TestLinkAPI api;
 
 	private URL testLinkUrl;
 	private String devKey;
-	private TestLinkAPI api;
 	private String automationKeyFieldName;
 	private String inputDataFieldName;
 	private String outputDataFieldName;
