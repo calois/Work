@@ -1,12 +1,17 @@
 package com.nasdaqomx.selenium.test.base;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.openqa.selenium.WebDriver;
 
-public class TestService {
+public class TestService implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static final String BASE_PACKAGE = "com.nasdaqomx.selenium.test.cases.";
 	private String chromeDriver;
 	private DriverType driverType;
