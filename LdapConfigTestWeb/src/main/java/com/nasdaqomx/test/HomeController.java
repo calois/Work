@@ -5,17 +5,22 @@ import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import br.eti.kinoshita.testlinkjavaapi.model.Build;
 import br.eti.kinoshita.testlinkjavaapi.model.TestPlan;
 
 import com.nasdaqomx.selenium.test.base.DriverType;
+import com.nasdaqomx.selenium.test.base.TestApp;
+import com.nasdaqomx.selenium.test.base.TestAppObject;
 import com.nasdaqomx.selenium.test.base.TestData;
+import com.nasdaqomx.selenium.test.base.TestObject;
 import com.nasdaqomx.selenium.test.base.TestResult;
 import com.nasdaqomx.selenium.test.base.TestService;
 import com.nasdaqomx.test.testlink.AutomationTestCase;
@@ -25,6 +30,7 @@ import com.nasdaqomx.test.testlink.TestLinkService;
  * Handles requests for the application home page.
  */
 @Controller
+@SessionAttributes("testObject")
 public class HomeController {
 
 	@Autowired
@@ -33,16 +39,26 @@ public class HomeController {
 	@Autowired
 	private TestService testService;
 
+	@ModelAttribute("testObject")
+	public TestObject produceTestObject() {
+		TestObject testObject = new TestObject();
+		TestAppObject appObj = new TestAppObject();
+		appObj.setApp(TestApp.LDAP_CONFIG);
+		testObject.getAppObj().put(appObj.getApp(), appObj);
+		return testObject;
+	}
+
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
+	public String home(Locale locale, Model model,
+			@ModelAttribute("testObject") TestObject testObject) {
 		model.addAttribute("testProjects", testLinkService.getTestProjects());
 		model.addAttribute("testPlans",
 				testLinkService.getTestPlansForProject(2));
-		model.addAttribute("explicitWait", testService.getExplicitWait());
-		model.addAttribute("implicitWait", testService.getImplicitWait());
+		model.addAttribute("explicitWait", testObject.getExplicitWait());
+		model.addAttribute("implicitWait", testObject.getImplicitWait());
 		return "home";
 	}
 
@@ -63,19 +79,22 @@ public class HomeController {
 	public String runTestCases(@RequestParam DriverType browserType,
 			@RequestParam Long explicitWait, @RequestParam Long implicitWait,
 			@RequestParam String url, @RequestParam Integer projectId,
-			@RequestParam Integer planId, @RequestParam String build,
-			Model model) {
-		testService.setBaseUrl(url);
-		testService.setDriverType(browserType);
-		testService.setExplicitWait(explicitWait);
-		testService.setImplicitWait(implicitWait);
+			@RequestParam Integer planId,
+			@RequestParam(required = false) String build, Model model,
+			@ModelAttribute("testObject") TestObject testObject) {
+		//TODO: Need to set for different APP
+		testObject.getAppObj().get(TestApp.LDAP_CONFIG).setBaseUrl(url);
+		testObject.setDriverType(browserType);
+		testObject.setExplicitWait(explicitWait);
+		testObject.setImplicitWait(implicitWait);
+
 		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan(
 				planId, projectId);
 		if (null != testCases) {
 			createTestLinkBuild(build, planId);
 			for (int i = 0; i < testCases.length; i++) {
-				testCases[i].setTestResult(runTestCase(testCases[i], planId,
-						build));
+				testCases[i].setTestResult(runTestCase(testObject,
+						testCases[i], planId, build));
 			}
 		}
 		model.addAttribute("testCases", testCases);
@@ -89,9 +108,11 @@ public class HomeController {
 	public String viewTestCases(@RequestParam DriverType browserType,
 			@RequestParam String url, @RequestParam Integer projectId,
 			@RequestParam Integer planId, @RequestParam String build,
-			Model model) {
-		testService.setBaseUrl(url);
-		testService.setDriverType(browserType);
+			Model model, @ModelAttribute("testObject") TestObject testObject) {
+		//TODO: Need to set for different APP
+		testObject.getAppObj().get(TestApp.LDAP_CONFIG).setBaseUrl(url);
+		testObject.setDriverType(browserType);
+
 		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan(
 				planId, projectId);
 		model.addAttribute("testCases", testCases);
@@ -105,25 +126,26 @@ public class HomeController {
 	@ResponseBody
 	public AutomationTestCase runTestCase(@PathVariable Integer projectId,
 			@PathVariable Integer planId, @PathVariable String build,
-			@PathVariable Integer testCaseId, Model model) {
+			@PathVariable Integer testCaseId, Model model,
+			@ModelAttribute("testObject") TestObject testObject) {
 		AutomationTestCase testCase = testLinkService.getTestCase(testCaseId,
 				projectId);
 		createTestLinkBuild(build, planId);
-		testCase.setTestResult(runTestCase(testCase, planId, build));
+		testCase.setTestResult(runTestCase(testObject, testCase, planId, build));
 		return testCase;
 	}
 
 	@RequestMapping(value = "/{projectId}/{planId}/{build}/testCases", method = RequestMethod.GET)
 	public String runTestCases(@PathVariable Integer projectId,
 			@PathVariable Integer planId, @PathVariable String build,
-			Model model) {
+			Model model, @ModelAttribute("testObject") TestObject testObject) {
 		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan(
 				planId, projectId);
 		if (null != testCases) {
 			createTestLinkBuild(build, planId);
 			for (int i = 0; i < testCases.length; i++) {
-				testCases[i].setTestResult(runTestCase(testCases[i], planId,
-						build));
+				testCases[i].setTestResult(runTestCase(testObject,
+						testCases[i], planId, build));
 			}
 		}
 		model.addAttribute("testCases", testCases);
@@ -149,9 +171,10 @@ public class HomeController {
 		}
 	}
 
-	private TestResult runTestCase(AutomationTestCase tc, Integer planId,
-			String build) {
+	private TestResult runTestCase(TestObject testObject,
+			AutomationTestCase tc, Integer planId, String build) {
 		TestResult result = testService.run(
+				testObject,
 				tc.getAutomationKey(),
 				new TestData(tc.getInputDataProperties(), tc
 						.getOutputProperties()));

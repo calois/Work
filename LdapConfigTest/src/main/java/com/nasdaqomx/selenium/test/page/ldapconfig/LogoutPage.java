@@ -5,10 +5,9 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 import com.nasdaqomx.selenium.test.base.AbstractTest;
-import com.nasdaqomx.selenium.test.base.TestObject;
-import com.nasdaqomx.selenium.test.base.page.AbstractPageObject;
+import com.nasdaqomx.selenium.test.base.TestManager;
 
-public class LogoutPage extends AbstractPageObject {
+public class LogoutPage extends LdapConfigBasePage {
 
 	private static final String URL = "logout.view";
 	// <a href="index.view">Click here to log in again.</a>
@@ -17,13 +16,13 @@ public class LogoutPage extends AbstractPageObject {
 
 	private WebElement loginLink;
 
-	public LogoutPage(TestObject testObject) {
-		super(testObject);
-		AbstractTest.assertEquals(URL, this.getSimpleUrl());
+	public LogoutPage(TestManager testManager) {
+		super(testManager);
+		AbstractTest.assertEquals(getTestApp(), URL, this.getSimpleUrl());
 		try {
 			loginLink = getElement(By.partialLinkText(LOGIN_LINK_LOCATOR));
 		} catch (NoSuchElementException e) {
-			AbstractTest.fail(e.getMessage());
+			AbstractTest.fail(getTestApp(), e.getMessage());
 		}
 	}
 

@@ -11,29 +11,40 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.nasdaqomx.selenium.test.base.TestObject;
+import com.nasdaqomx.selenium.test.base.TestApp;
+import com.nasdaqomx.selenium.test.base.TestManager;
+import com.nasdaqomx.selenium.test.base.anno.PageObject;
 
 public abstract class AbstractPageObject {
 	private static final Log LOGGER = LogFactory
 			.getLog(AbstractPageObject.class);
 
-	private TestObject testObject;
+	private TestManager testManager;
 
-	public AbstractPageObject(TestObject testObject) {
-		this.testObject = testObject;
+	public AbstractPageObject(TestManager testManager) {
+		this.testManager = testManager;
+	}
+
+	public TestApp getTestApp() {
+		PageObject p = this.getClass().getAnnotation(PageObject.class);
+		if (null == p) {
+			throw new RuntimeException("Missing PageObject Annotation for :"
+					+ this.getClass().getName());
+		}
+		return p.value();
 	}
 
 	protected <T extends AbstractPageObject> T createPageObject(Class<T> clazz) {
 		try {
-			T o = clazz.getDeclaredConstructor(TestObject.class).newInstance(
-					testObject);
+			T o = clazz.getDeclaredConstructor(TestManager.class).newInstance(
+					testManager);
 			return o;
 		} catch (Exception e) {
 			throw new RuntimeException("Fail to create page object: "
 					+ clazz.getSimpleName(), e);
 		}
 	}
-	
+
 	protected String getCurrentUrl() {
 		return getWebDriver().getCurrentUrl();
 	}
@@ -47,19 +58,19 @@ public abstract class AbstractPageObject {
 	}
 
 	protected void load(String url) {
-		getWebDriver().get(testObject.getBaseUrl() + url);
+		getWebDriver().get(testManager.getBaseUrl(getTestApp()) + url);
 	}
 
 	protected void load() {
-		getWebDriver().get(testObject.getBaseUrl());
+		getWebDriver().get(testManager.getBaseUrl(getTestApp()));
 	}
 
 	protected WebDriver getWebDriver() {
-		return testObject.getWebDriver();
+		return testManager.getWebDriver(getTestApp());
 	}
 
 	protected WebDriverWait getWebDriveWait() {
-		return new WebDriverWait(getWebDriver(), testObject.getExplicitWait());
+		return new WebDriverWait(getWebDriver(), testManager.getExplicitWait());
 	}
 
 	protected WebElement getElement(By by) {

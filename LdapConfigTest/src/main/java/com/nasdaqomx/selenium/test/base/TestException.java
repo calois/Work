@@ -7,15 +7,24 @@ public class TestException extends RuntimeException {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public TestException(String message) {
+	private TestApp testApp;
+
+	public TestApp getTestApp() {
+		return testApp;
+	}
+
+	public TestException(TestApp testApp, String message) {
 		super(message);
+		this.testApp = testApp;
 	}
 
-	public TestException(String message, Throwable cause) {
+	public TestException(TestApp testApp, String message, Throwable cause) {
 		super(message, cause);
+		this.testApp = testApp;
 	}
 
-	public TestException(Throwable cause) {
+	public TestException(TestApp testApp, Throwable cause) {
 		super(cause);
+		this.testApp = testApp;
 	}
 }

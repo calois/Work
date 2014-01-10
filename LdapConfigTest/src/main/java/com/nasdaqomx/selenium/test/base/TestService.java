@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.openqa.selenium.WebDriver;
-
 public class TestService implements Serializable {
 
 	/**
@@ -13,66 +11,21 @@ public class TestService implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private static final String BASE_PACKAGE = "com.nasdaqomx.selenium.test.cases.";
-	private String chromeDriver;
-	private DriverType driverType;
-	private Long implicitWait;
-	private Long explicitWait;
-	private String baseUrl;
 
-	public String getChromeDriver() {
-		return chromeDriver;
-	}
+	private String chromeDriver;
 
 	public void setChromeDriver(String chromeDriver) {
 		this.chromeDriver = chromeDriver;
 	}
 
-	public DriverType getDriverType() {
-		return driverType;
-	}
-
-	public void setDriverType(DriverType driverType) {
-		this.driverType = driverType;
-	}
-
-	public Long getImplicitWait() {
-		return implicitWait;
-	}
-
-	public void setImplicitWait(Long implicitWait) {
-		this.implicitWait = implicitWait;
-	}
-
-	public Long getExplicitWait() {
-		return explicitWait;
-	}
-
-	public void setExplicitWait(Long explicitWait) {
-		this.explicitWait = explicitWait;
-	}
-
-	public String getBaseUrl() {
-		return baseUrl;
-	}
-
-	public void setBaseUrl(String baseUrl) {
-		this.baseUrl = baseUrl;
-	}
-
-	public TestResult run(String automationKey, TestData testData) {
-		WebDriver webDriver = TestUtils.getWebDriver(driverType, chromeDriver,
-				implicitWait);
+	public TestResult run(TestObject testObject, String automationKey,
+			TestData testData) {
 		TestResult result = new TestResult();
-		if (null == webDriver) {
-			result.setStatus(TestResultStatus.INVALID);
-			result.setMessage("Invalid Web Browser");
-			return result;
+		TestManager testManager = new TestManager(testObject);
+		if (TestUtils.isEmpty(testObject.getChromeDriver())) {
+			testObject.setChromeDriver(this.chromeDriver);
 		}
 		try {
-			TestObject testObject = new TestObject();
-			testObject.setWebDriver(webDriver);
-			testObject.setBaseUrl(baseUrl);
-			testObject.setExplicitWait(explicitWait);
 			String className = BASE_PACKAGE.concat(automationKey.substring(0,
 					automationKey.lastIndexOf(".")));
 			String methodName = automationKey.substring(automationKey
@@ -81,7 +34,7 @@ public class TestService implements Serializable {
 				Class<?> clazz = Class.forName(className);
 				AbstractTest test = (AbstractTest) clazz.newInstance();
 				test.setTestData(testData);
-				test.setTestObject(testObject);
+				test.setTestManager(testManager);
 				Method precondition = TestUtils.getTestBeforeMethod(test
 						.getClass());
 				// run precondition first
@@ -90,11 +43,13 @@ public class TestService implements Serializable {
 						precondition.invoke(test);
 					} catch (InvocationTargetException ie) {
 						if (ie.getTargetException() instanceof TestException) {
+							TestException e = (TestException) ie
+									.getTargetException();
 							result.setStatus(TestResultStatus.BLOCKED);
-							result.setMessage(TestUtils.getStackTrace(ie
-									.getTargetException()));
+							result.setMessage(TestUtils.getStackTrace(e));
 							result.setScreenshot(TestUtils
-									.takeScreenshot(webDriver));
+									.takeScreenshot(testManager.getWebDriver(e
+											.getTestApp())));
 							return result;
 						} else {
 							throw ie.getTargetException();
@@ -120,7 +75,8 @@ public class TestService implements Serializable {
 			} catch (TestException e) {
 				result.setStatus(TestResultStatus.FAILED);
 				result.setMessage(TestUtils.getStackTrace(e));
-				result.setScreenshot(TestUtils.takeScreenshot(webDriver));
+				result.setScreenshot(TestUtils.takeScreenshot(testManager
+						.getWebDriver(e.getTestApp())));
 				return result;
 			} catch (Throwable e) {
 				e.printStackTrace();
@@ -131,9 +87,7 @@ public class TestService implements Serializable {
 			result.setStatus(TestResultStatus.PASSED);
 			return result;
 		} finally {
-			if (null != webDriver) {
-				webDriver.close();
-			}
+			testManager.close();
 		}
 	}
 }

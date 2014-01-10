@@ -5,11 +5,10 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 import com.nasdaqomx.selenium.test.base.AbstractTest;
-import com.nasdaqomx.selenium.test.base.TestObject;
-import com.nasdaqomx.selenium.test.base.page.AbstractPageObject;
+import com.nasdaqomx.selenium.test.base.TestManager;
 import com.nasdaqomx.selenium.test.page.ldapconfig.clients.ListClients;
 
-public class MainPage extends AbstractPageObject {
+public class MainPage extends LdapConfigBasePage {
 
 	private static final String MANAGERS_LOCATOR = "//div[@id='mainMenu']//a[text()='Managers']";
 	private static final String MARKETS_LOCATOR = "//div[@id='mainMenu']//a[text()='Markets']";
@@ -29,8 +28,8 @@ public class MainPage extends AbstractPageObject {
 	private WebElement remoteAdmin;
 	private WebElement logout;
 
-	public MainPage(TestObject testObject) {
-		super(testObject);
+	public MainPage(TestManager testManager) {
+		super(testManager);
 		try {
 			managers = getElement(By.xpath(MANAGERS_LOCATOR));
 			markets = getElement(By.xpath(MARKETS_LOCATOR));
@@ -41,7 +40,7 @@ public class MainPage extends AbstractPageObject {
 			remoteAdmin = getElement(By.xpath(REMOTE_ADMIN_LOCATOR));
 			logout = getElement(By.id(LOGOUT_LOCATOR));
 		} catch (NoSuchElementException e) {
-			AbstractTest.fail(e.getMessage());
+			AbstractTest.fail(getTestApp(), e.getMessage());
 		}
 	}
 

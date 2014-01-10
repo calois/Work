@@ -1,26 +1,42 @@
 package com.nasdaqomx.selenium.test.base;
 
-import org.openqa.selenium.WebDriver;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
-public class TestObject {
-	private WebDriver webDriver;
-	private long explicitWait;
-	private String baseUrl;
+public class TestObject implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String chromeDriver;
+	private DriverType driverType;
+	private long implicitWait = 30;
+	private long explicitWait = 10;
+	private Map<TestApp, TestAppObject> appObj = new HashMap<>();
 
-	public String getBaseUrl() {
-		return baseUrl;
+	public String getChromeDriver() {
+		return chromeDriver;
 	}
 
-	public void setBaseUrl(String baseUrl) {
-		this.baseUrl = baseUrl;
+	public void setChromeDriver(String chromeDriver) {
+		this.chromeDriver = chromeDriver;
 	}
 
-	public WebDriver getWebDriver() {
-		return webDriver;
+	public DriverType getDriverType() {
+		return driverType;
 	}
 
-	public void setWebDriver(WebDriver webDriver) {
-		this.webDriver = webDriver;
+	public void setDriverType(DriverType driverType) {
+		this.driverType = driverType;
+	}
+
+	public long getImplicitWait() {
+		return implicitWait;
+	}
+
+	public void setImplicitWait(long implicitWait) {
+		this.implicitWait = implicitWait;
 	}
 
 	public long getExplicitWait() {
@@ -29,5 +45,13 @@ public class TestObject {
 
 	public void setExplicitWait(long explicitWait) {
 		this.explicitWait = explicitWait;
+	}
+
+	public Map<TestApp, TestAppObject> getAppObj() {
+		return appObj;
+	}
+
+	public void setAppObj(Map<TestApp, TestAppObject> appObj) {
+		this.appObj = appObj;
 	}
 }

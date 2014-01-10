@@ -4,11 +4,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
-import com.nasdaqomx.selenium.test.base.TestObject;
-import com.nasdaqomx.selenium.test.base.page.AbstractPageObject;
+import com.nasdaqomx.selenium.test.base.TestManager;
 import com.nasdaqomx.selenium.test.page.ldapconfig.clients.ListClients;
 
-public class LoginPage extends AbstractPageObject {
+public class LoginPage extends LdapConfigBasePage {
 
 	/*
 	 * <div id="header"> <img id="productlogo"
@@ -40,8 +39,8 @@ public class LoginPage extends AbstractPageObject {
 	 * 2013, The <a href="http://www.nasdaqomx.com" target="_blank">NASDAQ
 	 * OMX</a> Group, Inc. All Rights Reserved.</li> </ul> </div> </div>
 	 */
-	public LoginPage(TestObject testObject) {
-		super(testObject);
+	public LoginPage(TestManager testManager) {
+		super(testManager);
 		if (!this.getCurrentUrl().contains(URL)) {
 			load();
 		}

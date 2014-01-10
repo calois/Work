@@ -30,9 +30,13 @@ public class TestLinkService {
 	private String outputDataFieldName;
 	private boolean overwriteTestResult;
 
+	private boolean debug = true;
+
 	@PostConstruct
 	public void init() {
-		api = new TestLinkAPI(testLinkUrl, devKey);
+		if (!debug) {
+			api = new TestLinkAPI(testLinkUrl, devKey);
+		}
 	}
 
 	public void setUrl(URL url) {
@@ -130,14 +134,32 @@ public class TestLinkService {
 	}
 
 	public TestProject[] getTestProjects() {
+		if (debug) {
+			TestProject t = new TestProject();
+			t.setId(1);
+			t.setName("2");
+			return new TestProject[] { t };
+		}
 		return api.getProjects();
 	}
 
 	public TestPlan[] getTestPlansForProject(Integer testProjectId) {
+		if (debug) {
+			TestPlan testPlan = new TestPlan();
+			testPlan.setId(1);
+			testPlan.setName("asdasd");
+			return new TestPlan[] { testPlan };
+		}
 		return api.getProjectTestPlans(testProjectId);
 	}
 
 	public Build[] getBuildsForPlan(Integer testPlanId) {
+		if (debug) {
+			Build b = new Build();
+			b.setId(1);
+			b.setName("asd");
+			return new Build[] { b };
+		}
 		return api.getBuildsForTestPlan(testPlanId);
 	}
 
