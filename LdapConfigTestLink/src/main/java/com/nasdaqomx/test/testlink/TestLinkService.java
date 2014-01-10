@@ -30,7 +30,7 @@ public class TestLinkService {
 	private String outputDataFieldName;
 	private boolean overwriteTestResult;
 
-	private boolean debug = true;
+	private boolean debug = false;
 
 	@PostConstruct
 	public void init() {

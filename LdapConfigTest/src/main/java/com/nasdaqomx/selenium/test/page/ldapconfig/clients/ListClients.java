@@ -10,7 +10,7 @@ public class ListClients extends MainPage {
 
 	public ListClients(TestManager testManager) {
 		super(testManager);
-		AbstractTest.assertEquals(getTestApp(), URL, this.getSimpleUrl());
+		AbstractTest.assertEquals(getProject(), URL, this.getSimpleUrl());
 		// TODO Auto-generated constructor stub
 	}
 

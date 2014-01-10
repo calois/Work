@@ -1,11 +1,19 @@
 package com.nasdaqomx.selenium.test.base;
 
-public class TestConfig {
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
+public class TestConfig implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String chromeDriver;
 	private DriverType driverType;
-	private Long implicitWait;
-	private Long explicitWait;
-	private String baseUrl;
+	private long implicitWait = 30;
+	private long explicitWait = 10;
+	private Map<Project, ProjectConfig> projectConfigMap = new HashMap<>();
 
 	public String getChromeDriver() {
 		return chromeDriver;
@@ -23,27 +31,27 @@ public class TestConfig {
 		this.driverType = driverType;
 	}
 
-	public Long getImplicitWait() {
+	public long getImplicitWait() {
 		return implicitWait;
 	}
 
-	public void setImplicitWait(Long implicitWait) {
+	public void setImplicitWait(long implicitWait) {
 		this.implicitWait = implicitWait;
 	}
 
-	public Long getExplicitWait() {
+	public long getExplicitWait() {
 		return explicitWait;
 	}
 
-	public void setExplicitWait(Long explicitWait) {
+	public void setExplicitWait(long explicitWait) {
 		this.explicitWait = explicitWait;
 	}
 
-	public String getBaseUrl() {
-		return baseUrl;
+	public Map<Project, ProjectConfig> getProjectConfigMap() {
+		return projectConfigMap;
 	}
 
-	public void setBaseUrl(String baseUrl) {
-		this.baseUrl = baseUrl;
+	public void setProjectConfigMap(Map<Project, ProjectConfig> projectConfigMap) {
+		this.projectConfigMap = projectConfigMap;
 	}
 }

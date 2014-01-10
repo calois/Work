@@ -2,16 +2,13 @@ package com.nasdaqomx.selenium.test.base;
 
 import java.io.Serializable;
 
-public class TestAppObject implements Serializable {
+public class ProjectConfig implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private String baseUrl;
 
-	private TestApp app;
+	private Project project;
 
 	public String getBaseUrl() {
 		return baseUrl;
@@ -21,11 +18,11 @@ public class TestAppObject implements Serializable {
 		this.baseUrl = baseUrl;
 	}
 
-	public TestApp getApp() {
-		return app;
+	public Project getProject() {
+		return project;
 	}
 
-	public void setApp(TestApp app) {
-		this.app = app;
+	public void setProject(Project project) {
+		this.project = project;
 	}
 }

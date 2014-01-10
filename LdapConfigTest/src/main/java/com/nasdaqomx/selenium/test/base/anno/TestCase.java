@@ -8,12 +8,12 @@ import java.lang.annotation.Target;
 
 import org.springframework.stereotype.Component;
 
-import com.nasdaqomx.selenium.test.base.TestApp;
+import com.nasdaqomx.selenium.test.base.Project;
 
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Component
 public @interface TestCase {
-	TestApp value();
+	Project value();
 }

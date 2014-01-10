@@ -6,41 +6,39 @@ import java.util.Map;
 import org.openqa.selenium.WebDriver;
 
 public class TestManager {
-	private TestObject testObject;
-	private Map<TestApp, WebDriver> driverMap = new HashMap<>();
+	private TestConfig testConfig;
+	private Map<Project, WebDriver> driverMap = new HashMap<>();
 
-	public TestManager(TestObject testObject) {
-		this.testObject = testObject;
+	public TestManager(TestConfig testConfig) {
+		this.testConfig = testConfig;
 	}
 
 	public String getChromeDriver() {
-		return testObject.getChromeDriver();
+		return testConfig.getChromeDriver();
 	}
 
 	public DriverType getDriverType() {
-		return testObject.getDriverType();
+		return testConfig.getDriverType();
 	}
 
 	public long getImplicitWait() {
-		return testObject.getImplicitWait();
+		return testConfig.getImplicitWait();
 	}
 
 	public long getExplicitWait() {
-		return testObject.getExplicitWait();
+		return testConfig.getExplicitWait();
 	}
 
-	public String getBaseUrl(TestApp app) {
-		return testObject.getAppObj().get(app).getBaseUrl();
+	public String getBaseUrl(Project project) {
+		return testConfig.getProjectConfigMap().get(project).getBaseUrl();
 	}
 
-	public WebDriver getWebDriver(TestApp app) {
-		if (driverMap.containsKey(app)) {
-			return driverMap.get(app);
+	public WebDriver getWebDriver(Project project) {
+		if (driverMap.containsKey(project)) {
+			return driverMap.get(project);
 		} else {
-			WebDriver webDriver = TestUtils.getWebDriver(
-					testObject.getDriverType(), testObject.getChromeDriver(),
-					testObject.getExplicitWait());
-			driverMap.put(app, webDriver);
+			WebDriver webDriver = TestUtils.getWebDriver(testConfig);
+			driverMap.put(project, webDriver);
 			return webDriver;
 		}
 	}
