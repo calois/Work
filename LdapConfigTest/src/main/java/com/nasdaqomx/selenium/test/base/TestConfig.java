@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TestObject implements Serializable {
+public class TestConfig implements Serializable {
 	/**
 	 * 
 	 */
@@ -13,7 +13,7 @@ public class TestObject implements Serializable {
 	private DriverType driverType;
 	private long implicitWait = 30;
 	private long explicitWait = 10;
-	private Map<TestApp, TestAppObject> appObj = new HashMap<>();
+	private Map<Project, ProjectConfig> projectConfigMap = new HashMap<>();
 
 	public String getChromeDriver() {
 		return chromeDriver;
@@ -47,11 +47,11 @@ public class TestObject implements Serializable {
 		this.explicitWait = explicitWait;
 	}
 
-	public Map<TestApp, TestAppObject> getAppObj() {
-		return appObj;
+	public Map<Project, ProjectConfig> getProjectConfigMap() {
+		return projectConfigMap;
 	}
 
-	public void setAppObj(Map<TestApp, TestAppObject> appObj) {
-		this.appObj = appObj;
+	public void setProjectConfigMap(Map<Project, ProjectConfig> projectConfigMap) {
+		this.projectConfigMap = projectConfigMap;
 	}
 }

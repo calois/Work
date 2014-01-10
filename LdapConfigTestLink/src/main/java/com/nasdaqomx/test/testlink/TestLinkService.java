@@ -19,8 +19,9 @@ import com.nasdaqomx.selenium.test.base.TestResultStatus;
 
 public class TestLinkService {
 
-	private final ExecutionType AUTOMATED = ExecutionType.AUTOMATED;
-	private final boolean GETSTEPINFO = true;
+	private static final ExecutionType AUTOMATED = ExecutionType.AUTOMATED;
+	private static final boolean GETSTEPINFO = true;
+	private static final boolean OVERWRITE_TEST_RESULT = true;
 	private TestLinkAPI api;
 
 	private URL testLinkUrl;
@@ -28,9 +29,8 @@ public class TestLinkService {
 	private String automationKeyFieldName;
 	private String inputDataFieldName;
 	private String outputDataFieldName;
-	private boolean overwriteTestResult;
 
-	private boolean debug = true;
+	private boolean debug = false;
 
 	@PostConstruct
 	public void init() {
@@ -57,10 +57,6 @@ public class TestLinkService {
 
 	public void setOutputDataFieldName(String name) {
 		this.outputDataFieldName = name;
-	}
-
-	public void setOverwriteTestResult(boolean overwriteTestResult) {
-		this.overwriteTestResult = overwriteTestResult;
 	}
 
 	public AutomationTestCase[] getTestCasesForSuite(Integer testSuiteId,
@@ -123,7 +119,7 @@ public class TestLinkService {
 			return api.reportTCResult(testCaseId, null, testPlanId,
 					ExecutionStatus.valueOf(result.getStatus().toString()),
 					null, buildName, result.getMessage(), false, null, null,
-					null, null, overwriteTestResult).getExecutionId();
+					null, null, OVERWRITE_TEST_RESULT).getExecutionId();
 		}
 	}
 

@@ -40,7 +40,7 @@ public class MainPage extends LdapConfigBasePage {
 			remoteAdmin = getElement(By.xpath(REMOTE_ADMIN_LOCATOR));
 			logout = getElement(By.id(LOGOUT_LOCATOR));
 		} catch (NoSuchElementException e) {
-			AbstractTest.fail(getTestApp(), e.getMessage());
+			AbstractTest.fail(getProject(), e.getMessage());
 		}
 	}
 

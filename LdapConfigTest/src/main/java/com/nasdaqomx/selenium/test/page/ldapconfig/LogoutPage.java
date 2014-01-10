@@ -18,11 +18,11 @@ public class LogoutPage extends LdapConfigBasePage {
 
 	public LogoutPage(TestManager testManager) {
 		super(testManager);
-		AbstractTest.assertEquals(getTestApp(), URL, this.getSimpleUrl());
+		AbstractTest.assertEquals(getProject(), URL, this.getSimpleUrl());
 		try {
 			loginLink = getElement(By.partialLinkText(LOGIN_LINK_LOCATOR));
 		} catch (NoSuchElementException e) {
-			AbstractTest.fail(getTestApp(), e.getMessage());
+			AbstractTest.fail(getProject(), e.getMessage());
 		}
 	}
 

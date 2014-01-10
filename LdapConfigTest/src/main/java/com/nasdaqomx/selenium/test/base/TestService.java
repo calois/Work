@@ -6,9 +6,6 @@ import java.lang.reflect.Method;
 
 public class TestService implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private static final String BASE_PACKAGE = "com.nasdaqomx.selenium.test.cases.";
 
@@ -18,12 +15,12 @@ public class TestService implements Serializable {
 		this.chromeDriver = chromeDriver;
 	}
 
-	public TestResult run(TestObject testObject, String automationKey,
+	public TestResult run(TestConfig testConfig, String automationKey,
 			TestData testData) {
 		TestResult result = new TestResult();
-		TestManager testManager = new TestManager(testObject);
-		if (TestUtils.isEmpty(testObject.getChromeDriver())) {
-			testObject.setChromeDriver(this.chromeDriver);
+		TestManager testManager = new TestManager(testConfig);
+		if (TestUtils.isEmpty(testConfig.getChromeDriver())) {
+			testConfig.setChromeDriver(this.chromeDriver);
 		}
 		try {
 			String className = BASE_PACKAGE.concat(automationKey.substring(0,
@@ -49,7 +46,7 @@ public class TestService implements Serializable {
 							result.setMessage(TestUtils.getStackTrace(e));
 							result.setScreenshot(TestUtils
 									.takeScreenshot(testManager.getWebDriver(e
-											.getTestApp())));
+											.getProject())));
 							return result;
 						} else {
 							throw ie.getTargetException();
@@ -76,7 +73,7 @@ public class TestService implements Serializable {
 				result.setStatus(TestResultStatus.FAILED);
 				result.setMessage(TestUtils.getStackTrace(e));
 				result.setScreenshot(TestUtils.takeScreenshot(testManager
-						.getWebDriver(e.getTestApp())));
+						.getWebDriver(e.getProject())));
 				return result;
 			} catch (Throwable e) {
 				e.printStackTrace();

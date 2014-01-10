@@ -11,7 +11,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.nasdaqomx.selenium.test.base.TestApp;
+import com.nasdaqomx.selenium.test.base.Project;
 import com.nasdaqomx.selenium.test.base.TestManager;
 import com.nasdaqomx.selenium.test.base.anno.PageObject;
 
@@ -25,7 +25,7 @@ public abstract class AbstractPageObject {
 		this.testManager = testManager;
 	}
 
-	public TestApp getTestApp() {
+	public Project getProject() {
 		PageObject p = this.getClass().getAnnotation(PageObject.class);
 		if (null == p) {
 			throw new RuntimeException("Missing PageObject Annotation for :"
@@ -58,15 +58,15 @@ public abstract class AbstractPageObject {
 	}
 
 	protected void load(String url) {
-		getWebDriver().get(testManager.getBaseUrl(getTestApp()) + url);
+		getWebDriver().get(testManager.getBaseUrl(getProject()) + url);
 	}
 
 	protected void load() {
-		getWebDriver().get(testManager.getBaseUrl(getTestApp()));
+		getWebDriver().get(testManager.getBaseUrl(getProject()));
 	}
 
 	protected WebDriver getWebDriver() {
-		return testManager.getWebDriver(getTestApp());
+		return testManager.getWebDriver(getProject());
 	}
 
 	protected WebDriverWait getWebDriveWait() {

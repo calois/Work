@@ -12,7 +12,7 @@ public abstract class AbstractTest {
 
 	private StringBuilder verificationErrors = new StringBuilder();
 
-	public TestApp getTestApp() {
+	public Project getProject() {
 		TestCase t = this.getClass().getAnnotation(TestCase.class);
 		if (null == t) {
 			throw new RuntimeException("Missing TestCase Annotation for :"
@@ -81,11 +81,11 @@ public abstract class AbstractTest {
 	}
 
 	public void assertEquals(Object expected, Object actual) {
-		assertEquals(this.getTestApp(), expected, actual);
+		assertEquals(this.getProject(), expected, actual);
 	}
 
 	/** Like JUnit's Assert.assertEquals, but knows how to compare string arrays */
-	public static void assertEquals(TestApp testApp, Object expected,
+	public static void assertEquals(Project testApp, Object expected,
 			Object actual) {
 		if (expected == null) {
 			assertTrue(testApp, "Expected: \"" + expected + "\" but actual: \""
@@ -122,10 +122,10 @@ public abstract class AbstractTest {
 	 * Selenese
 	 */
 	public void assertEquals(String expected, String actual) {
-		assertEquals(getTestApp(), expected, actual);
+		assertEquals(getProject(), expected, actual);
 	}
 
-	public static void assertEquals(TestApp testApp, String expected,
+	public static void assertEquals(Project testApp, String expected,
 			String actual) {
 		assertTrue(testApp, "Expected: \"" + expected + "\" but actual: \""
 				+ actual + "\"", seleniumEquals(expected, actual));
@@ -136,19 +136,19 @@ public abstract class AbstractTest {
 	 * and handles "regexp:" strings like HTML Selenese
 	 */
 	public void assertEquals(String expected, String[] actual) {
-		assertEquals(getTestApp(), expected, actual);
+		assertEquals(getProject(), expected, actual);
 	}
 
-	public static void assertEquals(TestApp testApp, String expected,
+	public static void assertEquals(Project testApp, String expected,
 			String[] actual) {
 		assertEquals(testApp, expected, join(actual, ','));
 	}
 
 	public void assertEquals(String[] expected, String[] actual) {
-		assertEquals(getTestApp(), expected, actual);
+		assertEquals(getProject(), expected, actual);
 	}
 
-	public static void assertEquals(TestApp testApp, String[] expected,
+	public static void assertEquals(Project testApp, String[] expected,
 			String[] actual) {
 		assertEquals(testApp, join(expected, ','), join(actual, ','));
 	}
@@ -185,10 +185,10 @@ public abstract class AbstractTest {
 
 	/** Asserts that two objects are not the same (compares using .equals()) */
 	public void assertNotEquals(Object expected, Object actual) {
-		assertNotEquals(getTestApp(), expected, actual);
+		assertNotEquals(getProject(), expected, actual);
 	}
 
-	public static void assertNotEquals(TestApp testApp, Object expected,
+	public static void assertNotEquals(Project testApp, Object expected,
 			Object actual) {
 		if (expected == null) {
 			assertFalse(testApp, "did not expect null to be null",
@@ -199,46 +199,46 @@ public abstract class AbstractTest {
 		}
 	}
 
-	public static void fail(TestApp app, String message) {
+	public static void fail(Project app, String message) {
 		throw new TestException(app, message);
 	}
 
 	public void fail(String message) {
-		fail(getTestApp(), message);
+		fail(getProject(), message);
 	}
 
 	public void assertTrue(String message, boolean condition) {
-		assertTrue(getTestApp(), message, condition);
+		assertTrue(getProject(), message, condition);
 	}
 
-	public static void assertTrue(TestApp testApp, String message,
+	public static void assertTrue(Project testApp, String message,
 			boolean condition) {
 		if (!condition)
 			fail(testApp, message);
 	}
 
 	public void assertTrue(boolean condition) {
-		assertTrue(getTestApp(), condition);
+		assertTrue(getProject(), condition);
 	}
 
-	public static void assertTrue(TestApp testApp, boolean condition) {
+	public static void assertTrue(Project testApp, boolean condition) {
 		assertTrue(testApp, null, condition);
 	}
 
 	public void assertFalse(String message, boolean condition) {
-		assertFalse(getTestApp(), message, condition);
+		assertFalse(getProject(), message, condition);
 	}
 
-	public static void assertFalse(TestApp app, String message,
+	public static void assertFalse(Project app, String message,
 			boolean condition) {
 		assertTrue(app, message, !condition);
 	}
 
 	public void assertFalse(boolean condition) {
-		assertFalse(getTestApp(), condition);
+		assertFalse(getProject(), condition);
 	}
 
-	public static void assertFalse(TestApp testApp, boolean condition) {
+	public static void assertFalse(Project testApp, boolean condition) {
 		assertTrue(testApp, null, !condition);
 	}
 
@@ -247,7 +247,7 @@ public abstract class AbstractTest {
 		assertNotEquals(Boolean.valueOf(expected), Boolean.valueOf(actual));
 	}
 
-	public static void assertNotEquals(TestApp testApp, boolean expected,
+	public static void assertNotEquals(Project testApp, boolean expected,
 			boolean actual) {
 		assertNotEquals(testApp, Boolean.valueOf(expected),
 				Boolean.valueOf(actual));
@@ -269,7 +269,7 @@ public abstract class AbstractTest {
 		String verificationErrorString = verificationErrors.toString();
 		clearVerificationErrors();
 		if (!"".equals(verificationErrorString)) {
-			fail(this.getTestApp(), verificationErrorString);
+			fail(this.getProject(), verificationErrorString);
 		}
 	}
 
