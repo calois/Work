@@ -2,6 +2,8 @@ package com.nasdaqomx.test;
 
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,8 +21,8 @@ import br.eti.kinoshita.testlinkjavaapi.model.TestPlan;
 import com.nasdaqomx.selenium.test.base.DriverType;
 import com.nasdaqomx.selenium.test.base.Project;
 import com.nasdaqomx.selenium.test.base.ProjectConfig;
-import com.nasdaqomx.selenium.test.base.TestData;
 import com.nasdaqomx.selenium.test.base.TestConfig;
+import com.nasdaqomx.selenium.test.base.TestData;
 import com.nasdaqomx.selenium.test.base.TestResult;
 import com.nasdaqomx.selenium.test.base.TestService;
 import com.nasdaqomx.test.testlink.AutomationTestCase;
@@ -40,12 +42,14 @@ public class HomeController {
 	private TestService testService;
 
 	@ModelAttribute("testConfig")
-	public TestConfig produceTestConfig() {
+	public TestConfig produceTestConfig(HttpServletRequest request) {
 		TestConfig config = new TestConfig();
 		ProjectConfig projectConfig = new ProjectConfig();
 		projectConfig.setProject(Project.LDAP_CONFIG);
 		config.getProjectConfigMap().put(projectConfig.getProject(),
 				projectConfig);
+		config.setChromeDriver(request.getSession().getServletContext()
+				.getRealPath("chromedriver.exe"));
 		return config;
 	}
 
