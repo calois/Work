@@ -2,7 +2,6 @@ package com.nasdaqomx.selenium.test.base;
 
 import java.util.regex.Pattern;
 
-import com.nasdaqomx.selenium.test.base.anno.TestCase;
 import com.nasdaqomx.selenium.test.base.page.AbstractPageObject;
 
 public abstract class AbstractTest {
@@ -13,12 +12,7 @@ public abstract class AbstractTest {
 	private StringBuilder verificationErrors = new StringBuilder();
 
 	public Project getProject() {
-		TestCase t = this.getClass().getAnnotation(TestCase.class);
-		if (null == t) {
-			throw new RuntimeException("Missing TestCase Annotation for :"
-					+ this.getClass().getName());
-		}
-		return t.value();
+		return TestUtils.getTestProject(this.getClass());
 	}
 
 	public void setTestManager(TestManager testManager) {
@@ -31,7 +25,7 @@ public abstract class AbstractTest {
 					testManager);
 			return o;
 		} catch (Exception e) {
-			throw new TestException(TestUtils.getTestApp(clazz),
+			throw new TestException(TestUtils.getTestProject(clazz),
 					"Fail to create page object" + clazz.getSimpleName(), e);
 		}
 	}

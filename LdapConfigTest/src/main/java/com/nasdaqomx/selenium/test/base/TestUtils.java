@@ -30,7 +30,7 @@ import com.nasdaqomx.selenium.test.base.anno.TestBefore;
 public class TestUtils {
 	private static final Log LOGGER = LogFactory.getLog(TestUtils.class);
 
-	public static Project getTestApp(Class<?> clazz) {
+	public static Project getTestProject(Class<?> clazz) {
 		if (clazz.getName().startsWith(
 				"com.nasdaqomx.selenium.test.cases.ldapconfig")
 				|| clazz.getName().startsWith(

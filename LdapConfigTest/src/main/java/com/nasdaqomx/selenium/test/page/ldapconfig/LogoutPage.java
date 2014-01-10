@@ -6,8 +6,9 @@ import org.openqa.selenium.WebElement;
 
 import com.nasdaqomx.selenium.test.base.AbstractTest;
 import com.nasdaqomx.selenium.test.base.TestManager;
+import com.nasdaqomx.selenium.test.base.page.AbstractPageObject;
 
-public class LogoutPage extends LdapConfigBasePage {
+public class LogoutPage extends AbstractPageObject {
 
 	private static final String URL = "logout.view";
 	// <a href="index.view">Click here to log in again.</a>

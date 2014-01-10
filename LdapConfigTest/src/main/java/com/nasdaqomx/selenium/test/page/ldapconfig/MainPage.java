@@ -6,9 +6,10 @@ import org.openqa.selenium.WebElement;
 
 import com.nasdaqomx.selenium.test.base.AbstractTest;
 import com.nasdaqomx.selenium.test.base.TestManager;
+import com.nasdaqomx.selenium.test.base.page.AbstractPageObject;
 import com.nasdaqomx.selenium.test.page.ldapconfig.clients.ListClients;
 
-public class MainPage extends LdapConfigBasePage {
+public class MainPage extends AbstractPageObject {
 
 	private static final String MANAGERS_LOCATOR = "//div[@id='mainMenu']//a[text()='Managers']";
 	private static final String MARKETS_LOCATOR = "//div[@id='mainMenu']//a[text()='Markets']";

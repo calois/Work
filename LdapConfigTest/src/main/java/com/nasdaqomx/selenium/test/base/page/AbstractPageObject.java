@@ -13,7 +13,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.nasdaqomx.selenium.test.base.Project;
 import com.nasdaqomx.selenium.test.base.TestManager;
-import com.nasdaqomx.selenium.test.base.anno.PageObject;
+import com.nasdaqomx.selenium.test.base.TestUtils;
 
 public abstract class AbstractPageObject {
 	private static final Log LOGGER = LogFactory
@@ -26,12 +26,7 @@ public abstract class AbstractPageObject {
 	}
 
 	public Project getProject() {
-		PageObject p = this.getClass().getAnnotation(PageObject.class);
-		if (null == p) {
-			throw new RuntimeException("Missing PageObject Annotation for :"
-					+ this.getClass().getName());
-		}
-		return p.value();
+		return TestUtils.getTestProject(this.getClass());
 	}
 
 	protected <T extends AbstractPageObject> T createPageObject(Class<T> clazz) {

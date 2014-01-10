@@ -5,9 +5,10 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 import com.nasdaqomx.selenium.test.base.TestManager;
+import com.nasdaqomx.selenium.test.base.page.AbstractPageObject;
 import com.nasdaqomx.selenium.test.page.ldapconfig.clients.ListClients;
 
-public class LoginPage extends LdapConfigBasePage {
+public class LoginPage extends AbstractPageObject {
 
 	/*
 	 * <div id="header"> <img id="productlogo"

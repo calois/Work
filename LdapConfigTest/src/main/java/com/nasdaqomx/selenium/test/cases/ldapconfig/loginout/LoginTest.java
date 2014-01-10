@@ -1,10 +1,10 @@
 package com.nasdaqomx.selenium.test.cases.ldapconfig.loginout;
 
+import com.nasdaqomx.selenium.test.base.AbstractTest;
 import com.nasdaqomx.selenium.test.base.anno.TestBefore;
-import com.nasdaqomx.selenium.test.cases.ldapconfig.LdapConfigBaseTest;
 import com.nasdaqomx.selenium.test.page.ldapconfig.LoginPage;
 
-public class LoginTest extends LdapConfigBaseTest {
+public class LoginTest extends AbstractTest {
 
 	private LoginPage loginPage;
 
