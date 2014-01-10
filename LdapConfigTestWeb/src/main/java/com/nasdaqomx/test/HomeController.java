@@ -76,7 +76,7 @@ public class HomeController {
 		return testLinkService.getBuildsForPlan(testPlanId);
 	}
 
-	@RequestMapping(value = "/runTestCases", method = RequestMethod.POST)
+	@RequestMapping(value = "/runTestCases", method = RequestMethod.GET)
 	public String runTestCases(@RequestParam DriverType browserType,
 			@RequestParam Long explicitWait, @RequestParam Long implicitWait,
 			@RequestParam String url, @RequestParam Integer projectId,
@@ -105,7 +105,7 @@ public class HomeController {
 		return "testList";
 	}
 
-	@RequestMapping(value = "/viewTestCases", method = RequestMethod.POST)
+	@RequestMapping(value = "/viewTestCases", method = RequestMethod.GET)
 	public String viewTestCases(@RequestParam DriverType browserType,
 			@RequestParam String url, @RequestParam Integer projectId,
 			@RequestParam Integer planId, @RequestParam String build,
