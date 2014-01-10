@@ -30,6 +30,17 @@ import com.nasdaqomx.selenium.test.base.anno.TestBefore;
 public class TestUtils {
 	private static final Log LOGGER = LogFactory.getLog(TestUtils.class);
 
+	public static TestApp getTestApp(Class<?> clazz) {
+		if (clazz.getName().startsWith(
+				"com.nasdaqomx.selenium.test.cases.ldapconfig")
+				|| clazz.getName().startsWith(
+						"com.nasdaqomx.selenium.test.page.ldapconfig")) {
+			return TestApp.LDAP_CONFIG;
+		} else {
+			return null;
+		}
+	}
+
 	public static WebDriver getWebDriver(DriverType driverType,
 			String chromeDriver, Long defaultWait) {
 		DesiredCapabilities capabilities;

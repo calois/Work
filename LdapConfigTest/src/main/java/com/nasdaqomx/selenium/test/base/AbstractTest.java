@@ -2,7 +2,6 @@ package com.nasdaqomx.selenium.test.base;
 
 import java.util.regex.Pattern;
 
-import com.nasdaqomx.selenium.test.base.anno.PageObject;
 import com.nasdaqomx.selenium.test.base.anno.TestCase;
 import com.nasdaqomx.selenium.test.base.page.AbstractPageObject;
 
@@ -32,9 +31,8 @@ public abstract class AbstractTest {
 					testManager);
 			return o;
 		} catch (Exception e) {
-			throw new TestException(clazz.getAnnotation(PageObject.class)
-					.value(), "Fail to create page object"
-					+ clazz.getSimpleName(), e);
+			throw new TestException(TestUtils.getTestApp(clazz),
+					"Fail to create page object" + clazz.getSimpleName(), e);
 		}
 	}
 
