@@ -10,14 +10,7 @@
 	<context:annotation-config />
 	<context:component-scan base-package="com.nasdaqomx.test" />
 	<bean class="com.nasdaqomx.test.testlink.TestLinkService">
-		<property name="url"
-			value="http://au03smbcqa02.dev.smbc.nasdaqomx.com/testlink/lib/api/xmlrpc/v1/xmlrpc.php" />
-		<property name="devKey" value="6ab4b64c40af9cb23d72a1f25885b9f2" />
-		<property name="automationKeyFieldName" value="Automation Key" />
-		<property name="inputDataFieldName" value="Input Data" />
-		<property name="outputDataFieldName" value="Output Data" />
 	</bean>
 	<bean class="com.nasdaqomx.selenium.test.base.TestService">
-		<property name="chromeDriver" value="C:\\Work\\automation2\\chromedriver.exe" />
 	</bean>
 </beans>

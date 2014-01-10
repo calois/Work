@@ -1,9 +1,5 @@
 package com.nasdaqomx.test.testlink;
 
-import java.net.URL;
-
-import javax.annotation.PostConstruct;
-
 import br.eti.kinoshita.testlinkjavaapi.TestLinkAPI;
 import br.eti.kinoshita.testlinkjavaapi.constants.ExecutionStatus;
 import br.eti.kinoshita.testlinkjavaapi.constants.ExecutionType;
@@ -22,114 +18,78 @@ public class TestLinkService {
 	private static final ExecutionType AUTOMATED = ExecutionType.AUTOMATED;
 	private static final boolean GETSTEPINFO = true;
 	private static final boolean OVERWRITE_TEST_RESULT = true;
-	private TestLinkAPI api;
-
-	private URL testLinkUrl;
-	private String devKey;
-	private String automationKeyFieldName;
-	private String inputDataFieldName;
-	private String outputDataFieldName;
-
+	
 	private boolean debug = false;
 
-	@PostConstruct
-	public void init() {
-		if (!debug) {
-			api = new TestLinkAPI(testLinkUrl, devKey);
-		}
-	}
-
-	public void setUrl(URL url) {
-		this.testLinkUrl = url;
-	}
-
-	public void setDevKey(String devKey) {
-		this.devKey = devKey;
-	}
-
-	public void setAutomationKeyFieldName(String name) {
-		this.automationKeyFieldName = name;
-	}
-
-	public void setInputDataFieldName(String name) {
-		this.inputDataFieldName = name;
-	}
-
-	public void setOutputDataFieldName(String name) {
-		this.outputDataFieldName = name;
-	}
-
-	public AutomationTestCase[] getTestCasesForSuite(Integer testSuiteId,
-			Integer testProjectId) {
-		TestCase[] testCases = api.getTestCasesForTestSuite(testSuiteId, null,
-				null);
+	public AutomationTestCase[] getTestCasesForSuite(
+			TestLinkManager testLinkManager) {
+		TestLinkAPI api = testLinkManager.getApi();
+		TestCase[] testCases = api.getTestCasesForTestSuite(
+				testLinkManager.getSuiteId(), null, null);
 		AutomationTestCase[] t = new AutomationTestCase[testCases.length];
 		for (int i = 0; i < testCases.length; i++) {
-			TestCase testCase = getTestCaseById(testCases[i].getId());
-			t[i] = convertTestCase(testCase, testProjectId);
+			t[i] = convertTestCase(getTestCaseById(testCases[i].getId(), api),
+					testLinkManager);
 		}
 		return t;
 	}
 
-	public AutomationTestCase[] getTestCasesForPlan(Integer testPlanId,
-			Integer testProjectId) {
-		TestCase[] testCases = api.getTestCasesForTestPlan(testPlanId, null,
-				null, null, null, null, null, null, AUTOMATED, GETSTEPINFO,
-				null);
+	public AutomationTestCase[] getTestCasesForPlan(
+			TestLinkManager testLinkManager) {
+		TestLinkAPI api = testLinkManager.getApi();
+		TestCase[] testCases = api.getTestCasesForTestPlan(
+				testLinkManager.getPlanId(), null, null, null, null, null,
+				null, null, AUTOMATED, GETSTEPINFO, null);
 		AutomationTestCase[] t = new AutomationTestCase[testCases.length];
 		for (int i = 0; i < testCases.length; i++) {
-			t[i] = convertTestCase(testCases[i], testProjectId);
+			t[i] = convertTestCase(getTestCaseById(testCases[i].getId(), api),
+					testLinkManager);
 		}
 		return t;
 	}
 
 	private AutomationTestCase convertTestCase(TestCase testCase,
-			Integer testProjectId) {
+			TestLinkManager testLinkManager) {
 		AutomationTestCase t = new AutomationTestCase(testCase);
-		t.setAutomationKey(getAutomationKey(testCase, testProjectId));
-		t.setInputData(getInputData(testCase, testProjectId));
-		t.setOutputData(getOutputData(testCase, testProjectId));
+		t.setAutomationKey(getAutomationKey(testCase, testLinkManager));
+		t.setInputData(getInputData(testCase, testLinkManager));
+		t.setOutputData(getOutputData(testCase, testLinkManager));
 		return t;
 	}
 
 	public AutomationTestCase getTestCase(Integer testCaseId,
-			Integer testProjectId) {
-		return convertTestCase(getTestCaseById(testCaseId), testProjectId);
+			TestLinkManager testLinkManager) {
+		return convertTestCase(
+				getTestCaseById(testCaseId, testLinkManager.getApi()),
+				testLinkManager);
 	}
 
-	public String getAutomationKey(TestCase testCase, Integer testProjectId) {
-		return getCustomFieldValue(testCase, automationKeyFieldName,
-				testProjectId);
-	}
-
-	public String getInputData(TestCase testCase, Integer testProjectId) {
-		return getCustomFieldValue(testCase, inputDataFieldName, testProjectId);
-	}
-
-	public String getOutputData(TestCase testCase, Integer testProjectId) {
-		return getCustomFieldValue(testCase, outputDataFieldName, testProjectId);
-
-	}
-
-	public Integer reportResult(Integer testCaseId, Integer testPlanId,
-			String buildName, TestResult result) {
+	public Integer reportResult(Integer testCaseId,
+			TestLinkManager testLinkManager, TestResult result) {
 		if (TestResultStatus.INVALID.equals(result.getStatus())) {
 			return null;
 		} else {
-			return api.reportTCResult(testCaseId, null, testPlanId,
-					ExecutionStatus.valueOf(result.getStatus().toString()),
-					null, buildName, result.getMessage(), false, null, null,
-					null, null, OVERWRITE_TEST_RESULT).getExecutionId();
+			return testLinkManager
+					.getApi()
+					.reportTCResult(
+							testCaseId,
+							null,
+							testLinkManager.getPlanId(),
+							ExecutionStatus.valueOf(result.getStatus()
+									.toString()), null,
+							testLinkManager.getBuild(), result.getMessage(),
+							false, null, null, null, null,
+							OVERWRITE_TEST_RESULT).getExecutionId();
 		}
 	}
 
 	public Attachment uploadExecutionAttachment(Integer executionId,
-			String fileName, String fileContent) {
+			String fileName, String fileContent, TestLinkAPI api) {
 		return api.uploadExecutionAttachment(executionId, null, null, fileName,
 				"image/png", fileContent);
 	}
 
-	public TestProject[] getTestProjects() {
+	public TestProject[] getTestProjects(TestLinkAPI api) {
 		if (debug) {
 			TestProject t = new TestProject();
 			t.setId(1);
@@ -139,54 +99,87 @@ public class TestLinkService {
 		return api.getProjects();
 	}
 
-	public TestPlan[] getTestPlansForProject(Integer testProjectId) {
+	public TestPlan[] getTestPlansForProject(TestLinkManager testLinkManager) {
 		if (debug) {
 			TestPlan testPlan = new TestPlan();
 			testPlan.setId(1);
 			testPlan.setName("asdasd");
 			return new TestPlan[] { testPlan };
 		}
-		return api.getProjectTestPlans(testProjectId);
+		return testLinkManager.getApi().getProjectTestPlans(
+				testLinkManager.getProjectId());
 	}
 
-	public Build[] getBuildsForPlan(Integer testPlanId) {
+	public Build[] getBuildsForPlan(TestLinkManager testLinkManager) {
 		if (debug) {
 			Build b = new Build();
 			b.setId(1);
 			b.setName("asd");
 			return new Build[] { b };
 		}
-		return api.getBuildsForTestPlan(testPlanId);
+		return testLinkManager.getApi().getBuildsForTestPlan(
+				testLinkManager.getPlanId());
 	}
 
-	public TestSuite[] getTestSuitesForPlan(Integer testPlanId) {
-		return api.getTestSuitesForTestPlan(testPlanId);
+	public TestSuite[] getTestSuitesForPlan(TestLinkManager testLinkManager) {
+		return testLinkManager.getApi().getTestSuitesForTestPlan(
+				testLinkManager.getPlanId());
 	}
 
-	public TestSuite[] getTestSuitesForSuite(Integer testSuiteId) {
-		return api.getTestSuitesForTestSuite(testSuiteId);
+	public TestSuite[] getTestSuitesForSuite(TestLinkManager testLinkManager) {
+		return testLinkManager.getApi().getTestSuitesForTestSuite(
+				testLinkManager.getSuiteId());
 	}
 
-	public TestPlan getTestPlanByName(String projectName, String planName) {
-		return api.getTestPlanByName(planName, projectName);
+	public TestPlan getTestPlanByName(TestLinkManager testLinkManager) {
+		return testLinkManager.getApi()
+				.getTestPlanByName(testLinkManager.getPlanName(),
+						testLinkManager.getProjectName());
 	}
 
-	public TestProject getTestProjectByName(String projectName) {
-		return api.getTestProjectByName(projectName);
+	public TestProject getTestProjectByName(TestLinkManager testLinkManager) {
+		return testLinkManager.getApi().getTestProjectByName(
+				testLinkManager.getProjectName());
 	}
 
-	public Build createBuild(Integer testPlanId, String buildName) {
-		return api.createBuild(testPlanId, buildName, null);
+	public Build createBuild(TestLinkManager testLinkManager) {
+		return testLinkManager.getApi().createBuild(
+				testLinkManager.getPlanId(), testLinkManager.getBuild(), null);
 	}
 
-	public String getCustomFieldValue(TestCase testCase, String fieldName,
-			Integer testProjectId) {
-		return api.getTestCaseCustomFieldDesignValue(testCase.getId(), null,
-				testCase.getVersion(), testProjectId, fieldName, null)
-				.getValue();
+	public boolean checkDevKey(TestLinkAPI api, String devKey){
+		return api.checkDevKey(devKey);
+	}
+	
+	private String getCustomFieldValue(TestCase testCase, String fieldName,
+			TestLinkManager testLinkManager) {
+		return testLinkManager
+				.getApi()
+				.getTestCaseCustomFieldDesignValue(testCase.getId(), null,
+						testCase.getVersion(), testLinkManager.getProjectId(),
+						fieldName, null).getValue();
 	}
 
-	private TestCase getTestCaseById(Integer id) {
+	private String getAutomationKey(TestCase testCase,
+			TestLinkManager testLinkManager) {
+		return getCustomFieldValue(testCase,
+				testLinkManager.getAutomationKeyFieldName(), testLinkManager);
+	}
+
+	private String getInputData(TestCase testCase,
+			TestLinkManager testLinkManager) {
+		return getCustomFieldValue(testCase,
+				testLinkManager.getInputDataFieldName(), testLinkManager);
+	}
+
+	private String getOutputData(TestCase testCase,
+			TestLinkManager testLinkManager) {
+		return getCustomFieldValue(testCase,
+				testLinkManager.getOutputDataFieldName(), testLinkManager);
+
+	}
+
+	private TestCase getTestCaseById(Integer id, TestLinkAPI api) {
 		return api.getTestCase(id, null, null);
 	}
 }

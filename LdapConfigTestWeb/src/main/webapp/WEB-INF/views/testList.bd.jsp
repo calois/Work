@@ -5,8 +5,8 @@
 	</ol>
 </h1>
 <div class="container">
-	<a href='<test:url src="/${projectId}/${planId}/${build}/testCases"/>'
-		class="btn btn-primary btn-lg" role="button">Run All Test Cases</a>
+	<a href='<test:url src="/runAll"/>' class="btn btn-primary btn-lg"
+		role="button">Run All Test Cases</a>
 	<table class="table table-striped">
 		<thead>
 			<tr>
@@ -30,8 +30,7 @@
 					<td>${testCase.outputData}</td>
 					<td id="${testCase.id}_status">${testCase.testResult.status}</td>
 					<td id="${testCase.id}_message">${testCase.testResult.message}</td>
-					<td><button
-							url='<test:url src="/${projectId}/${planId}/${build}/testCase/${testCase.id}"/>'
+					<td><button url='<test:url src="/run/${testCase.id}"/>'
 							class="btn btn-primary" role="button">Run</button></td>
 				</tr>
 			</c:forEach>
@@ -42,7 +41,7 @@
 	$('button[url]').click(
 			function() {
 				$.ajax({
-					type : "get",
+					type : "post",
 					url : $(this).attr("url")
 				}).done(
 						function(testCase) {

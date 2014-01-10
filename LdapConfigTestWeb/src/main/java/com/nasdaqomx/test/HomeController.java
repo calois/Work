@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import br.eti.kinoshita.testlinkjavaapi.model.Build;
 import br.eti.kinoshita.testlinkjavaapi.model.TestPlan;
+import br.eti.kinoshita.testlinkjavaapi.model.TestProject;
 
 import com.nasdaqomx.selenium.test.base.DriverType;
 import com.nasdaqomx.selenium.test.base.Project;
@@ -26,13 +27,15 @@ import com.nasdaqomx.selenium.test.base.TestData;
 import com.nasdaqomx.selenium.test.base.TestResult;
 import com.nasdaqomx.selenium.test.base.TestService;
 import com.nasdaqomx.test.testlink.AutomationTestCase;
+import com.nasdaqomx.test.testlink.TestLinkConfig;
+import com.nasdaqomx.test.testlink.TestLinkManager;
 import com.nasdaqomx.test.testlink.TestLinkService;
 
 /**
  * Handles requests for the application home page.
  */
 @Controller
-@SessionAttributes("testConfig")
+@SessionAttributes({ "testConfig", "testLinkConfig" })
 public class HomeController {
 
 	@Autowired
@@ -53,142 +56,169 @@ public class HomeController {
 		return config;
 	}
 
-	/**
-	 * Simply selects the home view to render by returning its name.
-	 */
+	@ModelAttribute("testLinkConfig")
+	public TestLinkConfig produceTestLinkConfig(HttpServletRequest request) {
+		TestLinkConfig testLinkConfig = new TestLinkConfig();
+		testLinkConfig
+				.setBaseUrl("http://au03smbcqa02.dev.smbc.nasdaqomx.com/testlink/");
+		testLinkConfig.setDevKey("6ab4b64c40af9cb23d72a1f25885b9f2");
+		return testLinkConfig;
+	}
+
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model,
-			@ModelAttribute("testConfig") TestConfig testConfig) {
-		model.addAttribute("testProjects", testLinkService.getTestProjects());
-		model.addAttribute("testPlans",
-				testLinkService.getTestPlansForProject(2));
+			@ModelAttribute("testConfig") TestConfig testConfig,
+			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig) {
+		model.addAttribute("baseUrl", testLinkConfig.getBaseUrl());
+		model.addAttribute("devKey", testLinkConfig.getDevKey());
 		model.addAttribute("explicitWait", testConfig.getExplicitWait());
 		model.addAttribute("implicitWait", testConfig.getImplicitWait());
-		return "home";
+		return "testConfig";
+	}
+
+	@RequestMapping(value = "/testProjects", method = RequestMethod.GET)
+	@ResponseBody
+	public TestProject[] getTestProjects(@RequestParam String baseUrl,
+			@RequestParam String devKey,
+			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig,
+			Model model) {
+		testLinkConfig.setDevKey(devKey);
+		testLinkConfig.setBaseUrl(baseUrl);
+		return testLinkService.getTestProjects(new TestLinkManager(
+				testLinkConfig).getApi());
 	}
 
 	@RequestMapping(value = "/{testProjectId}/testPlan", method = RequestMethod.GET)
 	@ResponseBody
 	public TestPlan[] getTestPlans(@PathVariable Integer testProjectId,
+			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig,
 			Model model) {
-		return testLinkService.getTestPlansForProject(testProjectId);
+		testLinkConfig.setProjectId(testProjectId);
+		return testLinkService.getTestPlansForProject(new TestLinkManager(
+				testLinkConfig));
 	}
 
 	@RequestMapping(value = "/{testPlanId}/build", method = RequestMethod.GET)
 	@ResponseBody
-	public Build[] getBuilds(@PathVariable Integer testPlanId, Model model) {
-		return testLinkService.getBuildsForPlan(testPlanId);
+	public Build[] getBuilds(@PathVariable Integer testPlanId,
+			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig,
+			Model model) {
+		testLinkConfig.setPlanId(testPlanId);
+		return testLinkService.getBuildsForPlan(new TestLinkManager(
+				testLinkConfig));
 	}
 
-	@RequestMapping(value = "/runTestCases", method = RequestMethod.GET)
+	@RequestMapping(value = "/runTestCases", method = RequestMethod.POST)
 	public String runTestCases(@RequestParam DriverType browserType,
 			@RequestParam Long explicitWait, @RequestParam Long implicitWait,
 			@RequestParam String url, @RequestParam Integer projectId,
-			@RequestParam Integer planId,
-			@RequestParam(required = false) String build, Model model,
-			@ModelAttribute("testConfig") TestConfig testConfig) {
+			@RequestParam Integer planId, @RequestParam String build,
+			Model model, @ModelAttribute("testConfig") TestConfig testConfig,
+			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig) {
 		// TODO: Need to set for different APP
 		testConfig.getProjectConfigMap().get(Project.LDAP_CONFIG)
 				.setBaseUrl(url);
 		testConfig.setDriverType(browserType);
 		testConfig.setExplicitWait(explicitWait);
 		testConfig.setImplicitWait(implicitWait);
-		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan(
-				planId, projectId);
+		testLinkConfig.setProjectId(projectId);
+		testLinkConfig.setPlanId(planId);
+		testLinkConfig.setBuild(build);
+		TestLinkManager testLinkManager = new TestLinkManager(testLinkConfig);
+		AutomationTestCase[] testCases = testLinkService
+				.getTestCasesForPlan(testLinkManager);
 		if (null != testCases) {
-			createTestLinkBuild(build, planId);
+			createTestLinkBuild(testLinkManager);
 			for (int i = 0; i < testCases.length; i++) {
 				testCases[i].setTestResult(runTestCase(testConfig,
-						testCases[i], planId, build));
+						testCases[i], testLinkManager));
 			}
 		}
 		model.addAttribute("testCases", testCases);
-		model.addAttribute("projectId", projectId);
-		model.addAttribute("planId", planId);
-		model.addAttribute("build", build);
 		return "testList";
 	}
 
-	@RequestMapping(value = "/viewTestCases", method = RequestMethod.GET)
+	@RequestMapping(value = "/viewTestCases", method = RequestMethod.POST)
 	public String viewTestCases(@RequestParam DriverType browserType,
 			@RequestParam String url, @RequestParam Integer projectId,
 			@RequestParam Integer planId, @RequestParam String build,
-			Model model, @ModelAttribute("testConfig") TestConfig testConfig) {
+			Model model, @ModelAttribute("testConfig") TestConfig testConfig,
+			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig) {
 		// TODO: Need to set for different APP
 		testConfig.getProjectConfigMap().get(Project.LDAP_CONFIG)
 				.setBaseUrl(url);
 		testConfig.setDriverType(browserType);
-		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan(
-				planId, projectId);
+		testLinkConfig.setProjectId(projectId);
+		testLinkConfig.setPlanId(planId);
+		testLinkConfig.setBuild(build);
+		TestLinkManager testLinkManager = new TestLinkManager(testLinkConfig);
+		AutomationTestCase[] testCases = testLinkService
+				.getTestCasesForPlan(testLinkManager);
 		model.addAttribute("testCases", testCases);
-		model.addAttribute("projectId", projectId);
-		model.addAttribute("planId", planId);
-		model.addAttribute("build", build);
 		return "testList";
 	}
 
-	@RequestMapping(value = "/{projectId}/{planId}/{build}/testCase/{testCaseId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/run/{testCaseId}", method = RequestMethod.POST)
 	@ResponseBody
-	public AutomationTestCase runTestCase(@PathVariable Integer projectId,
-			@PathVariable Integer planId, @PathVariable String build,
-			@PathVariable Integer testCaseId, Model model,
-			@ModelAttribute("testConfig") TestConfig testConfig) {
+	public AutomationTestCase runTestCase(@PathVariable Integer testCaseId,
+			Model model, @ModelAttribute("testConfig") TestConfig testConfig,
+			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig) {
+		TestLinkManager testLinkManager = new TestLinkManager(testLinkConfig);
 		AutomationTestCase testCase = testLinkService.getTestCase(testCaseId,
-				projectId);
-		createTestLinkBuild(build, planId);
-		testCase.setTestResult(runTestCase(testConfig, testCase, planId, build));
+				testLinkManager);
+		createTestLinkBuild(testLinkManager);
+		testCase.setTestResult(runTestCase(testConfig, testCase,
+				testLinkManager));
 		return testCase;
 	}
 
-	@RequestMapping(value = "/{projectId}/{planId}/{build}/testCases", method = RequestMethod.GET)
-	public String runTestCases(@PathVariable Integer projectId,
-			@PathVariable Integer planId, @PathVariable String build,
-			Model model, @ModelAttribute("testConfig") TestConfig testConfig) {
-		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan(
-				planId, projectId);
+	@RequestMapping(value = "/runAll", method = RequestMethod.GET)
+	public String runTestCases(Model model,
+			@ModelAttribute("testConfig") TestConfig testConfig,
+			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig) {
+		TestLinkManager testLinkManager = new TestLinkManager(testLinkConfig);
+		AutomationTestCase[] testCases = testLinkService
+				.getTestCasesForPlan(testLinkManager);
 		if (null != testCases) {
-			createTestLinkBuild(build, planId);
+			createTestLinkBuild(testLinkManager);
 			for (int i = 0; i < testCases.length; i++) {
 				testCases[i].setTestResult(runTestCase(testConfig,
-						testCases[i], planId, build));
+						testCases[i], testLinkManager));
 			}
 		}
 		model.addAttribute("testCases", testCases);
-		model.addAttribute("projectId", projectId);
-		model.addAttribute("planId", planId);
-		model.addAttribute("build", build);
 		return "testList";
 	}
 
-	private void createTestLinkBuild(String build, Integer testPlanId) {
+	private void createTestLinkBuild(TestLinkManager testLinkManager) {
 		boolean hasBuild = false;
-		Build[] builds = testLinkService.getBuildsForPlan(testPlanId);
+		Build[] builds = testLinkService.getBuildsForPlan(testLinkManager);
 		if (null != builds) {
 			for (int i = 0; i < builds.length; i++) {
-				if (build.equals(builds[i].getName())) {
+				if (testLinkManager.getBuild().equals(builds[i].getName())) {
 					hasBuild = true;
 					break;
 				}
 			}
 		}
 		if (!hasBuild) {
-			testLinkService.createBuild(testPlanId, build);
+			testLinkService.createBuild(testLinkManager);
 		}
 	}
 
 	private TestResult runTestCase(TestConfig testConfig,
-			AutomationTestCase tc, Integer planId, String build) {
+			AutomationTestCase tc, TestLinkManager testLinkManager) {
 		TestResult result = testService.run(
 				testConfig,
 				tc.getAutomationKey(),
 				new TestData(tc.getInputDataProperties(), tc
 						.getOutputProperties()));
 		Integer executionId = testLinkService.reportResult(tc.getId(),
-				Integer.valueOf(planId), build, result);
+				testLinkManager, result);
 		if (null != result.getScreenshot()) {
 			testLinkService.uploadExecutionAttachment(executionId,
 					"Screenshot_" + System.currentTimeMillis(),
-					result.getScreenshot());
+					result.getScreenshot(), testLinkManager.getApi());
 		}
 		return result;
 	}

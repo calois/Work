@@ -1,19 +1,42 @@
 package com.nasdaqomx.test.testlink;
 
-import java.net.URL;
-
 public class TestLinkConfig {
-	private URL url;
+
+	private static final String XMLRPC_URL = "lib/api/xmlrpc/v1/xmlrpc.php";
+
+	private String baseUrl;
 	private String devKey;
-	private String automationKeyFieldName;
-	private String inputDataFieldName;
-	private String outputDataFieldName;
+	private String automationKeyFieldName = "Automation Key";
+	private String inputDataFieldName = "Input Data";
+	private String outputDataFieldName = "Output Data";
 	private Integer projectId;
-	private Integer PlanId;
-	private String build;
-	
-	public void setUrl(URL url) {
-		this.url = url;
+	private String projectName;
+	private Integer planId;
+	private Integer suiteId;
+	private String planName;
+
+	public String getAutomationKeyFieldName() {
+		return automationKeyFieldName;
+	}
+
+	public void setAutomationKeyFieldName(String automationKeyFieldName) {
+		this.automationKeyFieldName = automationKeyFieldName;
+	}
+
+	public String getInputDataFieldName() {
+		return inputDataFieldName;
+	}
+
+	public void setInputDataFieldName(String inputDataFieldName) {
+		this.inputDataFieldName = inputDataFieldName;
+	}
+
+	public String getOutputDataFieldName() {
+		return outputDataFieldName;
+	}
+
+	public void setOutputDataFieldName(String outputDataFieldName) {
+		this.outputDataFieldName = outputDataFieldName;
 	}
 
 	public Integer getProjectId() {
@@ -24,12 +47,36 @@ public class TestLinkConfig {
 		this.projectId = projectId;
 	}
 
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
 	public Integer getPlanId() {
-		return PlanId;
+		return planId;
 	}
 
 	public void setPlanId(Integer planId) {
-		PlanId = planId;
+		this.planId = planId;
+	}
+
+	public Integer getSuiteId() {
+		return suiteId;
+	}
+
+	public void setSuiteId(Integer suiteId) {
+		this.suiteId = suiteId;
+	}
+
+	public String getPlanName() {
+		return planName;
+	}
+
+	public void setPlanName(String planName) {
+		this.planName = planName;
 	}
 
 	public String getBuild() {
@@ -40,39 +87,26 @@ public class TestLinkConfig {
 		this.build = build;
 	}
 
-	public URL getUrl() {
-		return url;
+	private String build;
+
+	public String getUrl() {
+		return baseUrl.endsWith("/") ? baseUrl.concat(XMLRPC_URL) : baseUrl
+				.concat("/").concat(XMLRPC_URL);
+	}
+
+	public String getBaseUrl() {
+		return baseUrl;
+	}
+
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
 	}
 
 	public String getDevKey() {
 		return devKey;
 	}
 
-	public String getAutomationKeyFieldName() {
-		return automationKeyFieldName;
-	}
-
-	public String getInputDataFieldName() {
-		return inputDataFieldName;
-	}
-
-	public String getOutputDataFieldName() {
-		return outputDataFieldName;
-	}
-
 	public void setDevKey(String devKey) {
 		this.devKey = devKey;
-	}
-
-	public void setAutomationKeyFieldName(String name) {
-		this.automationKeyFieldName = name;
-	}
-
-	public void setInputDataFieldName(String name) {
-		this.inputDataFieldName = name;
-	}
-
-	public void setOutputDataFieldName(String name) {
-		this.outputDataFieldName = name;
 	}
 }

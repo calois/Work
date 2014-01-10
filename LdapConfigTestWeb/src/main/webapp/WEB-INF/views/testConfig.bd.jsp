@@ -1,10 +1,28 @@
-<h1><ol class="breadcrumb">
-  <li class="active"><a href='<test:url src="/"/>'>Home</a></li>
-</ol></h1>
+<h1>
+	<ol class="breadcrumb">
+		<li class="active"><a href='<test:url src="/"/>'>Home</a></li>
+	</ol>
+</h1>
 <div class="container">
 	<h2>Test Config</h2>
-	<br>
-	<form role="form" style="width: 600px;">
+	<form id="testLinkConfigForm" role="form"
+		action='<test:url src="/testProjects"/>' method="POST">
+		<div class="form-group">
+			<label for="url">Test Link URL:</label> <input required type="text"
+				class="form-control" id="baseUrl" name="baseUrl"
+				placeholder="Enter Test Link URL" value="${baseUrl}">
+		</div>
+		<div class="form-group">
+			<label for="projectName">Personal API access key:</label> <input
+				required type="text" class="form-control" id="devKey" name="devKey"
+				value="${devKey}">
+		</div>
+		<span class="help-block">Login TestLink and get the key in My
+			Settings page.</span>
+		<button type="submit" class="btn btn-default">Access to
+			TestLink</button>
+	</form>
+	<form id="testConfigForm" role="form" method="POST" hidden=true>
 		<div class="form-group">
 			<label for="browser">Test Browser:</label> <select required
 				class="form-control" id="browser" name="browserType">
@@ -62,24 +80,48 @@
 	</form>
 </div>
 <script>
+	var defaultProject = "LDAP Config";
+	var testLinkConfigForm = $('#testLinkConfigForm');
+	var testConfigForm = $('#testConfigForm');
+	var testProject = $('#testProject');
 	var testPlan = $('#testPlan');
 	var buildList = $('#buildsList');
 	var build = $('#build');
-	$('#testProject').change(
-			function() {
-				$.ajax({
-					type : "get",
-					url : '<test:url src="/' + $(this).val() + '/testPlan"/>'
-				}).done(
-						function(plans) {
-							testPlan.empty();
-							for ( var i in plans) {
-								testPlan.append($("<option></option>").attr(
-										"value", plans[i].id).text(
-										plans[i].name));
-							}
+	testLinkConfigForm.submit(function() {
+		var postData = $(this).serializeArray();
+		var formURL = $(this).attr("action");
+		$.ajax({
+			url : formURL,
+			type : "POST",
+			data : postData,
+			success : function(projects) {
+				testConfigForm.removeAttr("hidden");
+				testProject.empty();
+				for ( var i in projects) {
+					testProject.append($("<option></option>").attr("value",
+							projects[i].id).text(projects[i].name));
+				}
+				$('#testProject option:contains(' + defaultProject + ')').prop(
+						{
+							selected : true
 						});
-			});
+			}
+		});
+		return false;
+	});
+	testProject.change(function() {
+		$.ajax({
+			type : "get",
+			url : '<test:url src="/' + $(this).val() + '/testPlan"/>'
+		}).done(
+				function(plans) {
+					testPlan.empty();
+					for ( var i in plans) {
+						testPlan.append($("<option></option>").attr("value",
+								plans[i].id).text(plans[i].name));
+					}
+				});
+	});
 	testPlan.change(function() {
 		$.ajax({
 			type : "get",
@@ -91,9 +133,5 @@
 				buildList.append($("<option></option>").text(builds[i].name));
 			}
 		});
-	});
-	var defaultProject = "LDAP Config";
-	$('#testProject option:contains(' + defaultProject + ')').prop({
-		selected : true
 	});
 </script>
