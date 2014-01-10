@@ -16,7 +16,6 @@
 		<property name="automationKeyFieldName" value="Automation Key" />
 		<property name="inputDataFieldName" value="Input Data" />
 		<property name="outputDataFieldName" value="Output Data" />
-		<property name="overwriteTestResult" value="true" />
 	</bean>
 	<bean class="com.nasdaqomx.selenium.test.base.TestService">
 		<property name="chromeDriver" value="C:\\Work\\automation2\\chromedriver.exe" />
