@@ -1,3 +1,8 @@
+'use strict';
+(function($){
+	//Code here
+})(jQuery);
+
 var defaultProject = "LDAP Config";
 var testLinkConfigForm = $('#testLinkConfigForm');
 var testProject = $('#testProject');
