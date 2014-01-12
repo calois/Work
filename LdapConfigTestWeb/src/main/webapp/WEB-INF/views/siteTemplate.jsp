@@ -22,6 +22,9 @@
 	<test:js src="/resources/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js" />
 	<test:js src="/resources/js/vendor/bootstrap.min.js" />
 	<test:js src="/resources/js/main.js" />
+	<script>
+		test.ctx = '<test:url src=""/>';
+	</script>
 	<t:insertAttribute name="head" defaultValue="" />
 </head>
 

@@ -1,4 +1,4 @@
-<div class="panel-group" id="accordion">
+<div class="panel-group accordion" id="accordion">
 	<div class="panel panel-default">
 		<div class="panel-heading" data-toggle="collapse"
 			data-parent="#accordion" href="#testLinkCollapse">
@@ -96,60 +96,4 @@
 		</div>
 	</div>
 </div>
-<script>
-	var defaultProject = "LDAP Config";
-	var testLinkConfigForm = $('#testLinkConfigForm');
-	var testConfigForm = $('#testConfigForm');
-	var testProject = $('#testProject');
-	var testPlan = $('#testPlan');
-	var buildList = $('#buildsList');
-	var build = $('#build');
-	testLinkConfigForm.submit(function() {
-		var postData = $(this).serializeArray();
-		var formURL = $(this).attr("action");
-		$.ajax({
-			url : formURL,
-			type : "GET",
-			data : postData,
-			success : function(projects) {
-				$('#testLinkCollapse').collapse('hide');
-				$('#testConfigCollapse').collapse('show');
-				testProject.empty();
-				for ( var i in projects) {
-					testProject.append($("<option></option>").attr("value",
-							projects[i].id).text(projects[i].name));
-				}
-				$('#testProject option:contains(' + defaultProject + ')').prop(
-						{
-							selected : true
-						});
-			}
-		});
-		return false;
-	});
-	testProject.change(function() {
-		$.ajax({
-			type : "get",
-			url : '<test:url src="/' + $(this).val() + '/testPlan"/>'
-		}).done(
-				function(plans) {
-					testPlan.empty();
-					for ( var i in plans) {
-						testPlan.append($("<option></option>").attr("value",
-								plans[i].id).text(plans[i].name));
-					}
-				});
-	});
-	testPlan.change(function() {
-		$.ajax({
-			type : "get",
-			url : '<test:url src="/' + $(this).val() + '/build"/>'
-		}).done(function(builds) {
-			buildList.empty();
-			build.removeAttr("disabled");
-			for ( var i in builds) {
-				buildList.append($("<option></option>").text(builds[i].name));
-			}
-		});
-	});
-</script>
+<test:js src="/resources/js/testConfig.js" />
