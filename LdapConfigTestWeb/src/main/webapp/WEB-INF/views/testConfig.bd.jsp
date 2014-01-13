@@ -61,7 +61,7 @@
 					<div class="form-group">
 						<label for="url">Project URL:</label> <input required type="text"
 							class="form-control" id="url" name="url"
-							placeholder="Enter LDAP URL">
+							placeholder="Enter Project URL">
 					</div>
 					<div class="form-group">
 						<label for="planName">Test Plan:</label> <select required

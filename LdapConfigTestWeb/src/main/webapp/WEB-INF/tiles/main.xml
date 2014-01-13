@@ -11,6 +11,7 @@
 		<put-attribute name="body" value="/WEB-INF/views/testConfig.bd.jsp" />
 	</definition>
 	<definition name="testList" extends="siteTemplate">
+		<put-attribute name="head" value="/WEB-INF/views/testList.hd.jsp" />
 		<put-attribute name="body" value="/WEB-INF/views/testList.bd.jsp" />
 	</definition>
 </tiles-definitions>

@@ -12,6 +12,7 @@ body {
 }
 
 #siteContainer {
+	min-width: 70em;
 	background-color: #fff;
 	margin: auto;
 	margin-top: 5em;

@@ -6,7 +6,7 @@
 		role="button">Run All Test Cases</a>
 </div>
 <table
-	class="table table-striped table-bordered table-condensed table-responsive Listing">
+	class="table table-striped table-bordered table-condensed">
 	<thead>
 		<tr>
 			<th>Id</th>
