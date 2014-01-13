@@ -7,7 +7,7 @@
 <meta name="description" content="For Nasdaq OMXAutomation Test">
 <meta name="author" content="Joy Chiu">
 <link rel="shortcut icon"
-	href="/AutomationTestWeb/resources/img/favicon.ico" />
+	href="<test:url src='/resources/img/favicon.ico'/>" />
 <title>Automation Test Web</title>
 <test:css src="/resources/css/bootstrap.min.css" />
 <test:css src="/resources/css/bootstrap-theme.min.css" />
@@ -22,18 +22,18 @@
 <t:insertAttribute name="head" defaultValue="" />
 </head>
 <body>
-	<div id="Page">
-		<div id="Header">
-			<img id="ProductLogo"
-				src="/AutomationTestWeb/resources/img/AutomationLogo.png"
+	<div id="siteContainer" class="container">
+		<div id="header">
+			<img id="productLogo"
+				src="<test:url src='/resources/img/AutomationLogo.png'/>"
 				width="430" height="38" alt="NASDAQ OMX | Automation Test">
 		</div>
-		<div id="Wrapper">
+		<div id="body">
 			<t:insertAttribute name="body" />
 		</div>
 	</div>
-	<div id="Footer">
-		<div id="ProductInfo">
+	<div id="footer">
+		<div id="productInfo">
 			<ul>
 				<li><span>Email:</span> <a href="mailto:Joy.Chiu@nasdaqomx.com">
 						Joy.Chiu@nasdaqomx.com </a></li>
@@ -41,7 +41,7 @@
 				<li><span>Phone:</span> +61 2 8076 2972</li>
 			</ul>
 		</div>
-		<div id="FooterCopyright">
+		<div id="footerCopyright">
 			&#169; 2013, The <a href="http://www.nasdaqomx.com" target="_blank">NASDAQ
 				OMX</a> Group, Inc. All Rights Reserved.
 		</div>

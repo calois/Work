@@ -4,83 +4,81 @@
 body {
 	background-color: #f0f2f4;
 	font-family: Arial, Helvetica, sans-serif;
-	font-size: 12px;
+	font-size: 1.33em;
 	line-height: normal;
 	color: #333333;
-	margin: 0px;
-	padding: 0px;
+	margin: 0em;
+	padding: 0em;
 }
 
-#Page {
+#siteContainer {
 	background-color: #fff;
-	width: 900px;
-	border: 1px solid #000;
+	width: 70em;
 	margin: auto;
-	margin-top: 50px;
-	padding: 30px 0px;
-	border: 1px solid #ccc;
-	-moz-border-radius: 38px;
-	-webkit-border-radius: 38px;
-	border-radius: 38px;
-	-moz-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
-	-webkit-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
-	box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+	margin-top: 5em;
+	padding: 3em 0em;
+	border: 0.1em solid #ccc;
+	-moz-border-radius: 4em;
+	-webkit-border-radius: 4em;
+	border-radius: 4em;
+	-moz-box-shadow: 0.1em 0.1em 0.4em rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 0.1em 0.1em 0.4em rgba(0, 0, 0, 0.2);
+	box-shadow: 0.1em 0.1em 0.4em rgba(0, 0, 0, 0.2);
 }
 
-#Header {
+#header {
 	margin: auto;
-	padding: 0px 50px;
-	height: 64px;
-	margin-bottom: 30px;
+	padding: 0em 5em;
+	height: 6em;
 }
 
-#Wrapper {
+#body {
 	margin: auto;
-	margin-left: 50px;
-	margin-right: 50px;
-	padding-bottom: 30px;
+	margin-left: 5em;
+	margin-right: 5em;
+	padding-bottom: 3em;
 	clear: both;
 }
 
-#ProductLogo {
+#productLogo {
 	float: left;
-	margin-top: 14px;
+	margin-top: 1em;
 }
 
-.ListingOptions {
+.listingOptions {
 	margin-bottom: 1.5em;
 	margin-left: 0.5em;
 }
 
 /*---- footer --------------------- */
-#Footer {
+#footer {
 	color: #808080;
 	clear: both;
-	font-size: 11px;
-	width: 800px;
-	margin: 10px auto;
-	margin-bottom: 50px;
+	font-size: 0.8em;
+	width: 70em;
+	margin: 1.5em auto;
+	margin-bottom: 5em;
 }
 
-#Footer ul {
-	margin: 0px;
-	padding: 0px;
+#footer ul {
+	margin: 0em;
+	padding: 0em;
 	list-style-type: none;
 }
 
-#Footer ul li {
+#footer ul li {
 	display: inline;
 	margin-right: 1.5em;
 }
 
-#Footer span {
+#footer span {
 	text-align: left;
 }
 
-#FooterCopyright {
+#footerCopyright {
 	float: right;
 }
 
-#ProductInfo {
+#productInfo {
 	float: left;
 }

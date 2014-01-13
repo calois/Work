@@ -1,5 +1,5 @@
 <h2 class="Header">Test List</h2>
-<div class="ListingOptions">
+<div class="listingOptions">
 	<a href='<test:url src="/"/>' class="btn btn-default btn-sm"
 		role="button">Reset Test Config</a> <a
 		href='<test:url src="/runAll"/>' class="btn btn-default btn-sm"
