@@ -15,7 +15,7 @@ public class LoginPage extends AbstractPageObject {
 	 * src="/ldapconfig/images/ProductLogo.png" alt="LDAP Config"> </div>
 	 */
 
-	private static final String URL = "fdslogin.jsp";
+	private static final String URL = "login.jsp";
 	// <input type="text" name="j_username">
 	private static final String USER_NAME_LOCATOR = "j_username";
 	// <input type="password" name="j_password">
