@@ -28,7 +28,6 @@ import com.nasdaqomx.selenium.test.base.TestResult;
 import com.nasdaqomx.selenium.test.base.TestService;
 import com.nasdaqomx.test.testlink.AutomationTestCase;
 import com.nasdaqomx.test.testlink.TestLinkConfig;
-import com.nasdaqomx.test.testlink.TestLinkManager;
 import com.nasdaqomx.test.testlink.TestLinkService;
 
 /**
@@ -84,8 +83,8 @@ public class HomeController {
 			Model model) {
 		testLinkConfig.setDevKey(devKey);
 		testLinkConfig.setBaseUrl(baseUrl);
-		return testLinkService.getTestProjects(new TestLinkManager(
-				testLinkConfig).getApi());
+		testLinkService.setTestLinkConfig(testLinkConfig);
+		return testLinkService.getTestProjects();
 	}
 
 	@RequestMapping(value = "/{testProjectId}/testPlan", method = RequestMethod.GET)
@@ -94,8 +93,7 @@ public class HomeController {
 			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig,
 			Model model) {
 		testLinkConfig.setProjectId(testProjectId);
-		return testLinkService.getTestPlansForProject(new TestLinkManager(
-				testLinkConfig));
+		return testLinkService.getTestPlansForProject();
 	}
 
 	@RequestMapping(value = "/{testPlanId}/build", method = RequestMethod.GET)
@@ -104,8 +102,7 @@ public class HomeController {
 			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig,
 			Model model) {
 		testLinkConfig.setPlanId(testPlanId);
-		return testLinkService.getBuildsForPlan(new TestLinkManager(
-				testLinkConfig));
+		return testLinkService.getBuildsForPlan();
 	}
 
 	@RequestMapping(value = "/runTestCases", method = RequestMethod.POST)
@@ -124,14 +121,12 @@ public class HomeController {
 		testLinkConfig.setProjectId(projectId);
 		testLinkConfig.setPlanId(planId);
 		testLinkConfig.setBuild(build);
-		TestLinkManager testLinkManager = new TestLinkManager(testLinkConfig);
-		AutomationTestCase[] testCases = testLinkService
-				.getTestCasesForPlan(testLinkManager);
+		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan();
 		if (null != testCases) {
-			createTestLinkBuild(testLinkManager);
+			createTestLinkBuild(build);
 			for (int i = 0; i < testCases.length; i++) {
-				testCases[i].setTestResult(runTestCase(testConfig,
-						testCases[i], testLinkManager));
+				testCases[i]
+						.setTestResult(runTestCase(testConfig, testCases[i]));
 			}
 		}
 		model.addAttribute("testCases", testCases);
@@ -151,9 +146,7 @@ public class HomeController {
 		testLinkConfig.setProjectId(projectId);
 		testLinkConfig.setPlanId(planId);
 		testLinkConfig.setBuild(build);
-		TestLinkManager testLinkManager = new TestLinkManager(testLinkConfig);
-		AutomationTestCase[] testCases = testLinkService
-				.getTestCasesForPlan(testLinkManager);
+		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan();
 		model.addAttribute("testCases", testCases);
 		return "testList";
 	}
@@ -163,12 +156,9 @@ public class HomeController {
 	public AutomationTestCase runTestCase(@PathVariable Integer testCaseId,
 			Model model, @ModelAttribute("testConfig") TestConfig testConfig,
 			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig) {
-		TestLinkManager testLinkManager = new TestLinkManager(testLinkConfig);
-		AutomationTestCase testCase = testLinkService.getTestCase(testCaseId,
-				testLinkManager);
-		createTestLinkBuild(testLinkManager);
-		testCase.setTestResult(runTestCase(testConfig, testCase,
-				testLinkManager));
+		AutomationTestCase testCase = testLinkService.getTestCase(testCaseId);
+		createTestLinkBuild(testLinkConfig.getBuild());
+		testCase.setTestResult(runTestCase(testConfig, testCase));
 		return testCase;
 	}
 
@@ -176,49 +166,45 @@ public class HomeController {
 	public String runTestCases(Model model,
 			@ModelAttribute("testConfig") TestConfig testConfig,
 			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig) {
-		TestLinkManager testLinkManager = new TestLinkManager(testLinkConfig);
-		AutomationTestCase[] testCases = testLinkService
-				.getTestCasesForPlan(testLinkManager);
+		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan();
 		if (null != testCases) {
-			createTestLinkBuild(testLinkManager);
+			createTestLinkBuild(testLinkConfig.getBuild());
 			for (int i = 0; i < testCases.length; i++) {
-				testCases[i].setTestResult(runTestCase(testConfig,
-						testCases[i], testLinkManager));
+				testCases[i]
+						.setTestResult(runTestCase(testConfig, testCases[i]));
 			}
 		}
 		model.addAttribute("testCases", testCases);
 		return "testList";
 	}
 
-	private void createTestLinkBuild(TestLinkManager testLinkManager) {
+	private void createTestLinkBuild(String build) {
 		boolean hasBuild = false;
-		Build[] builds = testLinkService.getBuildsForPlan(testLinkManager);
+		Build[] builds = testLinkService.getBuildsForPlan();
 		if (null != builds) {
 			for (int i = 0; i < builds.length; i++) {
-				if (testLinkManager.getBuild().equals(builds[i].getName())) {
+				if (build.equals(builds[i].getName())) {
 					hasBuild = true;
 					break;
 				}
 			}
 		}
 		if (!hasBuild) {
-			testLinkService.createBuild(testLinkManager);
+			testLinkService.createBuild();
 		}
 	}
 
-	private TestResult runTestCase(TestConfig testConfig,
-			AutomationTestCase tc, TestLinkManager testLinkManager) {
+	private TestResult runTestCase(TestConfig testConfig, AutomationTestCase tc) {
 		TestResult result = testService.run(
 				testConfig,
 				tc.getAutomationKey(),
 				new TestData(tc.getInputDataProperties(), tc
 						.getOutputProperties()));
-		Integer executionId = testLinkService.reportResult(tc.getId(),
-				testLinkManager, result);
+		Integer executionId = testLinkService.reportResult(tc.getId(), result);
 		if (null != result.getScreenshot()) {
 			testLinkService.uploadExecutionAttachment(executionId,
 					"Screenshot_" + System.currentTimeMillis(),
-					result.getScreenshot(), testLinkManager.getApi());
+					result.getScreenshot());
 		}
 		return result;
 	}

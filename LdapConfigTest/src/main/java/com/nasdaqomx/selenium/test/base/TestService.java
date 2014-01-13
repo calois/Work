@@ -9,19 +9,10 @@ public class TestService implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final String BASE_PACKAGE = "com.nasdaqomx.selenium.test.cases.";
 
-	private String chromeDriver;
-
-	public void setChromeDriver(String chromeDriver) {
-		this.chromeDriver = chromeDriver;
-	}
-
 	public TestResult run(TestConfig testConfig, String automationKey,
 			TestData testData) {
 		TestResult result = new TestResult();
 		TestManager testManager = new TestManager(testConfig);
-		if (TestUtils.isEmpty(testConfig.getChromeDriver())) {
-			testConfig.setChromeDriver(this.chromeDriver);
-		}
 		try {
 			String className = BASE_PACKAGE.concat(automationKey.substring(0,
 					automationKey.lastIndexOf(".")));

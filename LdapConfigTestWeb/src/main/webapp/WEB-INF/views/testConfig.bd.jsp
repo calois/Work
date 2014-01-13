@@ -1,8 +1,9 @@
+<h3>Test Config</h3>
 <div class="panel-group accordion" id="accordion">
 	<div class="panel panel-default">
 		<div class="panel-heading" data-toggle="collapse"
 			data-parent="#accordion" href="#testLinkCollapse">
-			<h4 class="panel-title">Access to TestLink</h4>
+			<h5 class="panel-title">Access to TestLink</h5>
 		</div>
 		<div id="testLinkCollapse" class="panel-collapse collapse in">
 			<div class="panel-body">
@@ -18,9 +19,9 @@
 							required type="text" class="form-control" id="devKey"
 							name="devKey" value="${devKey}">
 					</div>
-					<span class="help-block">Login TestLink and get the key in
-						My Settings page.</span>
-					<button type="submit" class="btn btn-primary">Access to
+					<span class="help-block">To get the access key, please Login
+						the TestLink and go to My Settings page.</span>
+					<button type="submit" class="btn btn-default">Access to
 						TestLink</button>
 				</form>
 			</div>
@@ -29,7 +30,7 @@
 	<div class="panel panel-default">
 		<div class="panel-heading" data-toggle="collapse"
 			data-parent="#accordion" href="#testConfigCollapse">
-			<h4 class="panel-title">Test Config</h4>
+			<h5 class="panel-title">Configuration</h5>
 		</div>
 		<div id="testConfigCollapse" class="panel-collapse collapse">
 			<div class="panel-body">
@@ -53,26 +54,18 @@
 							placeholder="Extra waiting time for locating elements">
 					</div>
 					<div class="form-group">
-						<label for="url">Test URL:</label> <input required type="text"
+						<label for="projectName">Test Project:</label> <select required
+							class="form-control" id="testProject" name="projectId">
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="url">Project URL:</label> <input required type="text"
 							class="form-control" id="url" name="url"
 							placeholder="Enter LDAP URL">
 					</div>
 					<div class="form-group">
-						<label for="projectName">Test Project:</label> <select required
-							class="form-control" id="testProject" name="projectId">
-							<option></option>
-							<c:forEach var="testProject" items="${testProjects}">
-								<option value=${testProject.id}>${testProject.name}</option>
-							</c:forEach>
-						</select>
-					</div>
-					<div class="form-group">
 						<label for="planName">Test Plan:</label> <select required
 							class="form-control" id="testPlan" name="planId">
-							<option></option>
-							<c:forEach var="testPlan" items="${testPlans}">
-								<option value=${testPlan.id}>${testPlan.name}</option>
-							</c:forEach>
 						</select>
 					</div>
 					<div class="form-group">
@@ -87,10 +80,10 @@
 					</div>
 					<button type="submit" form="testConfigForm"
 						formaction='<test:url src="/viewTestCases"/>'
-						class="btn btn-primary">View Test Cases</button>
+						class="btn btn-default">View Test Cases</button>
 					<button type="submit" form="testConfigForm"
 						formaction='<test:url src="/runTestCases"/>'
-						class="btn btn-primary">Run Test Cases</button>
+						class="btn btn-default">Run Test Cases</button>
 				</form>
 			</div>
 		</div>
