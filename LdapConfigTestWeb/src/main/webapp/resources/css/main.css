@@ -11,53 +11,45 @@ body {
 	padding: 0px;
 }
 
-#page-border {
-	margin: 50px 50px 0;
-	float: left;
-}
-
-#page {
+#Page {
 	background-color: #fff;
-	/* 42px gives 50px to the top line of the logo text (8px padding inside the image) */
-	padding: 42px 0 50px 0;
-
-	border: 1px solid #ccc;
-	-moz-border-radius: 50px;
-	-webkit-border-radius: 50px;
-	border-radius: 50px;
-
-	-moz-box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
-	-webkit-box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
-	box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
-}
-
-#header {
+	width: 900px;
+	border: 1px solid #000;
 	margin: auto;
-	padding: 0px 50px 0px 50px;
+	margin-top: 50px;
+	padding: 30px 0px;
+	border: 1px solid #ccc;
+	-moz-border-radius: 38px;
+	-webkit-border-radius: 38px;
+	border-radius: 38px;
+	-moz-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+	box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
 }
 
-#pageContent {
-	/* 42px gives 50px to the bottom line of the logo text (8px for the 'Q' tail) */
-	margin: 42px 50px 0 50px;
+#Header {
+	margin: auto;
+	padding: 0px 50px;
+	height: 64px;
+	margin-bottom: 30px;
 }
 
-#content {
-	margin: 0;
+#Wrapper {
+	margin: auto;
+	margin-left: 50px;
+	margin-right: 50px;
+	padding-bottom: 30px;
+	clear: both;
 }
 
-h3 {
-	margin: 0 0 10px 0;
-	padding: 0;
-}
-
-.Header {
-	font-size: 16px;
-	font-weight: bold;
+#ProductLogo {
+	float: left;
+	margin-top: 14px;
 }
 
 .ListingOptions {
 	margin-bottom: 1.5em;
-	margin-left: 0.5em;	
+	margin-left: 0.5em;
 }
 
 /*---- footer --------------------- */
@@ -88,6 +80,7 @@ h3 {
 #FooterCopyright {
 	float: right;
 }
-#ProductInfo, #BrowserInfo {
+
+#ProductInfo {
 	float: left;
 }

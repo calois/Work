@@ -22,33 +22,28 @@
 <t:insertAttribute name="head" defaultValue="" />
 </head>
 <body>
-	<div id="page-border">
-		<div id="page">
-			<div id="header">
-				<img id="Logo"
-					src="/AutomationTestWeb/resources/img/AutomationLogo.png"
-					width="430" height="38" alt="NASDAQ OMX | Automation Test">
-			</div>
-			<div id="pageContent">
-				<div id="mainMenu"></div>
-				<div id="content">
-					<t:insertAttribute name="body" />
-				</div>
-			</div>
+	<div id="Page">
+		<div id="Header">
+			<img id="ProductLogo"
+				src="/AutomationTestWeb/resources/img/AutomationLogo.png"
+				width="430" height="38" alt="NASDAQ OMX | Automation Test">
 		</div>
-		<div id="Footer">
-			<div id="ProductInfo" class="FooterPoints">
-				<ul>
-					<li><span>Email:</span> <a
-						href="mailto:Joy.Chiu@nasdaqomx.com"> Joy.Chiu@nasdaqomx.com </a></li>
-					<li><span>|</span></li>
-					<li><span>Phone:</span> +61 2 8076 2972</li>
-				</ul>
-			</div>
-			<div id="FooterCopyright">
-				&#169; 2013, The <a href="http://www.nasdaqomx.com" target="_blank">NASDAQ
-					OMX</a> Group, Inc. All Rights Reserved.
-			</div>
+		<div id="Wrapper">
+			<t:insertAttribute name="body" />
+		</div>
+	</div>
+	<div id="Footer">
+		<div id="ProductInfo">
+			<ul>
+				<li><span>Email:</span> <a href="mailto:Joy.Chiu@nasdaqomx.com">
+						Joy.Chiu@nasdaqomx.com </a></li>
+				<li><span>|</span></li>
+				<li><span>Phone:</span> +61 2 8076 2972</li>
+			</ul>
+		</div>
+		<div id="FooterCopyright">
+			&#169; 2013, The <a href="http://www.nasdaqomx.com" target="_blank">NASDAQ
+				OMX</a> Group, Inc. All Rights Reserved.
 		</div>
 	</div>
 </body>

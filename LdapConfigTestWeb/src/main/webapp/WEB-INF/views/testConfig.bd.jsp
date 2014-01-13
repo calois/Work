@@ -1,4 +1,4 @@
-<h3>Test Config</h3>
+<h2>Test Config</h2>
 <div class="panel-group accordion" id="accordion">
 	<div class="panel panel-default">
 		<div class="panel-heading" data-toggle="collapse"
