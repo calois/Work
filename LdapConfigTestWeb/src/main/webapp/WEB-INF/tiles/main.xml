@@ -7,6 +7,7 @@
 	<definition name="siteTemplate" template="/WEB-INF/views/siteTemplate.jsp">
 	</definition>
 	<definition name="testConfig" extends="siteTemplate">
+		<put-attribute name="head" value="/WEB-INF/views/testConfig.hd.jsp" />
 		<put-attribute name="body" value="/WEB-INF/views/testConfig.bd.jsp" />
 	</definition>
 	<definition name="testList" extends="siteTemplate">

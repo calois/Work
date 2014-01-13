@@ -22,7 +22,7 @@
 <t:insertAttribute name="head" defaultValue="" />
 </head>
 <body>
-	<div id="siteContainer" class="container">
+	<div id="siteContainer">
 		<div id="header">
 			<img id="productLogo"
 				src="<test:url src='/resources/img/AutomationLogo.png'/>"
@@ -42,7 +42,7 @@
 			</ul>
 		</div>
 		<div id="footerCopyright">
-			&#169; 2013, The <a href="http://www.nasdaqomx.com" target="_blank">NASDAQ
+			&copy; 2013, The <a href="http://www.nasdaqomx.com" target="_blank">NASDAQ
 				OMX</a> Group, Inc. All Rights Reserved.
 		</div>
 	</div>
