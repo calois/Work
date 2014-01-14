@@ -15,9 +15,9 @@
 							placeholder="Enter Test Link URL" value="${baseUrl}">
 					</div>
 					<div class="form-group">
-						<label for="projectName">Personal API access key:</label> <input
+						<label for="devKey">Personal API Access Key:</label> <input
 							required type="text" class="form-control" id="devKey"
-							name="devKey" value="${devKey}">
+							name="devKey" placeholder="Enter your personal API Access Key" value="${devKey}">
 					</div>
 					<span class="help-block">To get the access key, please Login
 						the TestLink and go to My Settings page.</span>

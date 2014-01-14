@@ -24,7 +24,7 @@ public class TestLinkService {
 	private static final boolean OVERWRITE_TEST_RESULT = true;
 	private TestLinkAPI api;
 	private TestLinkConfig testLinkConfig;
-	private boolean debug = true;
+	private boolean debug = false;
 
 	public void setTestLinkConfig(TestLinkConfig testLinkConfig) {
 		this.testLinkConfig = testLinkConfig;

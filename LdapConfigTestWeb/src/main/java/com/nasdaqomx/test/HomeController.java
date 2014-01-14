@@ -60,7 +60,6 @@ public class HomeController {
 		TestLinkConfig testLinkConfig = new TestLinkConfig();
 		testLinkConfig
 				.setBaseUrl("http://au03smbcqa02.dev.smbc.nasdaqomx.com/testlink/");
-		testLinkConfig.setDevKey("6ab4b64c40af9cb23d72a1f25885b9f2");
 		return testLinkConfig;
 	}
 
@@ -112,7 +111,6 @@ public class HomeController {
 			@RequestParam Integer planId, @RequestParam String build,
 			Model model, @ModelAttribute("testConfig") TestConfig testConfig,
 			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig) {
-		// TODO: Need to set for different APP
 		testConfig.getProjectConfigMap().get(Project.LDAP_CONFIG)
 				.setBaseUrl(url);
 		testConfig.setDriverType(browserType);
@@ -139,7 +137,6 @@ public class HomeController {
 			@RequestParam Integer planId, @RequestParam String build,
 			Model model, @ModelAttribute("testConfig") TestConfig testConfig,
 			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig) {
-		// TODO: Need to set for different APP
 		testConfig.getProjectConfigMap().get(Project.LDAP_CONFIG)
 				.setBaseUrl(url);
 		testConfig.setDriverType(browserType);
