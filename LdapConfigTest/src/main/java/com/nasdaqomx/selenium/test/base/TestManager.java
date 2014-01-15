@@ -46,6 +46,7 @@ public class TestManager {
 	public void close() {
 		for (WebDriver d : driverMap.values()) {
 			d.close();
+			d.quit();
 		}
 	}
 }
