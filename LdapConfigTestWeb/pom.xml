@@ -16,7 +16,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.nasdaqomx</groupId>
-			<artifactId>TestLinkAccess</artifactId>
+			<artifactId>TestManagermentToolAccess</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 

@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 import com.nasdaqomx.selenium.test.base.AbstractTest;
 import com.nasdaqomx.selenium.test.base.TestManager;
 import com.nasdaqomx.selenium.test.base.page.AbstractPageObject;
-import com.nasdaqomx.selenium.test.page.ldapconfig.clients.ListClients;
+import com.nasdaqomx.selenium.test.page.ldapconfig.clients.ListClientsPage;
 
 public class MainPage extends AbstractPageObject {
 
@@ -57,9 +57,9 @@ public class MainPage extends AbstractPageObject {
 		this.metamarkets.click();
 	}
 
-	public ListClients clickClients() {
+	public ListClientsPage clickClients() {
 		this.clients.click();
-		return createPageObject(ListClients.class);
+		return createPageObject(ListClientsPage.class);
 	}
 
 	public void clickReports() {

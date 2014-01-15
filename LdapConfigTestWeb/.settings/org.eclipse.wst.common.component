@@ -4,10 +4,10 @@
 		<wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
 		<wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
 		<wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <dependent-module archiveName="TestLinkAccess-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/TestLinkAccess/TestLinkAccess">
+        <dependent-module archiveName="TestManagermentToolAccess-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/TestManagementToolAccess/TestManagementToolAccess">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="AutomationTest-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/AutomationTest/AutomationTest">
+        <dependent-module archiveName="AutomationScripts-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/AutomationScripts/AutomationScripts">
             <dependency-type>uses</dependency-type>
         </dependent-module>
 		<property name="java-output-path" value="target/classes"/>

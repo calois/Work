@@ -6,7 +6,7 @@ import org.openqa.selenium.WebElement;
 
 import com.nasdaqomx.selenium.test.base.TestManager;
 import com.nasdaqomx.selenium.test.base.page.AbstractPageObject;
-import com.nasdaqomx.selenium.test.page.ldapconfig.clients.ListClients;
+import com.nasdaqomx.selenium.test.page.ldapconfig.clients.ListClientsPage;
 
 public class LoginPage extends AbstractPageObject {
 
@@ -81,9 +81,9 @@ public class LoginPage extends AbstractPageObject {
 		return this.password.getText();
 	}
 
-	public ListClients submitLogin() {
+	public ListClientsPage submitLogin() {
 		this.loginButton.click();
-		return createPageObject(ListClients.class);
+		return createPageObject(ListClientsPage.class);
 	}
 
 	public LoginPage submitLoginExpectingFailure() {
@@ -95,10 +95,10 @@ public class LoginPage extends AbstractPageObject {
 		this.forgottenPassword.click();
 	}
 
-	public ListClients loginAs(String name, String pwd) {
+	public ListClientsPage loginAs(String name, String pwd) {
 		typeUserName(name);
 		typePassword(pwd);
 		submitLogin();
-		return createPageObject(ListClients.class);
+		return createPageObject(ListClientsPage.class);
 	}
 }

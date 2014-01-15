@@ -4,11 +4,11 @@ import com.nasdaqomx.selenium.test.base.AbstractTest;
 import com.nasdaqomx.selenium.test.base.TestManager;
 import com.nasdaqomx.selenium.test.page.ldapconfig.MainPage;
 
-public class ListClients extends MainPage {
+public class ListClientsPage extends MainPage {
 
 	private static final String URL = "listClients.view";
 
-	public ListClients(TestManager testManager) {
+	public ListClientsPage(TestManager testManager) {
 		super(testManager);
 		AbstractTest.assertEquals(getProject(), URL, this.getSimpleUrl());
 		// TODO Auto-generated constructor stub
