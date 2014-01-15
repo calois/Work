@@ -6,12 +6,14 @@
 	var testPlan = $('#testPlan');
 	var buildList = $('#buildsList');
 	var build = $('#build');
+	var viewTestCasesBtn = $('#viewTestCases');
+	var runTestCasesBtn = $('#runTestCases');
 	testLinkConfigForm.submit(function() {
 		var postData = $(this).serializeArray();
 		var formURL = $(this).attr("action");
 		$.ajax({
 			url : formURL,
-			type : "GET",
+			type : "get",
 			data : postData,
 			success : function(projects) {
 				$('#testConfigCollapse').prev().click();
@@ -54,5 +56,9 @@
 				buildList.append($("<option></option>").text(builds[i].name));
 			}
 		});
+	});
+	$('#testConfigForm').submit(function() {
+		viewTestCasesBtn.attr("disabled", true);
+		runTestCasesBtn.attr("disabled", true);
 	});
 })(jQuery);

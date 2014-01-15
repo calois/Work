@@ -17,7 +17,7 @@
 					<div class="form-group">
 						<label for="devKey">Personal API Access Key:</label> <input
 							required type="text" class="form-control" id="devKey"
-							name="devKey" placeholder="Enter your personal API Access Key" value="${devKey}">
+							name="devKey" placeholder="Enter your personal API Access Key">
 					</div>
 					<span class="help-block">To get the access key, please Login
 						the TestLink and go to My Settings page.</span>
@@ -78,12 +78,12 @@
 						<span class="help-block">Build/Release will be created
 							automatically in TestLink if not existing.</span>
 					</div>
-					<button type="submit" form="testConfigForm"
+					<button id="viewTestCases" type="submit" form="testConfigForm"
 						formaction='<test:url src="/viewTestCases"/>'
-						class="btn btn-default">View Test Cases</button>
-					<button type="submit" form="testConfigForm"
+						class="btn btn-default" >View Test Cases</button>
+					<button id="runTestCases" type="submit" form="testConfigForm"
 						formaction='<test:url src="/runTestCases"/>'
-						class="btn btn-default">Run Test Cases</button>
+						class="btn btn-default" data-toggle="modal">Run Test Cases</button>
 				</form>
 			</div>
 		</div>

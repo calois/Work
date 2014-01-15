@@ -92,6 +92,7 @@ public class HomeController {
 			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig,
 			Model model) {
 		testLinkConfig.setProjectId(testProjectId);
+		testLinkService.setTestLinkConfig(testLinkConfig);
 		return testLinkService.getTestPlansForProject();
 	}
 
@@ -101,6 +102,7 @@ public class HomeController {
 			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig,
 			Model model) {
 		testLinkConfig.setPlanId(testPlanId);
+		testLinkService.setTestLinkConfig(testLinkConfig);
 		return testLinkService.getBuildsForPlan();
 	}
 
@@ -119,6 +121,7 @@ public class HomeController {
 		testLinkConfig.setProjectId(projectId);
 		testLinkConfig.setPlanId(planId);
 		testLinkConfig.setBuild(build);
+		testLinkService.setTestLinkConfig(testLinkConfig);
 		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan();
 		if (null != testCases) {
 			createTestLinkBuild(build);
@@ -143,6 +146,7 @@ public class HomeController {
 		testLinkConfig.setProjectId(projectId);
 		testLinkConfig.setPlanId(planId);
 		testLinkConfig.setBuild(build);
+		testLinkService.setTestLinkConfig(testLinkConfig);
 		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan();
 		model.addAttribute("testCases", testCases);
 		return "testList";
@@ -153,6 +157,7 @@ public class HomeController {
 	public AutomationTestCase runTestCase(@PathVariable Integer testCaseId,
 			Model model, @ModelAttribute("testConfig") TestConfig testConfig,
 			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig) {
+		testLinkService.setTestLinkConfig(testLinkConfig);
 		AutomationTestCase testCase = testLinkService.getTestCase(testCaseId);
 		createTestLinkBuild(testLinkConfig.getBuild());
 		testCase.setTestResult(runTestCase(testConfig, testCase));
@@ -163,6 +168,7 @@ public class HomeController {
 	public String runTestCases(Model model,
 			@ModelAttribute("testConfig") TestConfig testConfig,
 			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig) {
+		testLinkService.setTestLinkConfig(testLinkConfig);
 		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan();
 		if (null != testCases) {
 			createTestLinkBuild(testLinkConfig.getBuild());

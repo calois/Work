@@ -1,12 +1,11 @@
 <h2 class="Header">Test List</h2>
 <div class="listingOptions">
 	<a href='<test:url src="/"/>' class="btn btn-default btn-sm"
-		role="button">Reset Test Config</a> <a
+		role="button">Reset Test Config</a> <a id="runAll"
 		href='<test:url src="/runAll"/>' class="btn btn-default btn-sm"
 		role="button">Run All Test Cases</a>
 </div>
-<table
-	class="table table-striped table-bordered table-condensed">
+<table class="table table-striped table-bordered table-condensed">
 	<thead>
 		<tr>
 			<th>Id</th>
@@ -40,6 +39,8 @@
 	(function($) {
 		$('button[url]').click(
 				function() {
+					var button = $(this);
+					button.attr("disabled", true);
 					$.ajax({
 						type : "post",
 						url : $(this).attr("url")
@@ -51,7 +52,12 @@
 									$('#' + testCase.id + '_message').text(
 											testCase.testResult.message);
 								}
+								button.attr("disabled", false);
 							});
 				});
+		$('#runAll').click(function() {
+			$('button[url]').attr("disabled", true);
+			$('a').attr("disabled", true);
+		});
 	})(jQuery);
 </script>

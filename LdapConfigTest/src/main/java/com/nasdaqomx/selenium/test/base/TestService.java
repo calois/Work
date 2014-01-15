@@ -73,6 +73,7 @@ public class TestService implements Serializable {
 				return result;
 			}
 			result.setStatus(TestResultStatus.PASSED);
+			result.setMessage("");
 			return result;
 		} finally {
 			testManager.close();
