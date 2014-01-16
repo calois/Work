@@ -14,8 +14,8 @@ import br.eti.kinoshita.testlinkjavaapi.model.TestProject;
 import br.eti.kinoshita.testlinkjavaapi.model.TestSuite;
 import br.eti.kinoshita.testlinkjavaapi.util.TestLinkAPIException;
 
-import com.nasdaqomx.selenium.test.base.TestResult;
-import com.nasdaqomx.selenium.test.base.TestResultStatus;
+import com.nasdaqomx.test.selenium.base.TestResult;
+import com.nasdaqomx.test.selenium.base.TestResultStatus;
 
 public class TestLinkService {
 
@@ -24,7 +24,7 @@ public class TestLinkService {
 	private static final boolean OVERWRITE_TEST_RESULT = true;
 	private TestLinkAPI api;
 	private TestLinkConfig testLinkConfig;
-	private boolean debug = true;
+	private boolean debug = false;
 
 	public void setTestLinkConfig(TestLinkConfig testLinkConfig) {
 		this.testLinkConfig = testLinkConfig;

@@ -7,8 +7,9 @@ import br.eti.kinoshita.testlinkjavaapi.constants.TestImportance;
 import br.eti.kinoshita.testlinkjavaapi.model.TestCase;
 import br.eti.kinoshita.testlinkjavaapi.model.TestCaseStep;
 
-import com.nasdaqomx.selenium.test.base.TestResult;
-import com.nasdaqomx.selenium.test.base.TestUtils;
+import com.nasdaqomx.test.selenium.base.TestResult;
+import com.nasdaqomx.test.selenium.base.TestUtils;
+
 
 public class AutomationTestCase {
 	private TestCase testCase;
