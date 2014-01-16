@@ -79,5 +79,10 @@
 				checkResult();
 			});
 		});
+		if('${runAll}'=='true'){
+			$(function(){
+				$('#runAll').trigger('click');
+			});
+		}
 	})(jQuery);
 </script>
