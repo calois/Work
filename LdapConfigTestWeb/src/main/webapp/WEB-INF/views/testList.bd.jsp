@@ -2,7 +2,7 @@
 <div class="listingOptions">
 	<a href='<test:url src="/"/>' class="btn btn-default btn-sm"
 		role="button">Reset Test Config</a> <a id="runAll"
-		href='<test:url src="/runAll"/>' class="btn btn-default btn-sm"
+		href='javascript:void(0);' class="btn btn-default btn-sm"
 		role="button">Run All Test Cases</a>
 </div>
 <table class="table table-striped table-bordered table-condensed">
@@ -39,9 +39,17 @@
 <script>
 	'use strict';
 	(function($) {
+		var running = 0;
+		$('#runAll').click(function() {
+			$('button[class="btn btn-default btn-sm"]').each(function() {
+				running++;
+				$(this).trigger('click');
+			});
+		});
 		$('button[url]').click(function() {
 			var button = $(this);
 			button.attr("disabled", true);
+			$('#runAll').attr("disabled", true);
 			$.ajax({
 				type : "get",
 				url : $(this).attr("url")
@@ -59,6 +67,10 @@
 								$('#' + id + '_message').text(data.result.message);
 							}
 							button.attr("disabled", false);
+							running--;
+							if (running == 0) {
+								$('#runAll').attr("disabled", false);
+							}
 						} else {
 							setTimeout(checkResult, 1000);
 						}
@@ -66,10 +78,6 @@
 				}
 				checkResult();
 			});
-		});
-		$('#runAll').click(function() {
-			$('button[url]').attr("disabled", true);
-			$('a').attr("disabled", true);
 		});
 	})(jQuery);
 </script>
