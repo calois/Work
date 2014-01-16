@@ -1,4 +1,4 @@
-package com.nasdaqomx.test;
+package com.nasdaqomx.test.web;
 
 import java.util.Locale;
 
