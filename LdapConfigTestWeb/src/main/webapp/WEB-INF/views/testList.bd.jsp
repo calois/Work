@@ -1,6 +1,6 @@
 <h2 class="Header">Test List</h2>
 <div class="listingOptions">
-	<a href='<test:url src="/"/>' class="btn btn-default btn-sm"
+	<a id="reset" href='<test:url src="/"/>' class="btn btn-default btn-sm"
 		role="button">Reset Test Config</a> <a id="runAll"
 		href='javascript:void(0);' class="btn btn-default btn-sm"
 		role="button">Run All Test Cases</a>
@@ -36,53 +36,4 @@
 		</c:forEach>
 	</tbody>
 </table>
-<script>
-	'use strict';
-	(function($) {
-		var running = 0;
-		$('#runAll').click(function() {
-			$('button[class="btn btn-default btn-sm"]').each(function() {
-				running++;
-				$(this).trigger('click');
-			});
-		});
-		$('button[url]').click(function() {
-			var button = $(this);
-			button.attr("disabled", true);
-			$('#runAll').attr("disabled", true);
-			$.ajax({
-				type : "get",
-				url : $(this).attr("url")
-			}).done(function(testCase) {
-				var id = testCase.id;
-				function checkResult() {
-					$.ajax({
-						type : "get",
-						url : test.getUrl('/testJob/' + id)
-					}).done(function(data) {
-						$('#' + id + '_jobStatus').text(data.status);
-						if (data.result) {
-							$('#' + id + '_status').text(data.result.status);
-							if (null != data.result.message) {
-								$('#' + id + '_message').text(data.result.message);
-							}
-							button.attr("disabled", false);
-							running--;
-							if (running == 0) {
-								$('#runAll').attr("disabled", false);
-							}
-						} else {
-							setTimeout(checkResult, 1000);
-						}
-					});
-				}
-				checkResult();
-			});
-		});
-		if('${runAll}'=='true'){
-			$(function(){
-				$('#runAll').trigger('click');
-			});
-		}
-	})(jQuery);
-</script>
+<test:js src="/resources/js/testList.js" />

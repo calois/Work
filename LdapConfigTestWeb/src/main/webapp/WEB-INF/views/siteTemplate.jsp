@@ -48,7 +48,7 @@
 			</ul>
 		</div>
 		<div id="footerCopyright">
-			&copy; 2013, The <a href="http://www.nasdaqomx.com" target="_blank">NASDAQ
+			&copy; 2014, The <a href="http://www.nasdaqomx.com" target="_blank">NASDAQ
 				OMX</a> Group, Inc. All Rights Reserved.
 		</div>
 	</div>

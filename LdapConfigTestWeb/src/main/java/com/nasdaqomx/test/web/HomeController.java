@@ -132,9 +132,6 @@ public class HomeController {
 		TestLinkService testLinkService = new TestLinkService();
 		testLinkService.setTestLinkConfig(testLinkConfig);
 		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan();
-		if (null != testCases) {
-			createTestLinkBuild(testLinkService, build);
-		}
 		model.addAttribute("testCases", testCases);
 		model.addAttribute("runAll", true);
 		return "testList";
