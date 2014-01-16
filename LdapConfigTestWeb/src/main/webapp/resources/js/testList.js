@@ -4,15 +4,15 @@ var testList = {};
 	var running = 0;
 	var runAllBtn = $('#runAll');
 	runAllBtn.click(function() {
+		runAllBtn.attr("disabled", true);
 		$('button[url]').each(function() {
-			running++;
 			$(this).trigger('click');
 		});
 	});
 	$('button[url]').click(function() {
+		running++;
 		var button = $(this);
 		button.attr("disabled", true);
-		runAllBtn.attr("disabled", true);
 		$.ajax({
 			type : "get",
 			url : $(this).attr("url")

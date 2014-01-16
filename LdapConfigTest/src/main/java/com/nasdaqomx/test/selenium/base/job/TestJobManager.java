@@ -70,9 +70,9 @@ public class TestJobManager {
 			}
 		}
 		if (completeList.containsKey(id)) {
-			return TestStatus.COMPLETED;
+			return TestStatus.DONE;
 		}
-		return TestStatus.NONE;
+		return TestStatus.NA;
 	}
 
 	public TestJob getTestJob(String id) {
@@ -90,7 +90,7 @@ public class TestJobManager {
 		}
 		if (completeList.containsKey(id)) {
 			TestJob job = completeList.get(id);
-			job.setStatus(TestStatus.COMPLETED);
+			job.setStatus(TestStatus.DONE);
 			return job;
 		}
 		return null;

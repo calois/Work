@@ -28,12 +28,6 @@
 				src="<test:url src='/resources/img/AutomationLogo.png'/>"
 				width="430" height="38" alt="NASDAQ OMX | Automation Test">
 		</div>
-		<div id="console">
-			<div id="waitingJob">
-			</div>
-			<div id="runner">
-			</div>
-		</div>
 		<div id="body">
 			<t:insertAttribute name="body" />
 		</div>

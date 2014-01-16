@@ -2,8 +2,7 @@
 <div class="listingOptions">
 	<a id="reset" href='<test:url src="/"/>' class="btn btn-default btn-sm"
 		role="button">Reset Test Config</a> <a id="runAll"
-		href='javascript:void(0);' class="btn btn-default btn-sm"
-		role="button">Run All Test Cases</a>
+		class="btn btn-default btn-sm" role="button">Run All Test Cases</a>
 </div>
 <table class="table table-striped table-bordered table-condensed">
 	<thead>
@@ -15,7 +14,7 @@
 			<th>Output Data</th>
 			<th>Test Result</th>
 			<th>Result Note</th>
-			<th>Status</th>
+			<th>Execution Status</th>
 			<th>Action</th>
 		</tr>
 	</thead>
@@ -38,7 +37,7 @@
 </table>
 <test:js src="/resources/js/testList.js" />
 <script>
-if ('${runAll}' == 'true') {
-	testList.runAll();
-}
+	if ('${runAll}' == 'true') {
+		testList.runAll();
+	}
 </script>
