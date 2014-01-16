@@ -37,3 +37,8 @@
 	</tbody>
 </table>
 <test:js src="/resources/js/testList.js" />
+<script>
+if ('${runAll}' == 'true') {
+	testList.runAll();
+}
+</script>

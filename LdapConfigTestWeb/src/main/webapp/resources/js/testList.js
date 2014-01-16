@@ -1,7 +1,8 @@
 'use strict';
+var testList = {};
 (function($) {
 	var running = 0;
-	var runAllBtn=$('#runAll');
+	var runAllBtn = $('#runAll');
 	runAllBtn.click(function() {
 		$('button[url]').each(function() {
 			running++;
@@ -41,9 +42,9 @@
 			checkResult();
 		});
 	});
-	if ('${runAll}' == 'true') {
+	testList.runAll = function() {
 		$(function() {
 			runAllBtn.trigger('click');
 		});
-	}
+	};
 })(jQuery);
