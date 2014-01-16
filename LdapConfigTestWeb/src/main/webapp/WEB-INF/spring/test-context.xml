@@ -12,8 +12,6 @@
 	<bean class="com.nasdaqomx.test.testlink.TestLinkService" scope="request">
 		<aop:scoped-proxy proxy-target-class="true" />
 	</bean>
-	<bean class="com.nasdaqomx.selenium.test.base.TestService">
-	</bean>
-	<bean class="com.nasdaqomx.selenium.test.base.job.TestJobManager">
+	<bean class="com.nasdaqomx.test.selenium.base.TestService">
 	</bean>
 </beans>
