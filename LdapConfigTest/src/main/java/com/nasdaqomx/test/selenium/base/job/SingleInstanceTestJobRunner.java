@@ -17,12 +17,18 @@ public class SingleInstanceTestJobRunner extends AbstractTestJobRunner {
 			@Override
 			public void run() {
 				System.out.println("Start Running");
-				TestService testService = new TestService();
-				TestResult result = testService.run(testJob.getTestConfig(),
-						testJob.getAutomationKey(), testJob.getTestData());
-				testJob.getCallback().finish(testJob, result);
-				setAvailable(testJob.getTestConfig().getDriverType(), true);
-				System.out.println("Complete");
+				try {
+					TestService testService = new TestService();
+					TestResult result = testService.run(
+							testJob.getTestConfig(),
+							testJob.getAutomationKey(), testJob.getTestData());
+					testJob.getCallback().finish(testJob, result);
+				} catch (Throwable e) {
+					e.printStackTrace();
+				} finally {
+					setAvailable(testJob.getTestConfig().getDriverType(), true);
+					System.out.println("Complete");
+				}
 			}
 		});
 		thread.start();
