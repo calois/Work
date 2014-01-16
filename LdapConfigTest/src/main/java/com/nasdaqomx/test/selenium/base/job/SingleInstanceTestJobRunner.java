@@ -22,7 +22,8 @@ public class SingleInstanceTestJobRunner extends AbstractTestJobRunner {
 					TestResult result = testService.run(
 							testJob.getTestConfig(),
 							testJob.getAutomationKey(), testJob.getTestData());
-					testJob.getCallback().finish(testJob, result);
+					testJob.setResult(result);
+					testJob.getCallback().finish(testJob);
 				} catch (Throwable e) {
 					e.printStackTrace();
 				} finally {

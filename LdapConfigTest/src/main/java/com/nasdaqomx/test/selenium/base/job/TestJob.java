@@ -2,6 +2,7 @@ package com.nasdaqomx.test.selenium.base.job;
 
 import com.nasdaqomx.test.selenium.base.TestConfig;
 import com.nasdaqomx.test.selenium.base.TestData;
+import com.nasdaqomx.test.selenium.base.TestResult;
 
 class TestJob {
 	private String id;
@@ -9,6 +10,15 @@ class TestJob {
 	private String automationKey;
 	private TestData testData;
 	private TestJobInnerCallback callback;
+	private TestResult result;
+
+	public TestResult getResult() {
+		return result;
+	}
+
+	public void setResult(TestResult result) {
+		this.result = result;
+	}
 
 	public TestJobInnerCallback getCallback() {
 		return callback;

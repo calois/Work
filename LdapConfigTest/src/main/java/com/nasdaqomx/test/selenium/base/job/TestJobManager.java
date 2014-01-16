@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.nasdaqomx.test.selenium.base.TestConfig;
 import com.nasdaqomx.test.selenium.base.TestData;
-import com.nasdaqomx.test.selenium.base.TestResult;
 
 @Service
 public class TestJobManager {
@@ -28,9 +27,9 @@ public class TestJobManager {
 		testJob.setAutomationKey(automationKey);
 		testJob.setCallback(new TestJobInnerCallback() {
 			@Override
-			public void finish(TestJob testJob, TestResult result) {
+			public void finish(TestJob testJob) {
 				runningList.remove(testJob);
-				callback.finish(result);
+				callback.finish(testJob.getResult());
 			}
 		});
 		testJob.setTestConfig(testConfig);
