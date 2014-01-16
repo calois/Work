@@ -80,10 +80,10 @@
 					</div>
 					<button id="viewTestCases" type="submit" form="testConfigForm"
 						formaction='<test:url src="/viewTestCases"/>'
-						class="btn btn-default" >View Test Cases</button>
+						class="btn btn-default">View Test Cases</button>
 					<button id="runTestCases" type="submit" form="testConfigForm"
 						formaction='<test:url src="/runTestCases"/>'
-						class="btn btn-default" data-toggle="modal">Run Test Cases</button>
+						class="btn btn-default">Run Test Cases</button>
 				</form>
 			</div>
 		</div>
