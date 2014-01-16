@@ -176,21 +176,16 @@ public class HomeController {
 		return testCase;
 	}
 
-	@RequestMapping(value = "/runAll", method = RequestMethod.GET)
-	public String runTestCases(Model model,
-			@ModelAttribute("testConfig") TestConfig testConfig,
-			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig) {
-		TestLinkService testLinkService = new TestLinkService();
-		testLinkService.setTestLinkConfig(testLinkConfig);
-		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan();
-		if (null != testCases) {
-			createTestLinkBuild(testLinkService, testLinkConfig.getBuild());
-			for (int i = 0; i < testCases.length; i++) {
-				runTestCase(testLinkService, testConfig, testCases[i]);
-			}
-		}
-		model.addAttribute("testCases", testCases);
-		return "testList";
+	@RequestMapping(value = "/job/list/waiting", method = RequestMethod.GET)
+	public String getWaitingJobList(Model model) {
+		model.addAttribute("jobList", testJobManager.getWaitingJobList());
+		return "waitingJobList";
+	}
+
+	@RequestMapping(value = "/runner/list", method = RequestMethod.GET)
+	public String getTestJobRunnerList(Model model) {
+		model.addAttribute("runnerList", testJobManager.getTestJobRunnerList());
+		return "runnerList";
 	}
 
 	private void createTestLinkBuild(TestLinkService testLinkService,
@@ -226,17 +221,5 @@ public class HomeController {
 				}
 			}
 		});
-	}
-
-	@RequestMapping(value = "/job/list/waiting", method = RequestMethod.GET)
-	public String getWaitingJobList(Model model) {
-		model.addAttribute("jobList", testJobManager.getWaitingJobList());
-		return "waitingJobList";
-	}
-
-	@RequestMapping(value = "/runner/list", method = RequestMethod.GET)
-	public String getTestJobRunnerList(Model model) {
-		model.addAttribute("runnerList", testJobManager.getTestJobRunnerList());
-		return "runnerList";
 	}
 }
