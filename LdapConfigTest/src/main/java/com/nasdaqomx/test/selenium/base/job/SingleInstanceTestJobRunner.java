@@ -16,7 +16,6 @@ public class SingleInstanceTestJobRunner extends AbstractTestJobRunner {
 		Thread thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				System.out.println("Start Running");
 				try {
 					TestService testService = new TestService();
 					TestResult result = testService.run(
@@ -29,7 +28,6 @@ public class SingleInstanceTestJobRunner extends AbstractTestJobRunner {
 				} finally {
 					setAvailable(testJob.getTestConfig().getDriverType(), true);
 					setTestJob(null);
-					System.out.println("Complete");
 				}
 			}
 		});
