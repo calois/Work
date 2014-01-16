@@ -126,7 +126,7 @@ public class HomeController {
 		testLinkService.setTestLinkConfig(testLinkConfig);
 		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan();
 		if (null != testCases) {
-			createTestLinkBuild(build);
+			createTestLinkBuild(testLinkService, build);
 			for (int i = 0; i < testCases.length; i++) {
 				runTestCase(testLinkService, testConfig, testCases[i]);
 			}
@@ -164,7 +164,7 @@ public class HomeController {
 		TestLinkService testLinkService = new TestLinkService();
 		testLinkService.setTestLinkConfig(testLinkConfig);
 		AutomationTestCase testCase = testLinkService.getTestCase(testCaseId);
-		createTestLinkBuild(testLinkConfig.getBuild());
+		createTestLinkBuild(testLinkService, testLinkConfig.getBuild());
 		runTestCase(testLinkService, testConfig, testCase);
 		return testCase;
 	}
@@ -177,7 +177,7 @@ public class HomeController {
 		testLinkService.setTestLinkConfig(testLinkConfig);
 		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan();
 		if (null != testCases) {
-			createTestLinkBuild(testLinkConfig.getBuild());
+			createTestLinkBuild(testLinkService, testLinkConfig.getBuild());
 			for (int i = 0; i < testCases.length; i++) {
 				runTestCase(testLinkService, testConfig, testCases[i]);
 			}
@@ -186,7 +186,8 @@ public class HomeController {
 		return "testList";
 	}
 
-	private void createTestLinkBuild(String build) {
+	private void createTestLinkBuild(TestLinkService testLinkService,
+			String build) {
 		boolean hasBuild = false;
 		Build[] builds = testLinkService.getBuildsForPlan();
 		if (null != builds) {

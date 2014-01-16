@@ -32,9 +32,9 @@ public class TestUtils {
 
 	public static Project getTestProject(Class<?> clazz) {
 		if (clazz.getName().startsWith(
-				"com.nasdaqomx.selenium.test.cases.ldapconfig")
+				"com.nasdaqomx.test.selenium.testcase.ldapconfig")
 				|| clazz.getName().startsWith(
-						"com.nasdaqomx.selenium.test.page.ldapconfig")) {
+						"com.nasdaqomx.test.selenium.page.ldapconfig")) {
 			return Project.LDAP_CONFIG;
 		} else {
 			return null;

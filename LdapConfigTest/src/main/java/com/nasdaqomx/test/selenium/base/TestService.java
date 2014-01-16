@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 public class TestService implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private static final String BASE_PACKAGE = "com.nasdaqomx.selenium.test.cases.";
+	private static final String BASE_PACKAGE = "com.nasdaqomx.test.selenium.testcase.";
 
 	public TestResult run(TestConfig testConfig, String automationKey,
 			TestData testData) {
