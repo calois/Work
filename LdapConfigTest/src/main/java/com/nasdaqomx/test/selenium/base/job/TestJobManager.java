@@ -1,7 +1,9 @@
 package com.nasdaqomx.test.selenium.base.job;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.annotation.PostConstruct;
@@ -20,6 +22,8 @@ public class TestJobManager {
 
 	private List<TestJob> runningList = new LinkedList<TestJob>();
 
+	private Map<String, TestJob> completeList = new HashMap<>();
+
 	public void push(String id, TestConfig testConfig, String automationKey,
 			TestData testData, final TestJobCallback callback) {
 		TestJob testJob = new TestJob();
@@ -28,7 +32,10 @@ public class TestJobManager {
 		testJob.setCallback(new TestJobInnerCallback() {
 			@Override
 			public void finish(TestJob testJob) {
-				runningList.remove(testJob);
+				synchronized (TestJobManager.class) {
+					runningList.remove(testJob);
+					completeList.put(testJob.getId(), testJob);
+				}
 				callback.finish(testJob.getResult());
 			}
 		});
@@ -54,7 +61,31 @@ public class TestJobManager {
 				return TestStatus.RUNNING;
 			}
 		}
+		if (completeList.containsKey(id)) {
+			return TestStatus.COMPLETED;
+		}
 		return TestStatus.NONE;
+	}
+
+	public TestJob getTestJob(String id) {
+		for (TestJob testJob : queue) {
+			if (testJob.getId().equals(id)) {
+				testJob.setStatus(TestStatus.WAITING);
+				return testJob;
+			}
+		}
+		for (TestJob testJob : runningList) {
+			if (testJob.getId().equals(id)) {
+				testJob.setStatus(TestStatus.RUNNING);
+				return testJob;
+			}
+		}
+		if (completeList.containsKey(id)) {
+			TestJob job = completeList.get(id);
+			job.setStatus(TestStatus.COMPLETED);
+			return job;
+		}
+		return null;
 	}
 
 	@PostConstruct
@@ -72,7 +103,9 @@ public class TestJobManager {
 								testJobRunner.setTestJob(testJob);
 								testJobRunner.run();
 								queue.poll();
-								runningList.add(testJob);
+								synchronized (TestJobManager.class) {
+									runningList.add(testJob);
+								}
 								break;
 							}
 						}

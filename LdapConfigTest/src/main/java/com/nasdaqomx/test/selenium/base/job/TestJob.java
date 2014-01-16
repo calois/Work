@@ -1,16 +1,29 @@
 package com.nasdaqomx.test.selenium.base.job;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nasdaqomx.test.selenium.base.TestConfig;
 import com.nasdaqomx.test.selenium.base.TestData;
 import com.nasdaqomx.test.selenium.base.TestResult;
 
-class TestJob {
+public class TestJob {
 	private String id;
 	private TestConfig testConfig;
 	private String automationKey;
+	private TestStatus status;
+
+	@JsonIgnore
 	private TestData testData;
+	@JsonIgnore
 	private TestJobInnerCallback callback;
 	private TestResult result;
+
+	public TestStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(TestStatus status) {
+		this.status = status;
+	}
 
 	public TestResult getResult() {
 		return result;

@@ -29,7 +29,7 @@
 				<td>${testCase.outputData}</td>
 				<td id="${testCase.id}_status">${testCase.testResult.status}</td>
 				<td id="${testCase.id}_message">${testCase.testResult.message}</td>
-				<td>${testCase.status}</td>
+				<td id="${testCase.id}_jobStatus">${testCase.status}</td>
 				<td><button url='<test:url src="/run/${testCase.id}"/>'
 						class="btn btn-default btn-sm" role="button">Run</button></td>
 			</tr>
@@ -39,19 +39,34 @@
 <script>
 	'use strict';
 	(function($) {
-		$('button[url]').click(
-				function() {
-					var button = $(this);
-					button.attr("disabled", true);
+		$('button[url]').click(function() {
+			var button = $(this);
+			button.attr("disabled", true);
+			$.ajax({
+				type : "get",
+				url : $(this).attr("url")
+			}).done(function(testCase) {
+				var id = testCase.id;
+				function checkResult() {
 					$.ajax({
 						type : "get",
-						url : $(this).attr("url")
-					}).done(
-							function(testCase) {
-								history.go(0);
-								button.attr("disabled", false);
-							});
-				});
+						url : test.getUrl('/testJob/' + id)
+					}).done(function(data) {
+						$('#' + id + '_jobStatus').text(data.status);
+						if (data.result) {
+							$('#' + id + '_status').text(data.result.status);
+							if (null != data.result.message) {
+								$('#' + id + '_message').text(data.result.message);
+							}
+							button.attr("disabled", false);
+						} else {
+							setTimeout(checkResult, 1000);
+						}
+					});
+				}
+				checkResult();
+			});
+		});
 		$('#runAll').click(function() {
 			$('button[url]').attr("disabled", true);
 			$('a').attr("disabled", true);

@@ -25,6 +25,7 @@ import com.nasdaqomx.test.selenium.base.ProjectConfig;
 import com.nasdaqomx.test.selenium.base.TestConfig;
 import com.nasdaqomx.test.selenium.base.TestData;
 import com.nasdaqomx.test.selenium.base.TestResult;
+import com.nasdaqomx.test.selenium.base.job.TestJob;
 import com.nasdaqomx.test.selenium.base.job.TestJobCallback;
 import com.nasdaqomx.test.selenium.base.job.TestJobManager;
 import com.nasdaqomx.test.testlink.AutomationTestCase;
@@ -62,6 +63,12 @@ public class HomeController {
 		testLinkConfig
 				.setBaseUrl("http://au03smbcqa02.dev.smbc.nasdaqomx.com/testlink/");
 		return testLinkConfig;
+	}
+
+	@RequestMapping(value = "/testJob/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public TestJob testJob(@PathVariable String id) {
+		return testJobManager.getTestJob(id);
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
