@@ -22,7 +22,7 @@ public class TestJobManager {
 	private List<TestJob> runningList = new LinkedList<TestJob>();
 
 	public void push(String id, TestConfig testConfig, String automationKey,
-			TestData testData, TestJobCallback callback) {
+			TestData testData, final TestJobCallback callback) {
 		TestJob testJob = new TestJob();
 		testJob.setId(id);
 		testJob.setAutomationKey(automationKey);
@@ -30,6 +30,7 @@ public class TestJobManager {
 			@Override
 			public void finish(TestJob testJob, TestResult result) {
 				runningList.remove(testJob);
+				callback.finish(result);
 			}
 		});
 		testJob.setTestConfig(testConfig);
