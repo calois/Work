@@ -26,7 +26,7 @@ public abstract class AbstractTestJobRunner implements TestJobRunner {
 		this.testJob = testJob;
 	}
 
-	protected synchronized TestJob getTestJob() {
+	public synchronized TestJob getTestJob() {
 		return testJob;
 	}
 

@@ -28,6 +28,7 @@ public class SingleInstanceTestJobRunner extends AbstractTestJobRunner {
 					e.printStackTrace();
 				} finally {
 					setAvailable(testJob.getTestConfig().getDriverType(), true);
+					setTestJob(null);
 					System.out.println("Complete");
 				}
 			}

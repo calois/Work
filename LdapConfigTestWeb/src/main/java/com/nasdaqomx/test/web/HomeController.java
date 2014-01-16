@@ -227,4 +227,16 @@ public class HomeController {
 			}
 		});
 	}
+
+	@RequestMapping(value = "/job/list/waiting", method = RequestMethod.GET)
+	public String getWaitingJobList(Model model) {
+		model.addAttribute("jobList", testJobManager.getWaitingJobList());
+		return "waitingJobList";
+	}
+
+	@RequestMapping(value = "/runner/list", method = RequestMethod.GET)
+	public String getTestJobRunnerList(Model model) {
+		model.addAttribute("runnerList", testJobManager.getTestJobRunnerList());
+		return "runnerList";
+	}
 }

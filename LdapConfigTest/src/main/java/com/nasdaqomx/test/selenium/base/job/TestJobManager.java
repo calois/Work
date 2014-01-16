@@ -24,6 +24,14 @@ public class TestJobManager {
 
 	private Map<String, TestJob> completeList = new HashMap<>();
 
+	public TestJobRunner[] getTestJobRunnerList() {
+		return testJobRunnerList;
+	}
+
+	public TestJob[] getWaitingJobList() {
+		return queue.toArray(new TestJob[] {});
+	}
+
 	public void push(String id, TestConfig testConfig, String automationKey,
 			TestData testData, final TestJobCallback callback) {
 		TestJob testJob = new TestJob();

@@ -14,4 +14,8 @@
 		<put-attribute name="head" value="/WEB-INF/views/testList.hd.jsp" />
 		<put-attribute name="body" value="/WEB-INF/views/testList.bd.jsp" />
 	</definition>
+	<definition name="runnerList" template="/WEB-INF/views/runnerList.bd.jsp">
+	</definition>
+	<definition name="waitingJobList" template="/WEB-INF/views/waitingJobList.bd.jsp">
+	</definition>
 </tiles-definitions>

@@ -32,6 +32,13 @@ body {
 	height: 6em;
 }
 
+#console{
+	margin: auto;
+	margin-left: 5em;
+	margin-right: 5em;
+	clear: both;
+}
+
 #body {
 	margin: auto;
 	margin-left: 5em;
