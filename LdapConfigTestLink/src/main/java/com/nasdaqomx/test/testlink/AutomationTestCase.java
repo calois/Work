@@ -9,6 +9,7 @@ import br.eti.kinoshita.testlinkjavaapi.model.TestCaseStep;
 
 import com.nasdaqomx.selenium.test.base.TestResult;
 import com.nasdaqomx.selenium.test.base.TestUtils;
+import com.nasdaqomx.selenium.test.base.job.TestStatus;
 
 public class AutomationTestCase {
 	private TestCase testCase;
@@ -17,6 +18,15 @@ public class AutomationTestCase {
 	private String inputData;
 	private String outputData;
 	private TestResult result;
+	private TestStatus status;
+
+	public TestStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(TestStatus status) {
+		this.status = status;
+	}
 
 	public AutomationTestCase(TestCase testCase) {
 		this.testCase = testCase;

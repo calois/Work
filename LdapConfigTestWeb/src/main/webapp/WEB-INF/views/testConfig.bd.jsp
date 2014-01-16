@@ -34,7 +34,7 @@
 		</div>
 		<div id="testConfigCollapse" class="panel-collapse collapse">
 			<div class="panel-body">
-				<form id="testConfigForm" role="form" method="POST">
+				<form id="testConfigForm" role="form" method="GET">
 					<div class="form-group">
 						<label for="browser">Test Browser:</label> <select required
 							class="form-control" id="browser" name="browserType">

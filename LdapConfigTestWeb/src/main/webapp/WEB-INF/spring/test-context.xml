@@ -14,4 +14,6 @@
 	</bean>
 	<bean class="com.nasdaqomx.selenium.test.base.TestService">
 	</bean>
+	<bean class="com.nasdaqomx.selenium.test.base.job.TestJobManager">
+	</bean>
 </beans>

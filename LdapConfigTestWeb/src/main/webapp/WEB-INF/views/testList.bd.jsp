@@ -15,6 +15,7 @@
 			<th>Output Data</th>
 			<th>Test Result</th>
 			<th>Result Note</th>
+			<th>Status</th>
 			<th>Action</th>
 		</tr>
 	</thead>
@@ -28,6 +29,7 @@
 				<td>${testCase.outputData}</td>
 				<td id="${testCase.id}_status">${testCase.testResult.status}</td>
 				<td id="${testCase.id}_message">${testCase.testResult.message}</td>
+				<td>${testCase.status}</td>
 				<td><button url='<test:url src="/run/${testCase.id}"/>'
 						class="btn btn-default btn-sm" role="button">Run</button></td>
 			</tr>
@@ -42,16 +44,11 @@
 					var button = $(this);
 					button.attr("disabled", true);
 					$.ajax({
-						type : "post",
+						type : "get",
 						url : $(this).attr("url")
 					}).done(
 							function(testCase) {
-								$('#' + testCase.id + '_status').text(
-										testCase.testResult.status);
-								if (null != testCase.testResult.message) {
-									$('#' + testCase.id + '_message').text(
-											testCase.testResult.message);
-								}
+								history.go(0);
 								button.attr("disabled", false);
 							});
 				});

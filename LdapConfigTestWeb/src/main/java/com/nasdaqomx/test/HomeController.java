@@ -25,7 +25,8 @@ import com.nasdaqomx.selenium.test.base.ProjectConfig;
 import com.nasdaqomx.selenium.test.base.TestConfig;
 import com.nasdaqomx.selenium.test.base.TestData;
 import com.nasdaqomx.selenium.test.base.TestResult;
-import com.nasdaqomx.selenium.test.base.TestService;
+import com.nasdaqomx.selenium.test.base.job.TestJobCallback;
+import com.nasdaqomx.selenium.test.base.job.TestJobManager;
 import com.nasdaqomx.test.testlink.AutomationTestCase;
 import com.nasdaqomx.test.testlink.TestLinkConfig;
 import com.nasdaqomx.test.testlink.TestLinkService;
@@ -41,7 +42,7 @@ public class HomeController {
 	private TestLinkService testLinkService;
 
 	@Autowired
-	private TestService testService;
+	private TestJobManager testJobManager;
 
 	@ModelAttribute("testConfig")
 	public TestConfig produceTestConfig(HttpServletRequest request) {
@@ -106,7 +107,7 @@ public class HomeController {
 		return testLinkService.getBuildsForPlan();
 	}
 
-	@RequestMapping(value = "/runTestCases", method = RequestMethod.POST)
+	@RequestMapping(value = "/runTestCases", method = RequestMethod.GET)
 	public String runTestCases(@RequestParam DriverType browserType,
 			@RequestParam Long explicitWait, @RequestParam Long implicitWait,
 			@RequestParam String url, @RequestParam Integer projectId,
@@ -121,20 +122,20 @@ public class HomeController {
 		testLinkConfig.setProjectId(projectId);
 		testLinkConfig.setPlanId(planId);
 		testLinkConfig.setBuild(build);
+		TestLinkService testLinkService = new TestLinkService();
 		testLinkService.setTestLinkConfig(testLinkConfig);
 		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan();
 		if (null != testCases) {
 			createTestLinkBuild(build);
 			for (int i = 0; i < testCases.length; i++) {
-				testCases[i]
-						.setTestResult(runTestCase(testConfig, testCases[i]));
+				runTestCase(testLinkService, testConfig, testCases[i]);
 			}
 		}
 		model.addAttribute("testCases", testCases);
 		return "testList";
 	}
 
-	@RequestMapping(value = "/viewTestCases", method = RequestMethod.POST)
+	@RequestMapping(value = "/viewTestCases", method = RequestMethod.GET)
 	public String viewTestCases(@RequestParam DriverType browserType,
 			@RequestParam String url, @RequestParam Integer projectId,
 			@RequestParam Integer planId, @RequestParam String build,
@@ -148,19 +149,23 @@ public class HomeController {
 		testLinkConfig.setBuild(build);
 		testLinkService.setTestLinkConfig(testLinkConfig);
 		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan();
+		for (AutomationTestCase t : testCases) {
+			t.setStatus(testJobManager.getStatus(String.valueOf(t.getId())));
+		}
 		model.addAttribute("testCases", testCases);
 		return "testList";
 	}
 
-	@RequestMapping(value = "/run/{testCaseId}", method = RequestMethod.POST)
+	@RequestMapping(value = "/run/{testCaseId}", method = RequestMethod.GET)
 	@ResponseBody
 	public AutomationTestCase runTestCase(@PathVariable Integer testCaseId,
 			Model model, @ModelAttribute("testConfig") TestConfig testConfig,
 			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig) {
+		TestLinkService testLinkService = new TestLinkService();
 		testLinkService.setTestLinkConfig(testLinkConfig);
 		AutomationTestCase testCase = testLinkService.getTestCase(testCaseId);
 		createTestLinkBuild(testLinkConfig.getBuild());
-		testCase.setTestResult(runTestCase(testConfig, testCase));
+		runTestCase(testLinkService, testConfig, testCase);
 		return testCase;
 	}
 
@@ -168,13 +173,13 @@ public class HomeController {
 	public String runTestCases(Model model,
 			@ModelAttribute("testConfig") TestConfig testConfig,
 			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig) {
+		TestLinkService testLinkService = new TestLinkService();
 		testLinkService.setTestLinkConfig(testLinkConfig);
 		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan();
 		if (null != testCases) {
 			createTestLinkBuild(testLinkConfig.getBuild());
 			for (int i = 0; i < testCases.length; i++) {
-				testCases[i]
-						.setTestResult(runTestCase(testConfig, testCases[i]));
+				runTestCase(testLinkService, testConfig, testCases[i]);
 			}
 		}
 		model.addAttribute("testCases", testCases);
@@ -197,18 +202,21 @@ public class HomeController {
 		}
 	}
 
-	private TestResult runTestCase(TestConfig testConfig, AutomationTestCase tc) {
-		TestResult result = testService.run(
-				testConfig,
-				tc.getAutomationKey(),
-				new TestData(tc.getInputDataProperties(), tc
-						.getOutputProperties()));
-		Integer executionId = testLinkService.reportResult(tc.getId(), result);
-		if (null != result.getScreenshot()) {
-			testLinkService.uploadExecutionAttachment(executionId,
-					"Screenshot_" + System.currentTimeMillis(),
-					result.getScreenshot());
-		}
-		return result;
+	private void runTestCase(final TestLinkService testLinkService,
+			TestConfig testConfig, final AutomationTestCase tc) {
+		testJobManager.push(String.valueOf(tc.getId()), testConfig, tc
+				.getAutomationKey(), new TestData(tc.getInputDataProperties(),
+				tc.getOutputProperties()), new TestJobCallback() {
+			@Override
+			public void finish(TestResult result) {
+				Integer executionId = testLinkService.reportResult(tc.getId(),
+						result);
+				if (null != result.getScreenshot()) {
+					testLinkService.uploadExecutionAttachment(executionId,
+							"Screenshot_" + System.currentTimeMillis(),
+							result.getScreenshot());
+				}
+			}
+		});
 	}
 }
