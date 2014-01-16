@@ -17,11 +17,6 @@ public class SingleInstanceTestJobRunner extends AbstractTestJobRunner {
 			@Override
 			public void run() {
 				System.out.println("Start Running");
-				try {
-					Thread.sleep(5000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
 				TestService testService = new TestService();
 				TestResult result = testService.run(testJob.getTestConfig(),
 						testJob.getAutomationKey(), testJob.getTestData());
