@@ -167,7 +167,7 @@ public class HomeController {
 		testLinkService.setTestLinkConfig(testLinkConfig);
 		AutomationTestCase testCase = testLinkService.getTestCase(testCaseId);
 		createTestLinkBuild(testLinkService, testLinkConfig.getBuild());
-		runTestCase(testLinkService, testConfig, testCase);
+		run(testLinkService, testConfig, testCase);
 		return testCase;
 	}
 
@@ -200,7 +200,7 @@ public class HomeController {
 		}
 	}
 
-	private void runTestCase(final TestLinkService testLinkService,
+	private void run(final TestLinkService testLinkService,
 			TestConfig testConfig, final AutomationTestCase tc) {
 		testJobManager.push(String.valueOf(tc.getId()), testConfig, tc
 				.getAutomationKey(), new TestData(tc.getInputDataProperties(),
