@@ -26,9 +26,9 @@
 				<td>${testCase.automationKey}</td>
 				<td>${testCase.inputData}</td>
 				<td>${testCase.outputData}</td>
-				<td id="${testCase.id}_status">${testCase.testResult.status}</td>
-				<td id="${testCase.id}_message">${testCase.testResult.message}</td>
-				<td id="${testCase.id}_jobStatus">${testCase.status}</td>
+				<td id="${testCase.id}_status"></td>
+				<td id="${testCase.id}_message"></td>
+				<td id="${testCase.id}_jobStatus"></td>
 				<td><button url='<test:url src="/run/${testCase.id}"/>'
 						class="btn btn-default btn-sm" role="button">Run</button></td>
 			</tr>
