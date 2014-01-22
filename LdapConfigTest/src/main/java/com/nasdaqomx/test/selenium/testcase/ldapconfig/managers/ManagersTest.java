@@ -1,8 +1,5 @@
 package com.nasdaqomx.test.selenium.testcase.ldapconfig.managers;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.nasdaqomx.test.selenium.base.AbstractTest;
 import com.nasdaqomx.test.selenium.base.anno.TestAfter;
 import com.nasdaqomx.test.selenium.base.anno.TestBefore;
@@ -16,7 +13,7 @@ public class ManagersTest extends AbstractTest {
 
 	private ListManagersPage listManagersPage;
 	private LdapconfigBasePage lastPage;
-	private List<String> removeList = new ArrayList<String>();
+	private String removeUserId;
 
 	@TestBefore
 	public void before() {
@@ -65,20 +62,16 @@ public class ManagersTest extends AbstractTest {
 		verifyEquals(userTimezone, editPage.getUserTimezone());
 		verifyEquals(userLanguage, editPage.getUserLanguage());
 
-		removeList.add(userId);
+		removeUserId = userId;
 		lastPage = editPage;
 	}
 
 	@TestAfter
 	public void after() {
-		if (!removeList.isEmpty()) {
-			listManagersPage = lastPage.toManagers();
-			for (String userId : removeList) {
-				if (listManagersPage.isManagerListed(userId)) {
-					listManagersPage = listManagersPage.editManager(userId)
-							.removeManager().submitRemove();
-				}
-			}
+		listManagersPage = lastPage.toManagers();
+		if (listManagersPage.isManagerListed(removeUserId)) {
+			listManagersPage = listManagersPage.editManager(removeUserId)
+					.removeManager().submitRemove();
 		}
 	}
 }
