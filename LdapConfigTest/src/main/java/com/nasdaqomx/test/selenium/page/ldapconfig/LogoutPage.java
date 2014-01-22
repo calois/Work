@@ -4,7 +4,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
-import com.nasdaqomx.test.selenium.base.AbstractTest;
 import com.nasdaqomx.test.selenium.base.TestManager;
 import com.nasdaqomx.test.selenium.base.page.AbstractPageObject;
 
@@ -19,11 +18,11 @@ public class LogoutPage extends AbstractPageObject {
 
 	public LogoutPage(TestManager testManager) {
 		super(testManager);
-		AbstractTest.assertEquals(getProject(), URL, this.getSimpleUrl());
+		assertUrl(URL, this.getSimpleUrl(), false);
 		try {
 			loginLink = getElement(By.partialLinkText(LOGIN_LINK_LOCATOR));
 		} catch (NoSuchElementException e) {
-			AbstractTest.fail(getProject(), e.getMessage());
+			fail(e.getMessage());
 		}
 	}
 

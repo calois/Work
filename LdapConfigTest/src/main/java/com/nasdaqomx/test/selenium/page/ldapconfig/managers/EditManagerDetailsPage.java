@@ -7,23 +7,21 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.UnexpectedTagNameException;
 
 import com.nasdaqomx.test.selenium.base.TestManager;
-import com.nasdaqomx.test.selenium.page.ldapconfig.LdapconfigBasePage;
 
-public class AddManagerPage extends LdapconfigBasePage {
+public class EditManagerDetailsPage extends ManagerBasePage {
 
-	private static final String URL = "addManager.view";
+	private static final String URL = "editManager.view";
 
-	// cannot use equal because of line characters in label
-	private static final String USER_ID_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'User id:')]/following-sibling::td[input]";
-	private static final String USER_ID_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'User id:')]/following-sibling::td[@class='LdapErrorMsg']";
-	private static final String SURNAME_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'Surname:')]/following-sibling::td[input]";
-	private static final String SURNAME_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'Surname:')]/following-sibling::td[@class='LdapErrorMsg']";
-	private static final String FULL_NAME_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'Full name:')]/following-sibling::td[input]";
-	private static final String FULL_NAME_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'Full name:')]/following-sibling::td[@class='LdapErrorMsg']";
+	private static final String USER_ID_LOCATOR = "//form/table[@class='LdapListing']//td[div='User id:']/following-sibling::td/span";
+	private static final String USER_ID_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[div='User id:']/following-sibling::td[2]";
+	private static final String SURNAME_LOCATOR = "//form/table[@class='LdapListing']//td[div='Surname:']/following-sibling::td[input]";
+	private static final String SURNAME_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[div='Surname:']/following-sibling::td[@class='LdapErrorMsg']";
+	private static final String FULL_NAME_LOCATOR = "//form/table[@class='LdapListing']//td[div='Full name:']/following-sibling::td[input]";
+	private static final String FULL_NAME_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[div='Full name:']/following-sibling::td[@class='LdapErrorMsg']";
+	private static final String EMAIL_ADDRESS_LOCATOR = "//form/table[@class='LdapListing']//td[div='EMail address:']/following-sibling::td[input]";
+	private static final String EMAIL_ADDRESS_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[div='EMail address:']/following-sibling::td[@class='LdapErrorMsg']";
 
 	// cannot use equal because of "&nbsp;" in label;
-	private static final String EMAIL_ADDRESS_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'EMail address:')]/following-sibling::td[input]";
-	private static final String EMAIL_ADDRESS_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'EMail address:')]/following-sibling::td[@class='LdapErrorMsg']";
 	private static final String PHONE_NUMBER_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'Phone number:')]/following-sibling::td[input]";
 	private static final String PHONE_NUMBER_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'Phone number:')]/following-sibling::td[@class='LdapErrorMsg']";
 
@@ -31,6 +29,7 @@ public class AddManagerPage extends LdapconfigBasePage {
 	private static final String MOBILE_NUMBER_LOCATOR = "//form/table[@class='LdapListing']//td[text()='Mobile number:']/following-sibling::td[input]";
 	private static final String MOBILE_NUMBER_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[text()='Mobile number:']/following-sibling::td[@class='LdapErrorMsg']";
 
+	// class= ldapErrorMsg; different from above
 	private static final String USER_TIMEZONE_LOCATOR = "//form/table[@class='LdapListing']//td[div='User Timezone:']/following-sibling::td[select]";
 	private static final String USER_TIMEZONE_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[div='User Timezone:']/following-sibling::td[@class='ldapErrorMsg']";
 	private static final String USER_LANGUAGE_LOCATOR = "//form/table[@class='LdapListing']//td[div='User Language:']/following-sibling::td[select]";
@@ -38,8 +37,11 @@ public class AddManagerPage extends LdapconfigBasePage {
 	private static final String COMMENTS_LOCATOR = "//form/table[@class='LdapListing']//td[div='Comments:']/following-sibling::td[input]";
 	private static final String COMMENTS_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[div='Comments:']/following-sibling::td[@class='ldapErrorMsg']";
 
-	private static final String ADD_MANAGER_BTN_LOCATOR = "//form/div[@class='LdapListingOptions']/input[@value='Add manager']";
-	private static final String ADD_MANAGER_MENU_LOCATOR = "//div[@id='mainMenu']//td[@class='LdapSubMenuSelected']/a[text()='Add Manager']";
+	// have extra space at the end of label;
+	private static final String PASSWORD_EXPRIES_LOCATOR = "//form/table[@class='LdapListing']//td[div='Password expires: ']/following-sibling::td[1]";
+	private static final String PASSWORD_EXPRIES_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[div='Password expires: ']/following-sibling::td[2]";
+
+	private static final String UPDATE_BTN_LOCATOR = "//form/div[@class='LdapListingOptions']/input[@value='Update managers details']";
 
 	private WebElement userId;
 	private WebElement userIdErrMsg;
@@ -59,10 +61,11 @@ public class AddManagerPage extends LdapconfigBasePage {
 	private WebElement userLanguageErrMsg;
 	private WebElement comments;
 	private WebElement commentsErrMsg;
-	private WebElement addManagerBtn;
-	private WebElement addManagerMenu;
+	private WebElement passwordExpires;
+	private WebElement passwordExpiresErrMsg;
+	private WebElement updateBtn;
 
-	public AddManagerPage(TestManager testManager) {
+	public EditManagerDetailsPage(TestManager testManager) {
 		super(testManager);
 		assertUrl(URL, this.getSimpleUrl(), true);
 		try {
@@ -88,8 +91,10 @@ public class AddManagerPage extends LdapconfigBasePage {
 					.xpath(USER_LANGUAGE_ERROR_MSG_LOCATOR));
 			comments = getElement(By.xpath(COMMENTS_LOCATOR));
 			commentsErrMsg = getElement(By.xpath(COMMENTS_ERROR_MSG_LOCATOR));
-			addManagerBtn = getElement(By.xpath(ADD_MANAGER_BTN_LOCATOR));
-			addManagerMenu = getElement(By.xpath(ADD_MANAGER_MENU_LOCATOR));
+			passwordExpires = getElement(By.xpath(PASSWORD_EXPRIES_LOCATOR));
+			passwordExpiresErrMsg = getElement(By
+					.xpath(PASSWORD_EXPRIES_ERROR_MSG_LOCATOR));
+			updateBtn = getElement(By.xpath(UPDATE_BTN_LOCATOR));
 		} catch (NoSuchElementException e) {
 			fail(e.getMessage());
 		} catch (UnexpectedTagNameException e) {
@@ -185,7 +190,7 @@ public class AddManagerPage extends LdapconfigBasePage {
 		return this.userTimezone.getFirstSelectedOption().getText();
 	}
 
-	public void selectUserTimezone(String value) {
+	public void typeUserTimezone(String value) {
 		if (null != value) {
 			this.userTimezone.selectByValue(value);
 		}
@@ -199,12 +204,12 @@ public class AddManagerPage extends LdapconfigBasePage {
 		return this.userLanguage.getFirstSelectedOption().getText();
 	}
 
-	public void selectUserLanguage(String value) {
+	public void typeUserLanguage(String value) {
 		if (null != value) {
 			this.userLanguage.selectByValue(value);
 		}
 	}
-	
+
 	public String getUserLanguageErrMsg() {
 		return this.userLanguageErrMsg.getText();
 	}
@@ -223,14 +228,17 @@ public class AddManagerPage extends LdapconfigBasePage {
 		return this.commentsErrMsg.getText();
 	}
 
-	public EditManagerPermissionsPage clickAddManagerBtn() {
-		this.addManagerBtn.click();
-		return createPageObject(EditManagerPermissionsPage.class);
+	public String getPasswordExpires() {
+		return this.passwordExpires.getText();
 	}
 
-	public AddManagerPage clickAddManagerMenu() {
-		this.addManagerMenu.click();
-		return this;
+	public String getPasswordExpiresErrMsg() {
+		return this.passwordExpiresErrMsg.getText();
+	}
+
+	public EditManagerPermissionsPage clickUpdate() {
+		this.updateBtn.click();
+		return createPageObject(EditManagerPermissionsPage.class);
 	}
 
 }

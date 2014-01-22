@@ -45,17 +45,13 @@ public class LoginPage extends AbstractPageObject {
 		if (!this.getCurrentUrl().contains(URL)) {
 			load();
 		}
-		if (!this.getSimpleUrl().startsWith(URL)) {
-			fail("Expected URL Starts with: \"" + URL + "\" but actual: \""
-					+ this.getSimpleUrl());
-		}
+		assertUrl(URL, this.getSimpleUrl(), true);
 		try {
 			userName = getElement(By.name(USER_NAME_LOCATOR));
 			password = getElement(By.name(PASSWORD_LOCATOR));
 			loginButton = getElement(By.xpath(LOGIN_LOCATOR));
 			forgottenPassword = getElement(By
 					.partialLinkText(FORGOTTEN_PASSWORD_LOCATOR));
-
 		} catch (NoSuchElementException e) {
 			fail(e.getMessage());
 		}
@@ -65,16 +61,20 @@ public class LoginPage extends AbstractPageObject {
 		return getElement(By.id(INFO_MSG_LOCATOR)).getText();
 	}
 
-	public void typeUserName(String name) {
-		this.userName.sendKeys(name);
+	public void typeUserName(String value) {
+		if (null != value) {
+			this.userName.sendKeys(value);
+		}
 	}
 
 	public String getUserName() {
 		return this.userName.getText();
 	}
 
-	public void typePassword(String password) {
-		this.password.sendKeys(password);
+	public void typePassword(String value) {
+		if (null != value) {
+			this.password.sendKeys(value);
+		}
 	}
 
 	public String getPassword() {

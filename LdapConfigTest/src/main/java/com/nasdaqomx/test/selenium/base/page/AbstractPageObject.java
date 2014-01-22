@@ -102,7 +102,7 @@ public abstract class AbstractPageObject {
 	}
 
 	protected boolean isPresent(By by) {
-		return getWebDriveWait().until(
+		return !getWebDriveWait().until(
 				ExpectedConditions.invisibilityOfElementLocated(by));
 	}
 
@@ -116,6 +116,21 @@ public abstract class AbstractPageObject {
 			Thread.sleep(millis);
 		} catch (InterruptedException e) {
 			LOGGER.error(e);
+		}
+	}
+
+	protected void assertUrl(String expectUrl, String actualUrl,
+			boolean startWith) {
+		if (startWith) {
+			if (!actualUrl.startsWith(expectUrl)) {
+				fail("Expected URL Starts with: \"" + expectUrl
+						+ "\" but actual: \"" + actualUrl);
+			}
+		} else {
+			if (!actualUrl.equals(expectUrl)) {
+				fail("Expected URL: \"" + expectUrl + "\" but actual: \""
+						+ actualUrl);
+			}
 		}
 	}
 

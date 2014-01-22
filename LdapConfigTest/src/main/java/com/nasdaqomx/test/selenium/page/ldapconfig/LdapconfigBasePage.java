@@ -4,13 +4,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
-import com.nasdaqomx.test.selenium.base.AbstractTest;
 import com.nasdaqomx.test.selenium.base.TestManager;
 import com.nasdaqomx.test.selenium.base.page.AbstractPageObject;
 import com.nasdaqomx.test.selenium.page.ldapconfig.clients.ListClientsPage;
+import com.nasdaqomx.test.selenium.page.ldapconfig.managers.ListManagersPage;
 
-public class MainPage extends AbstractPageObject {
+public class LdapconfigBasePage extends AbstractPageObject {
 
+	private static final String TITLE_LOCATOR = "//h2[@class='LdapHeader']";
 	private static final String MANAGERS_LOCATOR = "//div[@id='mainMenu']//a[text()='Managers']";
 	private static final String MARKETS_LOCATOR = "//div[@id='mainMenu']//a[text()='Markets']";
 	private static final String METARMARKETS_LOCATOR = "//div[@id='mainMenu']//a[text()='Metamarkets']";
@@ -29,7 +30,7 @@ public class MainPage extends AbstractPageObject {
 	private WebElement remoteAdmin;
 	private WebElement logout;
 
-	public MainPage(TestManager testManager) {
+	public LdapconfigBasePage(TestManager testManager) {
 		super(testManager);
 		try {
 			managers = getElement(By.xpath(MANAGERS_LOCATOR));
@@ -41,12 +42,13 @@ public class MainPage extends AbstractPageObject {
 			remoteAdmin = getElement(By.xpath(REMOTE_ADMIN_LOCATOR));
 			logout = getElement(By.id(LOGOUT_LOCATOR));
 		} catch (NoSuchElementException e) {
-			AbstractTest.fail(getProject(), e.getMessage());
+			fail(e.getMessage());
 		}
 	}
 
-	public void clickManagers() {
+	public ListManagersPage clickManagers() {
 		this.managers.click();
+		return createPageObject(ListManagersPage.class);
 	}
 
 	public void clickMarkets() {
@@ -77,6 +79,10 @@ public class MainPage extends AbstractPageObject {
 	public LogoutPage clickLogout() {
 		this.logout.click();
 		return createPageObject(LogoutPage.class);
+	}
+
+	public String getCurrentTitle() {
+		return getElement(By.xpath(TITLE_LOCATOR)).getText();
 	}
 
 }
