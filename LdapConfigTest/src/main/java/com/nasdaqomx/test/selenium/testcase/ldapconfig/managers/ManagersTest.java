@@ -1,24 +1,32 @@
 package com.nasdaqomx.test.selenium.testcase.ldapconfig.managers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.nasdaqomx.test.selenium.base.AbstractTest;
+import com.nasdaqomx.test.selenium.base.anno.TestAfter;
 import com.nasdaqomx.test.selenium.base.anno.TestBefore;
+import com.nasdaqomx.test.selenium.page.ldapconfig.LdapconfigBasePage;
 import com.nasdaqomx.test.selenium.page.ldapconfig.LoginPage;
 import com.nasdaqomx.test.selenium.page.ldapconfig.managers.AddManagerPage;
+import com.nasdaqomx.test.selenium.page.ldapconfig.managers.EditManagerDetailsPage;
 import com.nasdaqomx.test.selenium.page.ldapconfig.managers.ListManagersPage;
 
 public class ManagersTest extends AbstractTest {
 
 	private ListManagersPage listManagersPage;
+	private LdapconfigBasePage lastPage;
+	private List<String> removeList = new ArrayList<String>();
 
 	@TestBefore
 	public void before() {
 		listManagersPage = createPageObject(LoginPage.class).loginAs(
 				getInputData("username"), getInputData("password"))
-				.clickManagers();
+				.toManagers();
 	}
 
 	public void testAddManager() {
-		AddManagerPage addManagerPage = listManagersPage.clickAddManager();
+		AddManagerPage addManagerPage = listManagersPage.addManager();
 		String userId = getInputData("userId");
 		String surname = getInputData("surname");
 		String fullName = getInputData("fullName");
@@ -27,7 +35,6 @@ public class ManagersTest extends AbstractTest {
 		String mobile = getInputData("mobile");
 		String userTimezone = getInputData("userTimezone");
 		String userLanguage = getInputData("userLanguage");
-		String comments = getInputData("comments");
 
 		addManagerPage.typeUserId(userId);
 		addManagerPage.typeSurname(surname);
@@ -37,8 +44,41 @@ public class ManagersTest extends AbstractTest {
 		addManagerPage.typeMobile(mobile);
 		addManagerPage.selectUserTimezone(userTimezone);
 		addManagerPage.selectUserLanguage(userLanguage);
-		addManagerPage.typeComments(comments);
-		assertTrue("", addManagerPage.clickAddManagerBtn().clickManagers().isManagerListed(userId));
-		
+
+		listManagersPage = addManagerPage.submitAdd().toManagers();
+		assertTrue("\"" + userId
+				+ "\" is not listed in the List Managers Page.",
+				listManagersPage.isManagerListed(userId));
+		verifyEquals(getOutputData("status"),
+				listManagersPage.getStatus(userId));
+		verifyEquals(getOutputData("lastLogin"),
+				listManagersPage.getLastLogin(userId));
+		verifyEquals(getOutputData("accountExpires"),
+				listManagersPage.getAccountExpires(userId));
+		EditManagerDetailsPage editPage = listManagersPage.editManager(userId);
+		verifyEquals(userId, editPage.getUserId());
+		verifyEquals(surname, editPage.getSurname());
+		verifyEquals(fullName, editPage.getFullName());
+		verifyEquals(email, editPage.getEmail());
+		verifyEquals(phone, editPage.getPhone());
+		verifyEquals(mobile, editPage.getMobile());
+		verifyEquals(userTimezone, editPage.getUserTimezone());
+		verifyEquals(userLanguage, editPage.getUserLanguage());
+
+		removeList.add(userId);
+		lastPage = editPage;
+	}
+
+	@TestAfter
+	public void after() {
+		if (!removeList.isEmpty()) {
+			listManagersPage = lastPage.toManagers();
+			for (String userId : removeList) {
+				if (listManagersPage.isManagerListed(userId)) {
+					listManagersPage = listManagersPage.editManager(userId)
+							.removeManager().submitRemove();
+				}
+			}
+		}
 	}
 }

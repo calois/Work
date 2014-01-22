@@ -14,27 +14,27 @@ public class EditManagerDetailsPage extends ManagerBasePage {
 
 	private static final String USER_ID_LOCATOR = "//form/table[@class='LdapListing']//td[div='User id:']/following-sibling::td/span";
 	private static final String USER_ID_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[div='User id:']/following-sibling::td[2]";
-	private static final String SURNAME_LOCATOR = "//form/table[@class='LdapListing']//td[div='Surname:']/following-sibling::td[input]";
+	private static final String SURNAME_LOCATOR = "//form/table[@class='LdapListing']//td[div='Surname:']/following-sibling::td/input";
 	private static final String SURNAME_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[div='Surname:']/following-sibling::td[@class='LdapErrorMsg']";
-	private static final String FULL_NAME_LOCATOR = "//form/table[@class='LdapListing']//td[div='Full name:']/following-sibling::td[input]";
+	private static final String FULL_NAME_LOCATOR = "//form/table[@class='LdapListing']//td[div='Full name:']/following-sibling::td/input";
 	private static final String FULL_NAME_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[div='Full name:']/following-sibling::td[@class='LdapErrorMsg']";
-	private static final String EMAIL_ADDRESS_LOCATOR = "//form/table[@class='LdapListing']//td[div='EMail address:']/following-sibling::td[input]";
+	private static final String EMAIL_ADDRESS_LOCATOR = "//form/table[@class='LdapListing']//td[div='EMail address:']/following-sibling::td/input";
 	private static final String EMAIL_ADDRESS_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[div='EMail address:']/following-sibling::td[@class='LdapErrorMsg']";
 
 	// cannot use equal because of "&nbsp;" in label;
-	private static final String PHONE_NUMBER_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'Phone number:')]/following-sibling::td[input]";
+	private static final String PHONE_NUMBER_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'Phone number:')]/following-sibling::td/input";
 	private static final String PHONE_NUMBER_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'Phone number:')]/following-sibling::td[@class='LdapErrorMsg']";
 
 	// label directly under td rather than div;
-	private static final String MOBILE_NUMBER_LOCATOR = "//form/table[@class='LdapListing']//td[text()='Mobile number:']/following-sibling::td[input]";
+	private static final String MOBILE_NUMBER_LOCATOR = "//form/table[@class='LdapListing']//td[text()='Mobile number:']/following-sibling::td/input";
 	private static final String MOBILE_NUMBER_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[text()='Mobile number:']/following-sibling::td[@class='LdapErrorMsg']";
 
 	// class= ldapErrorMsg; different from above
-	private static final String USER_TIMEZONE_LOCATOR = "//form/table[@class='LdapListing']//td[div='User Timezone:']/following-sibling::td[select]";
+	private static final String USER_TIMEZONE_LOCATOR = "//form/table[@class='LdapListing']//td[div='User Timezone:']/following-sibling::td/select";
 	private static final String USER_TIMEZONE_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[div='User Timezone:']/following-sibling::td[@class='ldapErrorMsg']";
-	private static final String USER_LANGUAGE_LOCATOR = "//form/table[@class='LdapListing']//td[div='User Language:']/following-sibling::td[select]";
+	private static final String USER_LANGUAGE_LOCATOR = "//form/table[@class='LdapListing']//td[div='User Language:']/following-sibling::td/select";
 	private static final String USER_LANGUAGE_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[div='User Language:']/following-sibling::td[@class='ldapErrorMsg']";
-	private static final String COMMENTS_LOCATOR = "//form/table[@class='LdapListing']//td[div='Comments:']/following-sibling::td[input]";
+	private static final String COMMENTS_LOCATOR = "//form/table[@class='LdapListing']//td[div='Comments:']/following-sibling::td/input";
 	private static final String COMMENTS_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[div='Comments:']/following-sibling::td[@class='ldapErrorMsg']";
 
 	// have extra space at the end of label;
@@ -67,7 +67,7 @@ public class EditManagerDetailsPage extends ManagerBasePage {
 
 	public EditManagerDetailsPage(TestManager testManager) {
 		super(testManager);
-		assertUrl(URL, this.getSimpleUrl(), true);
+		assertUrl(URL, this.getSimpleUrl());
 		try {
 			userId = getElement(By.xpath(USER_ID_LOCATOR));
 			userIdErrMsg = getElement(By.xpath(USER_ID_ERROR_MSG_LOCATOR));
@@ -103,7 +103,7 @@ public class EditManagerDetailsPage extends ManagerBasePage {
 	}
 
 	public String getUserId() {
-		return this.userId.getAttribute("value");
+		return this.userId.getText().trim();
 	}
 
 	public void typeUserId(String value) {
@@ -192,7 +192,7 @@ public class EditManagerDetailsPage extends ManagerBasePage {
 
 	public void typeUserTimezone(String value) {
 		if (null != value) {
-			this.userTimezone.selectByValue(value);
+			this.userTimezone.selectByVisibleText(value);
 		}
 	}
 
@@ -206,7 +206,7 @@ public class EditManagerDetailsPage extends ManagerBasePage {
 
 	public void typeUserLanguage(String value) {
 		if (null != value) {
-			this.userLanguage.selectByValue(value);
+			this.userLanguage.selectByVisibleText(value);
 		}
 	}
 
@@ -236,7 +236,7 @@ public class EditManagerDetailsPage extends ManagerBasePage {
 		return this.passwordExpiresErrMsg.getText();
 	}
 
-	public EditManagerPermissionsPage clickUpdate() {
+	public EditManagerPermissionsPage submitEdit() {
 		this.updateBtn.click();
 		return createPageObject(EditManagerPermissionsPage.class);
 	}

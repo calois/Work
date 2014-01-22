@@ -37,29 +37,30 @@ public class ManagerBasePage extends LdapconfigBasePage {
 		}
 	}
 
-	public String getId() {
+	public String getUserIdInMenu() {
 		return this.id.getText();
 	}
 
-	public EditManagerDetailsPage clickDetails() {
+	public EditManagerDetailsPage editDetails() {
 		this.details.click();
 		return createPageObject(EditManagerDetailsPage.class);
 	}
 
-	public EditManagerPermissionsPage clickPermissions() {
+	public EditManagerPermissionsPage editPermissions() {
 		this.permission.click();
 		return createPageObject(EditManagerPermissionsPage.class);
 	}
 
-	public void clickRestPassword() {
+	public void resetPassword() {
 		this.resetPassword.click();
 	}
 
-	public void clickLockAccount() {
+	public void lockAccount() {
 		this.lockAccount.click();
 	}
 
-	public void clickRemoveManager() {
+	public RemoveManagerPage removeManager() {
 		this.removeManager.click();
+		return createPageObject(RemoveManagerPage.class);
 	}
 }

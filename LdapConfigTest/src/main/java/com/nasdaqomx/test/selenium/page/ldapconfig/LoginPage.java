@@ -45,7 +45,7 @@ public class LoginPage extends AbstractPageObject {
 		if (!this.getCurrentUrl().contains(URL)) {
 			load();
 		}
-		assertUrl(URL, this.getSimpleUrl(), true);
+		assertUrl(URL, this.getSimpleUrl());
 		try {
 			userName = getElement(By.name(USER_NAME_LOCATOR));
 			password = getElement(By.name(PASSWORD_LOCATOR));

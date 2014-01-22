@@ -18,7 +18,7 @@ public class LogoutPage extends AbstractPageObject {
 
 	public LogoutPage(TestManager testManager) {
 		super(testManager);
-		assertUrl(URL, this.getSimpleUrl(), false);
+		assertUrl(URL, this.getSimpleUrl());
 		try {
 			loginLink = getElement(By.partialLinkText(LOGIN_LINK_LOCATOR));
 		} catch (NoSuchElementException e) {
@@ -26,7 +26,7 @@ public class LogoutPage extends AbstractPageObject {
 		}
 	}
 
-	public LoginPage clickLoginLink() {
+	public LoginPage loginAgain() {
 		this.loginLink.click();
 		return createPageObject(LoginPage.class);
 	}

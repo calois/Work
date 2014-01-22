@@ -16,7 +16,7 @@ public class ListManagersPage extends LdapconfigBasePage {
 
 	public ListManagersPage(TestManager testManager) {
 		super(testManager);
-		assertUrl(URL, this.getSimpleUrl(), false);
+		assertUrl(URL, this.getSimpleUrl());
 		try {
 			addManager = getElement(By.xpath(ADD_MANAGER_LOCATOR));
 		} catch (NoSuchElementException e) {
@@ -24,46 +24,70 @@ public class ListManagersPage extends LdapconfigBasePage {
 		}
 	}
 
-	public AddManagerPage clickAddManager() {
+	public AddManagerPage addManager() {
 		this.addManager.click();
 		return createPageObject(AddManagerPage.class);
 	}
 
-	public boolean isManagerListed(String userName) {
-		return isPresent(By.id("row-".concat(userName)));
+	public boolean isManagerListed(String userId) {
+		return isPresent(By.id("row-".concat(userId)));
 	}
 
-	public EditManagerDetailsPage editManager(String userName) {
-		this.getEditLink(userName).click();
+	public EditManagerDetailsPage editManager(String userId) {
+		this.getEditLink(userId).click();
 		return createPageObject(EditManagerDetailsPage.class);
 	}
 
-	public void resetPassword(String userName) {
-		this.getResetPasswordLink(userName).click();
+	public String getCommonName(String userId) {
+		return getElement(
+				By.xpath("//table[@class='LdapListing']/tbody/tr[@id='row-"
+						+ userId + "']/td[2]")).getText();
 	}
 
-	public void lockAccount(String userName) {
-		this.getLockAccountLink(userName).click();
+	public String getStatus(String userId) {
+		return getElement(
+				By.xpath("//table[@class='LdapListing']/tbody/tr[@id='row-"
+						+ userId + "']/td[4]")).getText();
 	}
 
-	private WebElement getEditLink(String userName) {
+	public String getLastLogin(String userId) {
+		return getElement(
+				By.xpath("//table[@class='LdapListing']/tbody/tr[@id='row-"
+						+ userId + "']/td[5]")).getText();
+	}
+
+	public String getAccountExpires(String userId) {
+		return getElement(
+				By.xpath("//table[@class='LdapListing']/tbody/tr[@id='row-"
+						+ userId + "']/td[6]")).getText();
+	}
+
+	public void resetPassword(String userId) {
+		this.getResetPasswordLink(userId).click();
+	}
+
+	public void lockAccount(String userId) {
+		this.getLockAccountLink(userId).click();
+	}
+
+	private WebElement getEditLink(String userId) {
 		return getElement(By
 				.xpath("//table[@class='LdapListing']/tbody/tr[@id='row-"
-						+ userName + "']//a[contains(.,'" + userName + "')]"));
+						+ userId + "']/td[1]//a[contains(.,'" + userId + "')]"));
 	}
 
-	private WebElement getResetPasswordLink(String userName) {
+	private WebElement getResetPasswordLink(String userId) {
 		return getElement(By
 				.xpath("//table[@class='LdapListing']/tbody/tr[@id='row-"
-						+ userName
-						+ "']//a[contains(.,'Reset') and contains(.,'password')]"));
+						+ userId
+						+ "']/td[3]//a[contains(.,'Reset') and contains(.,'password')]"));
 	}
 
-	private WebElement getLockAccountLink(String userName) {
+	private WebElement getLockAccountLink(String userId) {
 		return getElement(By
 				.xpath("//table[@class='LdapListing']/tbody/tr[@id='row-"
-						+ userName
-						+ "']//a[contains(.,'Lock') and contains(.,'account')]"));
+						+ userId
+						+ "']/td[3]//a[contains(.,'Lock') and contains(.,'account')]"));
 	}
 
 }

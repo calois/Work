@@ -10,7 +10,7 @@ public class EditManagerPermissionsPage extends ManagerBasePage {
 
 	public EditManagerPermissionsPage(TestManager testManager) {
 		super(testManager);
-		assertUrl(URL, this.getSimpleUrl(), true);
+		assertUrl(URL, this.getSimpleUrl());
 		try {
 		} catch (NoSuchElementException e) {
 			fail(e.getMessage());

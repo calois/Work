@@ -9,7 +9,7 @@ public class ListClientsPage extends LdapconfigBasePage {
 
 	public ListClientsPage(TestManager testManager) {
 		super(testManager);
-		assertUrl(URL, this.getSimpleUrl(), false);
+		assertUrl(URL, this.getSimpleUrl());
 		// TODO Auto-generated constructor stub
 	}
 

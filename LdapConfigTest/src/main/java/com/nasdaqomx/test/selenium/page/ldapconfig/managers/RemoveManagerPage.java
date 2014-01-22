@@ -1,0 +1,31 @@
+package com.nasdaqomx.test.selenium.page.ldapconfig.managers;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebElement;
+
+import com.nasdaqomx.test.selenium.base.TestManager;
+
+public class RemoveManagerPage extends ManagerBasePage {
+
+	private static final String URL = "removeManager.view";
+	private static final String REMOVER_MANAGER_LOCATOR = "//form/input[@value='Yes! Remove manager']";
+
+	private WebElement removeManager;
+
+	public RemoveManagerPage(TestManager testManager) {
+		super(testManager);
+		assertUrl(URL, this.getSimpleUrl());
+		try {
+			removeManager = getElement(By.xpath(REMOVER_MANAGER_LOCATOR));
+		} catch (NoSuchElementException e) {
+			fail(e.getMessage());
+		}
+	}
+
+	public ListManagersPage submitRemove() {
+		this.removeManager.click();
+		return createPageObject(ListManagersPage.class);
+	}
+
+}

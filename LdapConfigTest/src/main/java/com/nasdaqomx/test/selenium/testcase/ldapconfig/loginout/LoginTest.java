@@ -22,10 +22,9 @@ public class LoginTest extends AbstractTest {
 	public void testLoginFail() {
 		loginPage.typeUserName(getInputData("username"));
 		loginPage.typePassword(getInputData("password"));
-		LoginPage loginAfterFailurePage = loginPage
-				.submitLoginExpectingFailure();
-		verifyEquals(getOutputData("msg"), loginAfterFailurePage.getInfoMsg());
-		loginAfterFailurePage.loginAs(getInputData("usernameAfter"),
+		loginPage = loginPage.submitLoginExpectingFailure();
+		verifyEquals(getOutputData("msg"), loginPage.getInfoMsg());
+		loginPage.loginAs(getInputData("usernameAfter"),
 				getInputData("passwordAfter"));
 	}
 }

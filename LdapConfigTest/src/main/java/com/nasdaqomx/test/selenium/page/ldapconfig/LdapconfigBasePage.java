@@ -46,37 +46,37 @@ public class LdapconfigBasePage extends AbstractPageObject {
 		}
 	}
 
-	public ListManagersPage clickManagers() {
+	public ListManagersPage toManagers() {
 		this.managers.click();
 		return createPageObject(ListManagersPage.class);
 	}
 
-	public void clickMarkets() {
+	public void toMarkets() {
 		this.markets.click();
 	}
 
-	public void clickMetamarkets() {
+	public void toMetamarkets() {
 		this.metamarkets.click();
 	}
 
-	public ListClientsPage clickClients() {
+	public ListClientsPage toClients() {
 		this.clients.click();
 		return createPageObject(ListClientsPage.class);
 	}
 
-	public void clickReports() {
+	public void toReports() {
 		this.reports.click();
 	}
 
-	public void clickNotifications() {
+	public void toNotifications() {
 		this.notifications.click();
 	}
 
-	public void clickRemoteAdmins() {
+	public void toRemoteAdmins() {
 		this.remoteAdmin.click();
 	}
 
-	public LogoutPage clickLogout() {
+	public LogoutPage logout() {
 		this.logout.click();
 		return createPageObject(LogoutPage.class);
 	}

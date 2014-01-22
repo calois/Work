@@ -16,7 +16,7 @@ public class LogoutTest extends AbstractTest {
 	}
 
 	public void testLogout() {
-		verifyEquals(getOutputData("msg"), defaultPage.clickLogout()
+		verifyEquals(getOutputData("msg"), defaultPage.logout()
 				.getMessage());
 	}
 }

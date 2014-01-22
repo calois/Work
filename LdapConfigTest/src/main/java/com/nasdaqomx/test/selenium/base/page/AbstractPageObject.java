@@ -5,9 +5,14 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -101,9 +106,43 @@ public abstract class AbstractPageObject {
 				ExpectedConditions.presenceOfAllElementsLocatedBy(by));
 	}
 
-	protected boolean isPresent(By by) {
-		return !getWebDriveWait().until(
-				ExpectedConditions.invisibilityOfElementLocated(by));
+	protected boolean isPresent(final By by) {
+		try {
+			return getWebDriveWait().until(visibilityOfElementLocated(by));
+		} catch (TimeoutException e) {
+			return false;
+		}
+	}
+
+	private ExpectedCondition<Boolean> visibilityOfElementLocated(
+			final By locator) {
+		return new ExpectedCondition<Boolean>() {
+			public Boolean apply(WebDriver driver) {
+				try {
+					return findElement(locator, driver).isDisplayed();
+				} catch (NoSuchElementException e) {
+					return false;
+				} catch (StaleElementReferenceException e) {
+					return false;
+				}
+			}
+
+			public String toString() {
+				return "element is visible: " + locator;
+			}
+		};
+	}
+
+	private WebElement findElement(By by, WebDriver driver) {
+		try {
+			return driver.findElement(by);
+		} catch (NoSuchElementException e) {
+			throw e;
+		} catch (WebDriverException e) {
+			LOGGER.warn(String.format(
+					"WebDriverException thrown by findElement(%s)", by), e);
+			throw e;
+		}
 	}
 
 	protected void doubleClick(final By by) {
@@ -119,18 +158,10 @@ public abstract class AbstractPageObject {
 		}
 	}
 
-	protected void assertUrl(String expectUrl, String actualUrl,
-			boolean startWith) {
-		if (startWith) {
-			if (!actualUrl.startsWith(expectUrl)) {
-				fail("Expected URL Starts with: \"" + expectUrl
-						+ "\" but actual: \"" + actualUrl);
-			}
-		} else {
-			if (!actualUrl.equals(expectUrl)) {
-				fail("Expected URL: \"" + expectUrl + "\" but actual: \""
-						+ actualUrl);
-			}
+	protected void assertUrl(String expectUrl, String actualUrl) {
+		if (!actualUrl.startsWith(expectUrl)) {
+			fail("Expected URL Starts with: \"" + expectUrl
+					+ "\" but actual: \"" + actualUrl);
 		}
 	}
 

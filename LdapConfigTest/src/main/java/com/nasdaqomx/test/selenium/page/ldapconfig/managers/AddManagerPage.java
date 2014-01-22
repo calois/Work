@@ -14,28 +14,28 @@ public class AddManagerPage extends LdapconfigBasePage {
 	private static final String URL = "addManager.view";
 
 	// cannot use equal because of line characters in label
-	private static final String USER_ID_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'User id:')]/following-sibling::td[input]";
+	private static final String USER_ID_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'User id:')]/following-sibling::td/input";
 	private static final String USER_ID_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'User id:')]/following-sibling::td[@class='LdapErrorMsg']";
-	private static final String SURNAME_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'Surname:')]/following-sibling::td[input]";
+	private static final String SURNAME_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'Surname:')]/following-sibling::td/input";
 	private static final String SURNAME_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'Surname:')]/following-sibling::td[@class='LdapErrorMsg']";
-	private static final String FULL_NAME_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'Full name:')]/following-sibling::td[input]";
+	private static final String FULL_NAME_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'Full name:')]/following-sibling::td/input";
 	private static final String FULL_NAME_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'Full name:')]/following-sibling::td[@class='LdapErrorMsg']";
 
 	// cannot use equal because of "&nbsp;" in label;
-	private static final String EMAIL_ADDRESS_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'EMail address:')]/following-sibling::td[input]";
+	private static final String EMAIL_ADDRESS_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'EMail address:')]/following-sibling::td/input";
 	private static final String EMAIL_ADDRESS_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'EMail address:')]/following-sibling::td[@class='LdapErrorMsg']";
-	private static final String PHONE_NUMBER_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'Phone number:')]/following-sibling::td[input]";
+	private static final String PHONE_NUMBER_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'Phone number:')]/following-sibling::td/input";
 	private static final String PHONE_NUMBER_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'Phone number:')]/following-sibling::td[@class='LdapErrorMsg']";
 
 	// label directly under td rather than div;
-	private static final String MOBILE_NUMBER_LOCATOR = "//form/table[@class='LdapListing']//td[text()='Mobile number:']/following-sibling::td[input]";
+	private static final String MOBILE_NUMBER_LOCATOR = "//form/table[@class='LdapListing']//td[text()='Mobile number:']/following-sibling::td/input";
 	private static final String MOBILE_NUMBER_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[text()='Mobile number:']/following-sibling::td[@class='LdapErrorMsg']";
 
-	private static final String USER_TIMEZONE_LOCATOR = "//form/table[@class='LdapListing']//td[div='User Timezone:']/following-sibling::td[select]";
+	private static final String USER_TIMEZONE_LOCATOR = "//form/table[@class='LdapListing']//td[div='User Timezone:']/following-sibling::td/select";
 	private static final String USER_TIMEZONE_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[div='User Timezone:']/following-sibling::td[@class='ldapErrorMsg']";
-	private static final String USER_LANGUAGE_LOCATOR = "//form/table[@class='LdapListing']//td[div='User Language:']/following-sibling::td[select]";
+	private static final String USER_LANGUAGE_LOCATOR = "//form/table[@class='LdapListing']//td[div='User Language:']/following-sibling::td/select";
 	private static final String USER_LANGUAGE_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[div='User Language:']/following-sibling::td[@class='ldapErrorMsg']";
-	private static final String COMMENTS_LOCATOR = "//form/table[@class='LdapListing']//td[div='Comments:']/following-sibling::td[input]";
+	private static final String COMMENTS_LOCATOR = "//form/table[@class='LdapListing']//td[div='Comments:']/following-sibling::td/input";
 	private static final String COMMENTS_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[div='Comments:']/following-sibling::td[@class='ldapErrorMsg']";
 
 	private static final String ADD_MANAGER_BTN_LOCATOR = "//form/div[@class='LdapListingOptions']/input[@value='Add manager']";
@@ -64,7 +64,7 @@ public class AddManagerPage extends LdapconfigBasePage {
 
 	public AddManagerPage(TestManager testManager) {
 		super(testManager);
-		assertUrl(URL, this.getSimpleUrl(), true);
+		assertUrl(URL, this.getSimpleUrl());
 		try {
 			userId = getElement(By.xpath(USER_ID_LOCATOR));
 			userIdErrMsg = getElement(By.xpath(USER_ID_ERROR_MSG_LOCATOR));
@@ -187,7 +187,7 @@ public class AddManagerPage extends LdapconfigBasePage {
 
 	public void selectUserTimezone(String value) {
 		if (null != value) {
-			this.userTimezone.selectByValue(value);
+			this.userTimezone.selectByVisibleText(value);
 		}
 	}
 
@@ -201,10 +201,10 @@ public class AddManagerPage extends LdapconfigBasePage {
 
 	public void selectUserLanguage(String value) {
 		if (null != value) {
-			this.userLanguage.selectByValue(value);
+			this.userLanguage.selectByVisibleText(value);
 		}
 	}
-	
+
 	public String getUserLanguageErrMsg() {
 		return this.userLanguageErrMsg.getText();
 	}
@@ -223,12 +223,12 @@ public class AddManagerPage extends LdapconfigBasePage {
 		return this.commentsErrMsg.getText();
 	}
 
-	public EditManagerPermissionsPage clickAddManagerBtn() {
+	public EditManagerPermissionsPage submitAdd() {
 		this.addManagerBtn.click();
 		return createPageObject(EditManagerPermissionsPage.class);
 	}
 
-	public AddManagerPage clickAddManagerMenu() {
+	public AddManagerPage reset() {
 		this.addManagerMenu.click();
 		return this;
 	}
