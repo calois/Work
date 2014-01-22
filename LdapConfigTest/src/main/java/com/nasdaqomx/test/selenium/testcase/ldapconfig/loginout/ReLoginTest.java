@@ -17,7 +17,7 @@ public class ReLoginTest extends AbstractTest {
 	}
 
 	public void testLoginLink() {
-		logoutPage.loginAgain().loginAs(getInputData("username"),
+		logoutPage.toLogin().loginAs(getInputData("username"),
 				getInputData("password"));
 	}
 }

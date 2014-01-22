@@ -26,7 +26,7 @@ public class LogoutPage extends AbstractPageObject {
 		}
 	}
 
-	public LoginPage loginAgain() {
+	public LoginPage toLogin() {
 		this.loginLink.click();
 		return createPageObject(LoginPage.class);
 	}

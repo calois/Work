@@ -105,6 +105,10 @@ public abstract class AbstractPageObject {
 		return getWebDriveWait().until(
 				ExpectedConditions.presenceOfAllElementsLocatedBy(by));
 	}
+	protected boolean isDisappeared(By by) {
+		return getWebDriveWait().until(
+				ExpectedConditions.invisibilityOfElementLocated(by));
+	}
 
 	protected boolean isPresent(final By by) {
 		try {
