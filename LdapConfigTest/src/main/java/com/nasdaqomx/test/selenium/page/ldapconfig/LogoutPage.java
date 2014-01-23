@@ -11,8 +11,8 @@ public class LogoutPage extends AbstractPageObject {
 
 	private static final String URL = "logout.view";
 	// <a href="index.view">Click here to log in again.</a>
-	private static final String LOGIN_LINK_LOCATOR = "log in again";
-	private static final String MESSAGE_LOCATOR = "//div[@id='content']/p";
+	private static final String LOGIN_LINK_PARTIALLINKTEXT = "log in again";
+	private static final String MESSAGE_XPATH = "//div[@id='content']/p";
 
 	private WebElement loginLink;
 
@@ -20,7 +20,7 @@ public class LogoutPage extends AbstractPageObject {
 		super(testManager);
 		assertUrl(URL, this.getSimpleUrl());
 		try {
-			loginLink = getElement(By.partialLinkText(LOGIN_LINK_LOCATOR));
+			loginLink = getElement(By.partialLinkText(LOGIN_LINK_PARTIALLINKTEXT));
 		} catch (NoSuchElementException e) {
 			fail(e.getMessage());
 		}
@@ -32,6 +32,6 @@ public class LogoutPage extends AbstractPageObject {
 	}
 
 	public String getMessage() {
-		return getElement(By.xpath(MESSAGE_LOCATOR)).getText();
+		return getElement(By.xpath(MESSAGE_XPATH)).getText();
 	}
 }

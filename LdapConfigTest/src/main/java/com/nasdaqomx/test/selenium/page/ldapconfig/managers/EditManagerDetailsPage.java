@@ -12,36 +12,36 @@ public class EditManagerDetailsPage extends ManagerBasePage {
 
 	private static final String URL = "editManager.view";
 
-	private static final String USER_ID_LOCATOR = "//form/table[@class='LdapListing']//td[div='User id:']/following-sibling::td/span";
-	private static final String USER_ID_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[div='User id:']/following-sibling::td[2]";
-	private static final String SURNAME_LOCATOR = "//form/table[@class='LdapListing']//td[div='Surname:']/following-sibling::td/input";
-	private static final String SURNAME_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[div='Surname:']/following-sibling::td[@class='LdapErrorMsg']";
-	private static final String FULL_NAME_LOCATOR = "//form/table[@class='LdapListing']//td[div='Full name:']/following-sibling::td/input";
-	private static final String FULL_NAME_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[div='Full name:']/following-sibling::td[@class='LdapErrorMsg']";
-	private static final String EMAIL_ADDRESS_LOCATOR = "//form/table[@class='LdapListing']//td[div='EMail address:']/following-sibling::td/input";
-	private static final String EMAIL_ADDRESS_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[div='EMail address:']/following-sibling::td[@class='LdapErrorMsg']";
+	private static final String USER_ID_XPATH = "//form/table[@class='LdapListing']//td[div='User id:']/following-sibling::td/span";
+	private static final String USER_ID_ERROR_MSG_XPATH = "//form/table[@class='LdapListing']//td[div='User id:']/following-sibling::td[2]";
+	private static final String SURNAME_XPATH = "//form/table[@class='LdapListing']//td[div='Surname:']/following-sibling::td/input";
+	private static final String SURNAME_ERROR_MSG_XPATH = "//form/table[@class='LdapListing']//td[div='Surname:']/following-sibling::td[@class='LdapErrorMsg']";
+	private static final String FULL_NAME_XPATH = "//form/table[@class='LdapListing']//td[div='Full name:']/following-sibling::td/input";
+	private static final String FULL_NAME_ERROR_MSG_XPATH = "//form/table[@class='LdapListing']//td[div='Full name:']/following-sibling::td[@class='LdapErrorMsg']";
+	private static final String EMAIL_ADDRESS_XPATH = "//form/table[@class='LdapListing']//td[div='EMail address:']/following-sibling::td/input";
+	private static final String EMAIL_ADDRESS_ERROR_MSG_XPATH = "//form/table[@class='LdapListing']//td[div='EMail address:']/following-sibling::td[@class='LdapErrorMsg']";
 
 	// cannot use equal because of "&nbsp;" in label;
-	private static final String PHONE_NUMBER_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'Phone number:')]/following-sibling::td/input";
-	private static final String PHONE_NUMBER_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[contains(text(),'Phone number:')]/following-sibling::td[@class='LdapErrorMsg']";
+	private static final String PHONE_NUMBER_XPATH = "//form/table[@class='LdapListing']//td[contains(text(),'Phone number:')]/following-sibling::td/input";
+	private static final String PHONE_NUMBER_ERROR_MSG_XPATH = "//form/table[@class='LdapListing']//td[contains(text(),'Phone number:')]/following-sibling::td[@class='LdapErrorMsg']";
 
 	// label directly under td rather than div;
-	private static final String MOBILE_NUMBER_LOCATOR = "//form/table[@class='LdapListing']//td[text()='Mobile number:']/following-sibling::td/input";
-	private static final String MOBILE_NUMBER_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[text()='Mobile number:']/following-sibling::td[@class='LdapErrorMsg']";
+	private static final String MOBILE_NUMBER_XPATH = "//form/table[@class='LdapListing']//td[text()='Mobile number:']/following-sibling::td/input";
+	private static final String MOBILE_NUMBER_ERROR_MSG_XPATH = "//form/table[@class='LdapListing']//td[text()='Mobile number:']/following-sibling::td[@class='LdapErrorMsg']";
 
 	// class= ldapErrorMsg; different from above
-	private static final String USER_TIMEZONE_LOCATOR = "//form/table[@class='LdapListing']//td[div='User Timezone:']/following-sibling::td/select";
-	private static final String USER_TIMEZONE_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[div='User Timezone:']/following-sibling::td[@class='ldapErrorMsg']";
-	private static final String USER_LANGUAGE_LOCATOR = "//form/table[@class='LdapListing']//td[div='User Language:']/following-sibling::td/select";
-	private static final String USER_LANGUAGE_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[div='User Language:']/following-sibling::td[@class='ldapErrorMsg']";
-	private static final String COMMENTS_LOCATOR = "//form/table[@class='LdapListing']//td[div='Comments:']/following-sibling::td/input";
-	private static final String COMMENTS_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[div='Comments:']/following-sibling::td[@class='ldapErrorMsg']";
+	private static final String USER_TIMEZONE_XPATH = "//form/table[@class='LdapListing']//td[div='User Timezone:']/following-sibling::td/select";
+	private static final String USER_TIMEZONE_ERROR_MSG_XPATH = "//form/table[@class='LdapListing']//td[div='User Timezone:']/following-sibling::td[@class='ldapErrorMsg']";
+	private static final String USER_LANGUAGE_XPATH = "//form/table[@class='LdapListing']//td[div='User Language:']/following-sibling::td/select";
+	private static final String USER_LANGUAGE_ERROR_MSG_XPATH = "//form/table[@class='LdapListing']//td[div='User Language:']/following-sibling::td[@class='ldapErrorMsg']";
+	private static final String COMMENTS_XPATH = "//form/table[@class='LdapListing']//td[div='Comments:']/following-sibling::td/input";
+	private static final String COMMENTS_ERROR_MSG_XPATH = "//form/table[@class='LdapListing']//td[div='Comments:']/following-sibling::td[@class='ldapErrorMsg']";
 
 	// have extra space at the end of label;
-	private static final String PASSWORD_EXPRIES_LOCATOR = "//form/table[@class='LdapListing']//td[div='Password expires: ']/following-sibling::td[1]";
-	private static final String PASSWORD_EXPRIES_ERROR_MSG_LOCATOR = "//form/table[@class='LdapListing']//td[div='Password expires: ']/following-sibling::td[2]";
+	private static final String PASSWORD_EXPRIES_XPATH = "//form/table[@class='LdapListing']//td[div='Password expires: ']/following-sibling::td[1]";
+	private static final String PASSWORD_EXPRIES_ERROR_MSG_XPATH = "//form/table[@class='LdapListing']//td[div='Password expires: ']/following-sibling::td[2]";
 
-	private static final String UPDATE_BTN_LOCATOR = "//form/div[@class='LdapListingOptions']/input[@value='Update managers details']";
+	private static final String UPDATE_BTN_XPATH = "//form/div[@class='LdapListingOptions']/input[@value='Update managers details']";
 
 	private WebElement userId;
 	private WebElement userIdErrMsg;
@@ -69,32 +69,30 @@ public class EditManagerDetailsPage extends ManagerBasePage {
 		super(testManager);
 		assertUrl(URL, this.getSimpleUrl());
 		try {
-			userId = getElement(By.xpath(USER_ID_LOCATOR));
-			userIdErrMsg = getElement(By.xpath(USER_ID_ERROR_MSG_LOCATOR));
-			surname = getElement(By.xpath(SURNAME_LOCATOR));
-			surnameErrMsg = getElement(By.xpath(SURNAME_ERROR_MSG_LOCATOR));
-			fullName = getElement(By.xpath(FULL_NAME_LOCATOR));
-			fullNameErrMsg = getElement(By.xpath(FULL_NAME_ERROR_MSG_LOCATOR));
-			email = getElement(By.xpath(EMAIL_ADDRESS_LOCATOR));
-			emailErrMsg = getElement(By.xpath(EMAIL_ADDRESS_ERROR_MSG_LOCATOR));
-			phone = getElement(By.xpath(PHONE_NUMBER_LOCATOR));
-			phoneErrMsg = getElement(By.xpath(PHONE_NUMBER_ERROR_MSG_LOCATOR));
-			mobile = getElement(By.xpath(MOBILE_NUMBER_LOCATOR));
-			mobileErrMsg = getElement(By.xpath(MOBILE_NUMBER_ERROR_MSG_LOCATOR));
-			userTimezone = new Select(
-					getElement(By.xpath(USER_TIMEZONE_LOCATOR)));
+			userId = getElement(By.xpath(USER_ID_XPATH));
+			userIdErrMsg = getElement(By.xpath(USER_ID_ERROR_MSG_XPATH));
+			surname = getElement(By.xpath(SURNAME_XPATH));
+			surnameErrMsg = getElement(By.xpath(SURNAME_ERROR_MSG_XPATH));
+			fullName = getElement(By.xpath(FULL_NAME_XPATH));
+			fullNameErrMsg = getElement(By.xpath(FULL_NAME_ERROR_MSG_XPATH));
+			email = getElement(By.xpath(EMAIL_ADDRESS_XPATH));
+			emailErrMsg = getElement(By.xpath(EMAIL_ADDRESS_ERROR_MSG_XPATH));
+			phone = getElement(By.xpath(PHONE_NUMBER_XPATH));
+			phoneErrMsg = getElement(By.xpath(PHONE_NUMBER_ERROR_MSG_XPATH));
+			mobile = getElement(By.xpath(MOBILE_NUMBER_XPATH));
+			mobileErrMsg = getElement(By.xpath(MOBILE_NUMBER_ERROR_MSG_XPATH));
+			userTimezone = new Select(getElement(By.xpath(USER_TIMEZONE_XPATH)));
 			userTimezoneErrMsg = getElement(By
-					.xpath(USER_TIMEZONE_ERROR_MSG_LOCATOR));
-			userLanguage = new Select(
-					getElement(By.xpath(USER_LANGUAGE_LOCATOR)));
+					.xpath(USER_TIMEZONE_ERROR_MSG_XPATH));
+			userLanguage = new Select(getElement(By.xpath(USER_LANGUAGE_XPATH)));
 			userLanguageErrMsg = getElement(By
-					.xpath(USER_LANGUAGE_ERROR_MSG_LOCATOR));
-			comments = getElement(By.xpath(COMMENTS_LOCATOR));
-			commentsErrMsg = getElement(By.xpath(COMMENTS_ERROR_MSG_LOCATOR));
-			passwordExpires = getElement(By.xpath(PASSWORD_EXPRIES_LOCATOR));
+					.xpath(USER_LANGUAGE_ERROR_MSG_XPATH));
+			comments = getElement(By.xpath(COMMENTS_XPATH));
+			commentsErrMsg = getElement(By.xpath(COMMENTS_ERROR_MSG_XPATH));
+			passwordExpires = getElement(By.xpath(PASSWORD_EXPRIES_XPATH));
 			passwordExpiresErrMsg = getElement(By
-					.xpath(PASSWORD_EXPRIES_ERROR_MSG_LOCATOR));
-			updateBtn = getElement(By.xpath(UPDATE_BTN_LOCATOR));
+					.xpath(PASSWORD_EXPRIES_ERROR_MSG_XPATH));
+			updateBtn = getElement(By.xpath(UPDATE_BTN_XPATH));
 		} catch (NoSuchElementException e) {
 			fail(e.getMessage());
 		} catch (UnexpectedTagNameException e) {

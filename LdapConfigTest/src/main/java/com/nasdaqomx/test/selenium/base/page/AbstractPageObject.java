@@ -77,8 +77,16 @@ public abstract class AbstractPageObject {
 		return getWebDriver().findElement(by);
 	}
 
+	protected WebElement getElement(WebElement webElment, By by) {
+		return webElment.findElement(by);
+	}
+
 	protected List<WebElement> getElements(By by) {
 		return getWebDriver().findElements(by);
+	}
+
+	protected List<WebElement> getElements(WebElement webElment, By by) {
+		return webElment.findElements(by);
 	}
 
 	protected WebElement getElementUntilClickable(By by) {
@@ -105,12 +113,13 @@ public abstract class AbstractPageObject {
 		return getWebDriveWait().until(
 				ExpectedConditions.presenceOfAllElementsLocatedBy(by));
 	}
+
 	protected boolean isDisappeared(By by) {
 		return getWebDriveWait().until(
 				ExpectedConditions.invisibilityOfElementLocated(by));
 	}
 
-	protected boolean isPresent(final By by) {
+	protected boolean isPresent(By by) {
 		try {
 			return getWebDriveWait().until(visibilityOfElementLocated(by));
 		} catch (TimeoutException e) {
@@ -118,12 +127,11 @@ public abstract class AbstractPageObject {
 		}
 	}
 
-	private ExpectedCondition<Boolean> visibilityOfElementLocated(
-			final By locator) {
+	private ExpectedCondition<Boolean> visibilityOfElementLocated(final By by) {
 		return new ExpectedCondition<Boolean>() {
 			public Boolean apply(WebDriver driver) {
 				try {
-					return findElement(locator, driver).isDisplayed();
+					return findElement(by, driver).isDisplayed();
 				} catch (NoSuchElementException e) {
 					return false;
 				} catch (StaleElementReferenceException e) {
@@ -132,7 +140,7 @@ public abstract class AbstractPageObject {
 			}
 
 			public String toString() {
-				return "element is visible: " + locator;
+				return "element is visible: " + by;
 			}
 		};
 	}

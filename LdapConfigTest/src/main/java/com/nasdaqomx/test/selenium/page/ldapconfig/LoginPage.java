@@ -6,7 +6,6 @@ import org.openqa.selenium.WebElement;
 
 import com.nasdaqomx.test.selenium.base.TestManager;
 import com.nasdaqomx.test.selenium.base.page.AbstractPageObject;
-import com.nasdaqomx.test.selenium.page.ldapconfig.clients.ListClientsPage;
 
 public class LoginPage extends AbstractPageObject {
 
@@ -16,15 +15,11 @@ public class LoginPage extends AbstractPageObject {
 	 */
 
 	private static final String URL = "login.jsp";
-	// <input type="text" name="j_username">
-	private static final String USER_NAME_LOCATOR = "j_username";
-	// <input type="password" name="j_password">
-	private static final String PASSWORD_LOCATOR = "j_password";
-	// <input type="submit" value="Login">
-	private static final String LOGIN_LOCATOR = "//input[@type='submit']";
-	private static final String INFO_MSG_LOCATOR = "infomessage";
-	// <a href="forgottenPassword.view">Forgotten your password?</a>
-	private final String FORGOTTEN_PASSWORD_LOCATOR = "Forgotten your password";
+	private static final String USER_NAME_NAME = "j_username";
+	private static final String PASSWORD_NAME = "j_password";
+	private static final String LOGIN_XPATH = "//input[@value='Login']";
+	private static final String INFO_MSG_ID = "infomessage";
+	private final String FORGOTTEN_PASSWORD_PARTIALLINKTEXT = "Forgotten your password";
 
 	private WebElement userName;
 	private WebElement password;
@@ -47,18 +42,18 @@ public class LoginPage extends AbstractPageObject {
 		}
 		assertUrl(URL, this.getSimpleUrl());
 		try {
-			userName = getElement(By.name(USER_NAME_LOCATOR));
-			password = getElement(By.name(PASSWORD_LOCATOR));
-			loginButton = getElement(By.xpath(LOGIN_LOCATOR));
+			userName = getElement(By.name(USER_NAME_NAME));
+			password = getElement(By.name(PASSWORD_NAME));
+			loginButton = getElement(By.xpath(LOGIN_XPATH));
 			forgottenPassword = getElement(By
-					.partialLinkText(FORGOTTEN_PASSWORD_LOCATOR));
+					.partialLinkText(FORGOTTEN_PASSWORD_PARTIALLINKTEXT));
 		} catch (NoSuchElementException e) {
 			fail(e.getMessage());
 		}
 	}
 
 	public String getInfoMsg() {
-		return getElement(By.id(INFO_MSG_LOCATOR)).getText();
+		return getElement(By.id(INFO_MSG_ID)).getText();
 	}
 
 	public void typeUserName(String value) {
@@ -81,9 +76,9 @@ public class LoginPage extends AbstractPageObject {
 		return this.password.getText();
 	}
 
-	public ListClientsPage submitLogin() {
+	public LdapconfigBasePage submitLogin() {
 		this.loginButton.click();
-		return createPageObject(ListClientsPage.class);
+		return createPageObject(LdapconfigBasePage.class);
 	}
 
 	public LoginPage submitLoginExpectingFailure() {
@@ -91,14 +86,13 @@ public class LoginPage extends AbstractPageObject {
 		return createPageObject(LoginPage.class);
 	}
 
-	public void clickForgottenPassword() {
+	public void toForgottenPassword() {
 		this.forgottenPassword.click();
 	}
 
-	public ListClientsPage loginAs(String name, String pwd) {
+	public LdapconfigBasePage loginAs(String name, String pwd) {
 		typeUserName(name);
 		typePassword(pwd);
-		submitLogin();
-		return createPageObject(ListClientsPage.class);
+		return submitLogin();
 	}
 }

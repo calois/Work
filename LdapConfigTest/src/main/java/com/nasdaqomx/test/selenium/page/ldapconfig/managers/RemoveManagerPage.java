@@ -9,7 +9,7 @@ import com.nasdaqomx.test.selenium.base.TestManager;
 public class RemoveManagerPage extends ManagerBasePage {
 
 	private static final String URL = "removeManager.view";
-	private static final String REMOVER_MANAGER_LOCATOR = "//form/input[@value='Yes! Remove manager']";
+	private static final String REMOVER_MANAGER_XPATH = "//form/input[@value='Yes! Remove manager']";
 
 	private WebElement removeManager;
 
@@ -17,7 +17,7 @@ public class RemoveManagerPage extends ManagerBasePage {
 		super(testManager);
 		assertUrl(URL, this.getSimpleUrl());
 		try {
-			removeManager = getElement(By.xpath(REMOVER_MANAGER_LOCATOR));
+			removeManager = getElement(By.xpath(REMOVER_MANAGER_XPATH));
 		} catch (NoSuchElementException e) {
 			fail(e.getMessage());
 		}

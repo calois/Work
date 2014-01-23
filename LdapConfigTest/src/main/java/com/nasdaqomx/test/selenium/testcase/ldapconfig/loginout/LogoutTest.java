@@ -2,12 +2,12 @@ package com.nasdaqomx.test.selenium.testcase.ldapconfig.loginout;
 
 import com.nasdaqomx.test.selenium.base.AbstractTest;
 import com.nasdaqomx.test.selenium.base.anno.TestBefore;
+import com.nasdaqomx.test.selenium.page.ldapconfig.LdapconfigBasePage;
 import com.nasdaqomx.test.selenium.page.ldapconfig.LoginPage;
-import com.nasdaqomx.test.selenium.page.ldapconfig.clients.ListClientsPage;
 
 public class LogoutTest extends AbstractTest {
 
-	private ListClientsPage defaultPage;
+	private LdapconfigBasePage defaultPage;
 
 	@TestBefore
 	public void before() {
