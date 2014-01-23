@@ -23,6 +23,7 @@ public class ManagersTest extends AbstractTest {
 	private String mobile;
 	private String userTimezone;
 	private String userLanguage;
+	private String comments;
 	private String expectedUserId;
 	private String expectedSurname;
 	private String expectedFullName;
@@ -31,6 +32,7 @@ public class ManagersTest extends AbstractTest {
 	private String expectedMobile;
 	private String expectedUserTimezone;
 	private String expectedUserLanguage;
+	private String expectedComments;
 
 	@TestBefore
 	public void before() {
@@ -48,6 +50,8 @@ public class ManagersTest extends AbstractTest {
 		mobile = getInputData("mobile");
 		userTimezone = getInputData("userTimezone");
 		userLanguage = getInputData("userLanguage");
+		userLanguage = getInputData("userLanguage");
+		comments = getInputData("comments");
 		expectedUserId = TestUtils.isEmpty(userId) ? getOutputData("userId")
 				: userId;
 		expectedSurname = TestUtils.isEmpty(surname) ? getOutputData("surname")
@@ -64,10 +68,12 @@ public class ManagersTest extends AbstractTest {
 				: userTimezone;
 		expectedUserLanguage = TestUtils.isEmpty(userLanguage) ? getOutputData("userLanguage")
 				: userLanguage;
+		expectedComments = TestUtils.isEmpty(comments) ? getOutputData("comments")
+				: comments;
 	}
 
 	public void testAddManagerSuccess() {
-		//get data
+		// get data
 		setData();
 		// go to add manager page
 		AddManagerPage addManagerPage = listManagersPage.toAddManager();
@@ -114,7 +120,7 @@ public class ManagersTest extends AbstractTest {
 	public void testAddManagerFail() {
 		// get the total number of managers in the list before add
 		int totalManager = listManagersPage.getTotalManager();
-		//get data
+		// get data
 		setData();
 		// go to add manager page
 		AddManagerPage addManagerPage = listManagersPage.toAddManager();
@@ -127,6 +133,7 @@ public class ManagersTest extends AbstractTest {
 		addManagerPage.typeMobile(mobile);
 		addManagerPage.selectUserTimezone(userTimezone);
 		addManagerPage.selectUserLanguage(userLanguage);
+		addManagerPage.typeComments(comments);
 		// submit add and stay in the same page
 		addManagerPage = addManagerPage.submitAddExpectingFailure();
 		// verify error message
@@ -138,6 +145,16 @@ public class ManagersTest extends AbstractTest {
 				addManagerPage.getFullNameErrMsg());
 		verifyEquals(getOutputData("emailErrMsg"),
 				addManagerPage.getEmailErrMsg());
+		verifyEquals(getOutputData("phoneErrMsg"),
+				addManagerPage.getPhoneErrMsg());
+		verifyEquals(getOutputData("mobileErrMsg"),
+				addManagerPage.getMobileErrMsg());
+		verifyEquals(getOutputData("userTimezoneErrMsg"),
+				addManagerPage.getUserTimezoneErrMsg());
+		verifyEquals(getOutputData("userLanguageErrMsg"),
+				addManagerPage.getUserLanguageErrMsg());
+		verifyEquals(getOutputData("commentsErrMsg"),
+				addManagerPage.getCommentsErrMsg());
 
 		// verify the values in each field
 		verifyEquals(expectedUserId, addManagerPage.getUserId());
@@ -148,6 +165,7 @@ public class ManagersTest extends AbstractTest {
 		verifyEquals(expectedMobile, addManagerPage.getMobile());
 		verifyEquals(expectedUserTimezone, addManagerPage.getUserTimezone());
 		verifyEquals(expectedUserLanguage, addManagerPage.getUserLanguage());
+		verifyEquals(expectedComments, addManagerPage.getComments());
 
 		// go to managers tab
 		listManagersPage = addManagerPage.toManagers();

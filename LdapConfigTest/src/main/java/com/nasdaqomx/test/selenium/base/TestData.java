@@ -16,7 +16,6 @@ public class TestData {
 	}
 
 	public String getOutputData(String key) {
-		return "NULL".equals(outputData.getProperty(key)) ? null : outputData
-				.getProperty(key);
+		return outputData.getProperty(key);
 	}
 }
