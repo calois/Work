@@ -89,8 +89,8 @@ public class ManagersTest extends AbstractTest {
 		// submit add and go to managers tab
 		listManagersPage = addManagerPage.submitAdd().toManagers();
 		// if the useId is listed continue test, otherwise stop test
-		assertTrue("\"" + userId
-				+ "\" should be listed in the List Managers Page.",
+		assertTrue(String.format(
+				"Expect '%s listed in the List Managers Page'", userId),
 				listManagersPage.isManagerListed(userId));
 		// verify the status, lastLogin and accountExpires
 		verifyEquals(getOutputData("status"),
@@ -119,7 +119,7 @@ public class ManagersTest extends AbstractTest {
 
 	public void testAddManagerFail() {
 		// get the total number of managers in the list before add
-		int totalManager = listManagersPage.getTotalManager();
+		int totalManager = listManagersPage.getTotalNumber();
 		// get data
 		setData();
 		// go to add manager page
@@ -170,7 +170,7 @@ public class ManagersTest extends AbstractTest {
 		// go to managers tab
 		listManagersPage = addManagerPage.toManagers();
 		// no managers are added
-		verifyEquals(totalManager, listManagersPage.getTotalManager());
+		verifyEquals(totalManager, listManagersPage.getTotalNumber());
 
 	}
 

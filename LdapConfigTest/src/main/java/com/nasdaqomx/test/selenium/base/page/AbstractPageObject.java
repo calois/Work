@@ -5,9 +5,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -40,8 +38,9 @@ public abstract class AbstractPageObject {
 					testManager);
 			return o;
 		} catch (Exception e) {
-			throw new RuntimeException("Fail to create page object: "
-					+ clazz.getSimpleName(), e);
+			throw new RuntimeException(
+					String.format("Fail to create page object: '%s'",
+							clazz.getSimpleName()), e);
 		}
 	}
 
@@ -73,30 +72,12 @@ public abstract class AbstractPageObject {
 		return new WebDriverWait(getWebDriver(), testManager.getExplicitWait());
 	}
 
-	protected WebElement getElement(By by) {
+	protected WebElement findElement(By by) {
 		return getWebDriver().findElement(by);
 	}
 
-	protected WebElement getElement(WebElement webElment, By by) {
-		return webElment.findElement(by);
-	}
-
-	protected List<WebElement> getElements(By by) {
+	protected List<WebElement> findElements(By by) {
 		return getWebDriver().findElements(by);
-	}
-
-	protected List<WebElement> getElements(WebElement webElment, By by) {
-		return webElment.findElements(by);
-	}
-
-	protected WebElement getElementUntilClickable(By by) {
-		return getWebDriveWait().until(
-				ExpectedConditions.elementToBeClickable(by));
-	}
-
-	protected WebElement getElementUntilVisible(By by) {
-		return getWebDriveWait().until(
-				ExpectedConditions.visibilityOfElementLocated(by));
 	}
 
 	protected WebElement getElementUntilPresent(By by) {
@@ -104,9 +85,24 @@ public abstract class AbstractPageObject {
 				ExpectedConditions.presenceOfElementLocated(by));
 	}
 
+	protected WebElement getElementUntilVisible(By by) {
+		return getWebDriveWait().until(
+				ExpectedConditions.visibilityOfElementLocated(by));
+	}
+
 	protected List<WebElement> getElementsUntilVisible(By by) {
 		return getWebDriveWait().until(
 				ExpectedConditions.visibilityOfAllElementsLocatedBy(by));
+	}
+
+	protected List<WebElement> getElementsUntilVisible(List<WebElement> elements) {
+		return getWebDriveWait().until(
+				ExpectedConditions.visibilityOfAllElements(elements));
+	}
+
+	protected boolean isDisplayedAfterWait(WebElement element) {
+		return null != getWebDriveWait().until(
+				ExpectedConditions.visibilityOf(element));
 	}
 
 	protected List<WebElement> getElementsUntilPresent(By by) {
@@ -114,47 +110,96 @@ public abstract class AbstractPageObject {
 				ExpectedConditions.presenceOfAllElementsLocatedBy(by));
 	}
 
-	protected boolean isDisappeared(By by) {
+	protected boolean isTextContainedAfterWait(By by, String text) {
+		return getWebDriveWait().until(
+				ExpectedConditions.textToBePresentInElement(by, text));
+	}
+
+	protected boolean isTextContainedAfterWait(WebElement element, String text) {
+		return getWebDriveWait().until(textToBePresentInElement(element, text));
+	}
+
+	protected boolean isValueContainedAfterWait(By by, String value) {
+		return getWebDriveWait().until(
+				ExpectedConditions.textToBePresentInElementValue(by, value));
+	}
+
+	protected boolean isValueContainedAfterWait(WebElement element, String value) {
+		return getWebDriveWait().until(
+				textToBePresentInElementValue(element, value));
+	}
+
+	protected boolean isDisappearedAfterWait(By by) {
 		return getWebDriveWait().until(
 				ExpectedConditions.invisibilityOfElementLocated(by));
 	}
 
+	protected boolean isTextDisappearedAfterWait(By by, String text) {
+		return getWebDriveWait().until(
+				ExpectedConditions.invisibilityOfElementWithText(by, text));
+	}
+
+	protected WebElement getElementUntilClickable(By by) {
+		return getWebDriveWait().until(
+				ExpectedConditions.elementToBeClickable(by));
+	}
+
 	protected boolean isPresent(By by) {
 		try {
-			return getWebDriveWait().until(visibilityOfElementLocated(by));
-		} catch (TimeoutException e) {
+			return null != findElement(by);
+		} catch (WebDriverException e) {
 			return false;
 		}
 	}
 
-	private ExpectedCondition<Boolean> visibilityOfElementLocated(final By by) {
-		return new ExpectedCondition<Boolean>() {
-			public Boolean apply(WebDriver driver) {
-				try {
-					return findElement(by, driver).isDisplayed();
-				} catch (NoSuchElementException e) {
-					return false;
-				} catch (StaleElementReferenceException e) {
-					return false;
-				}
-			}
-
-			public String toString() {
-				return "element is visible: " + by;
-			}
-		};
+	protected boolean isPresentAfterWait(By by) {
+		try {
+			return null != getElementUntilPresent(by);
+		} catch (WebDriverException e) {
+			return false;
+		}
 	}
 
-	private WebElement findElement(By by, WebDriver driver) {
+	protected boolean isDisplayed(By by) {
 		try {
-			return driver.findElement(by);
-		} catch (NoSuchElementException e) {
-			throw e;
+			return findElement(by).isDisplayed();
 		} catch (WebDriverException e) {
-			LOGGER.warn(String.format(
-					"WebDriverException thrown by findElement(%s)", by), e);
-			throw e;
+			return false;
 		}
+	}
+
+	protected boolean isDisplayedAfterWait(By by) {
+		try {
+			return null != getElementsUntilVisible(by);
+		} catch (WebDriverException e) {
+			return false;
+		}
+	}
+
+	protected boolean isEnabled(By by) {
+		try {
+			return findElement(by).isEnabled();
+		} catch (WebDriverException e) {
+			return false;
+		}
+	}
+
+	protected boolean isSelected(By by) {
+		try {
+			return findElement(by).isSelected();
+		} catch (WebDriverException e) {
+			return false;
+		}
+	}
+
+	protected boolean isSelectedAfterWait(WebElement element) {
+		return getWebDriveWait().until(
+				ExpectedConditions.elementToBeSelected(element));
+	}
+
+	protected boolean isSelectedAfterWait(By by) {
+		return getWebDriveWait().until(
+				ExpectedConditions.elementToBeSelected(by));
 	}
 
 	protected void doubleClick(final By by) {
@@ -172,12 +217,63 @@ public abstract class AbstractPageObject {
 
 	protected void assertUrl(String expectUrl, String actualUrl) {
 		if (!actualUrl.startsWith(expectUrl)) {
-			fail("Expected URL Starts with: \"" + expectUrl
-					+ "\" but actual: \"" + actualUrl);
+			fail(String
+					.format("The URL should start with: ('%s'), but the actual result is:  ('%s')",
+							expectUrl, actualUrl));
 		}
 	}
 
 	protected void fail(String message) {
 		throw new RuntimeException(message);
+	}
+
+	private ExpectedCondition<Boolean> textToBePresentInElement(
+			final WebElement element, final String text) {
+
+		return new ExpectedCondition<Boolean>() {
+			@Override
+			public Boolean apply(WebDriver driver) {
+				try {
+					String elementText = element.getText();
+					return elementText.contains(text);
+				} catch (StaleElementReferenceException e) {
+					return null;
+				}
+			}
+
+			@Override
+			public String toString() {
+				return String.format(
+						"text ('%s') to be present in element ('%s')", text,
+						element);
+			}
+		};
+	}
+
+	private ExpectedCondition<Boolean> textToBePresentInElementValue(
+			final WebElement element, final String text) {
+
+		return new ExpectedCondition<Boolean>() {
+			@Override
+			public Boolean apply(WebDriver driver) {
+				try {
+					String elementText = element.getAttribute("value");
+					if (elementText != null) {
+						return elementText.contains(text);
+					} else {
+						return false;
+					}
+				} catch (StaleElementReferenceException e) {
+					return null;
+				}
+			}
+
+			@Override
+			public String toString() {
+				return String
+						.format("text ('%s') to be the value of element element ('%s')",
+								text, element);
+			}
+		};
 	}
 }

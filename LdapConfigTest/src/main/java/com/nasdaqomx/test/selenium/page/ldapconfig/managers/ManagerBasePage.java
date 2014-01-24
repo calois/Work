@@ -9,12 +9,18 @@ import com.nasdaqomx.test.selenium.page.ldapconfig.LdapconfigBasePage;
 
 public class ManagerBasePage extends LdapconfigBasePage {
 
-	private static final String ID_XPATH = "//div[@id='mainMenu']//tr[3]/td[@class='LdapClientName']";
-	private static final String DETAILS_XPATH = "//div[@id='mainMenu']//a[text()='Details']";
-	private static final String PERMISSIONS_XPATH = "//div[@id='mainMenu']//a[text()='Permissions']";
-	private static final String RESET_PASSWORD_XPATH = "//div[@id='mainMenu']//a[text()='Reset Password']";
-	private static final String LOCK_ACCOUNT_XPATH = "//div[@id='mainMenu']//a[text()='Lock Account']";
-	private static final String REMOVE_MANAGER_XPATH = "//div[@id='mainMenu']//a[text()='Remove Manager']";
+	private static final By ID_LOCATOR = By
+			.xpath("//div[@id='mainMenu']//tr[3]/td[@class='LdapClientName']");
+	private static final By DETAILS_LOCATOR = By
+			.xpath("//div[@id='mainMenu']//a[text()='Details']");
+	private static final By PERMISSIONS_LOCATOR = By
+			.xpath("//div[@id='mainMenu']//a[text()='Permissions']");
+	private static final By RESET_PASSWORD_LOCATOR = By
+			.xpath("//div[@id='mainMenu']//a[text()='Reset Password']");
+	private static final By LOCK_ACCOUNT_LOCATOR = By
+			.xpath("//div[@id='mainMenu']//a[text()='Lock Account']");
+	private static final By REMOVE_MANAGER_LOCATOR = By
+			.xpath("//div[@id='mainMenu']//a[text()='Remove Manager']");
 
 	private WebElement id;
 	private WebElement details;
@@ -26,12 +32,12 @@ public class ManagerBasePage extends LdapconfigBasePage {
 	public ManagerBasePage(TestManager testManager) {
 		super(testManager);
 		try {
-			id = getElement(By.xpath(ID_XPATH));
-			details = getElement(By.xpath(DETAILS_XPATH));
-			permission = getElement(By.xpath(PERMISSIONS_XPATH));
-			resetPassword = getElement(By.xpath(RESET_PASSWORD_XPATH));
-			lockAccount = getElement(By.xpath(LOCK_ACCOUNT_XPATH));
-			removeManager = getElement(By.xpath(REMOVE_MANAGER_XPATH));
+			id = findElement(ID_LOCATOR);
+			details = findElement(DETAILS_LOCATOR);
+			permission = findElement(PERMISSIONS_LOCATOR);
+			resetPassword = findElement(RESET_PASSWORD_LOCATOR);
+			lockAccount = findElement(LOCK_ACCOUNT_LOCATOR);
+			removeManager = findElement(REMOVE_MANAGER_LOCATOR);
 		} catch (NoSuchElementException e) {
 			fail(e.getMessage());
 		}

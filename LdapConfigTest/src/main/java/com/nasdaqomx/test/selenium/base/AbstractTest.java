@@ -26,7 +26,8 @@ public abstract class AbstractTest {
 			return o;
 		} catch (Exception e) {
 			throw new TestException(TestUtils.getTestProject(clazz),
-					"Fail to create page object" + clazz.getSimpleName(), e);
+					String.format("Fail to create page object: '%s'",
+							clazz.getSimpleName()), e);
 		}
 	}
 
@@ -83,8 +84,9 @@ public abstract class AbstractTest {
 	private void assertEquals(Project testProject, Object expected,
 			Object actual) {
 		if (expected == null) {
-			assertTrue(testProject, "Expected: \"" + expected
-					+ "\" but actual: \"" + actual + "\"", actual == null);
+			assertTrue(testProject, String.format(
+					"Expected result: '%s', but actual result: '%s'", expected,
+					actual), actual == null);
 		} else if (expected instanceof String && actual instanceof String) {
 			assertEquals(testProject, (String) expected, (String) actual);
 		} else if (expected instanceof String && actual instanceof String[]) {
@@ -96,9 +98,9 @@ public abstract class AbstractTest {
 		} else if (expected instanceof String[] && actual instanceof String[]) {
 			assertEquals(testProject, (String[]) expected, (String[]) actual);
 		} else {
-			assertTrue(testProject, "Expected: \"" + expected
-					+ "\" but actual: \"" + actual + "\" ",
-					expected.equals(actual));
+			assertTrue(testProject, String.format(
+					"Expected result: '%s', but actual result: '%s'", expected,
+					actual), expected.equals(actual));
 		}
 	}
 
@@ -119,8 +121,9 @@ public abstract class AbstractTest {
 
 	private void assertEquals(Project testProject, String expected,
 			String actual) {
-		assertTrue(testProject, "Expected: \"" + expected + "\" but actual: \""
-				+ actual + "\"", seleniumEquals(expected, actual));
+		assertTrue(testProject, String.format(
+				"Expected result: '%s', but actual result: '%s'", expected,
+				actual), seleniumEquals(expected, actual));
 	}
 
 	public void assertEquals(String expected, String[] actual) {
@@ -180,11 +183,14 @@ public abstract class AbstractTest {
 	private void assertNotEquals(Project testProject, Object expected,
 			Object actual) {
 		if (expected == null) {
-			assertTrue(testProject, "did not expect null to be null",
+			assertTrue(testProject,
+					"Expected result: 'null', but actual result: 'not null'",
 					!(actual == null));
 		} else if (expected.equals(actual)) {
-			fail(testProject, "did not expect (" + actual
-					+ ") to be equal to (" + expected + ")");
+			fail(testProject,
+					String.format(
+							"Expect result: '%s not equal to %s', but actual result is",
+							expected, actual));
 		}
 	}
 
@@ -325,8 +331,9 @@ public abstract class AbstractTest {
 			}
 		}
 		if (misMatch) {
-			return "Expected: " + stringArrayToString(expected)
-					+ " but actual: " + stringArrayToString(actual);
+			return String.format(
+					"Expected result: '%s', but actual result: '%s'",
+					stringArrayToString(expected), stringArrayToString(actual));
 		}
 		return null;
 	}

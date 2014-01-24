@@ -10,19 +10,22 @@ import com.nasdaqomx.test.selenium.page.ldapconfig.LdapconfigBasePage;
 public class ListManagersPage extends LdapconfigBasePage {
 
 	private static final String URL = "listManagers.view";
-	private static final String ADD_MANAGER_XPATH = "//div[@class='LdapListingOptions']/span[@class='LdapSubMenu']/a[contains(.,'Add') and contains(.,'manager')]";
-	private static final String MANAGERS_LIST_CLASS = "LdapListing";
-	private static final String MANAGER_ROWS_XPATH = "//tr[@id]";
+
+	private static final By ADD_MANAGER_LOCATOR = By
+			.xpath("//div[@class='LdapListingOptions']/span[@class='LdapSubMenu']/a[contains(.,'Add') and contains(.,'manager')]");
+	private static final By MANAGERS_LIST_LOCATOR = By.className("LdapListing");
+	private static final By MANAGER_ROWS_LOCATOR = By.xpath("//tr[@id]");
 	// followed by user id
-	private static final String MANAGER_ROW_ID = "row-";
-	// followed by contains user id
-	private static final String USER_NAME_XPATH = "./td[1]//a";
-	private static final String COMMON_NAME_XPATH = "./td[2]";
-	private static final String RESET_PASSWORD_XPATH = "./td[3]//a[contains(.,'Reset') and contains(.,'password')]";
-	private static final String LOCK_ACCOUNT_XPATH = "./td[3]//a[contains(.,'Lock') and contains(.,'account')]";
-	private static final String STATUS_XPATH = "./td[4]";
-	private static final String LAST_LOGIN_XPATH = "./td[5]";
-	private static final String ACCOUNT_EXPIRES_XPATH = "./td[6]";
+	private static final String MANAGER_ROW_ID_PREFIX = "row-";
+	private static final By USER_NAME_LOCATOR = By.xpath("./td[1]//a");
+	private static final By COMMON_NAME_LOCATOR = By.xpath("./td[2]");
+	private static final By RESET_PASSWORD_LOCATOR = By
+			.xpath("./td[3]//a[contains(.,'Reset') and contains(.,'password')]");
+	private static final By LOCK_ACCOUNT_LOCATOR = By
+			.xpath("./td[3]//a[contains(.,'Lock') and contains(.,'account')]");
+	private static final By STATUS_LOCATOR = By.xpath("./td[4]");
+	private static final By LAST_LOGIN_LOCATOR = By.xpath("./td[5]");
+	private static final By ACCOUNT_EXPIRES_LOCATOR = By.xpath("./td[6]");
 
 	private WebElement addManager;
 	private WebElement managersTable;
@@ -31,8 +34,8 @@ public class ListManagersPage extends LdapconfigBasePage {
 		super(testManager);
 		assertUrl(URL, this.getSimpleUrl());
 		try {
-			addManager = getElement(By.xpath(ADD_MANAGER_XPATH));
-			managersTable = getElement(By.className(MANAGERS_LIST_CLASS));
+			addManager = findElement(ADD_MANAGER_LOCATOR);
+			managersTable = findElement(MANAGERS_LIST_LOCATOR);
 		} catch (NoSuchElementException e) {
 			fail(e.getMessage());
 		}
@@ -44,7 +47,8 @@ public class ListManagersPage extends LdapconfigBasePage {
 	}
 
 	public boolean isManagerListed(String userId) {
-		return isPresent(By.id(MANAGER_ROW_ID.concat(userId)));
+		return isTextContainedAfterWait(
+				getManagerRow(userId).findElement(USER_NAME_LOCATOR), userId);
 	}
 
 	public EditManagerDetailsPage toEditManager(String userId) {
@@ -52,9 +56,12 @@ public class ListManagersPage extends LdapconfigBasePage {
 		return createPageObject(EditManagerDetailsPage.class);
 	}
 
+	public String getUserName(String userId) {
+		return getManagerRow(userId).findElement(USER_NAME_LOCATOR).getText();
+	}
+
 	public String getCommonName(String userId) {
-		return getElement(getManagerRow(userId), By.xpath(COMMON_NAME_XPATH))
-				.getText();
+		return getManagerRow(userId).findElement(COMMON_NAME_LOCATOR).getText();
 	}
 
 	public void toResetPassword(String userId) {
@@ -66,41 +73,36 @@ public class ListManagersPage extends LdapconfigBasePage {
 	}
 
 	public String getStatus(String userId) {
-		return getElement(getManagerRow(userId), By.xpath(STATUS_XPATH))
-				.getText();
+		return getManagerRow(userId).findElement(STATUS_LOCATOR).getText();
 	}
 
 	public String getLastLogin(String userId) {
-		return getElement(getManagerRow(userId), By.xpath(LAST_LOGIN_XPATH))
-				.getText();
+		return getManagerRow(userId).findElement(LAST_LOGIN_LOCATOR).getText();
 	}
 
 	public String getAccountExpires(String userId) {
-		return getElement(getManagerRow(userId),
-				By.xpath(ACCOUNT_EXPIRES_XPATH)).getText();
+		return getManagerRow(userId).findElement(ACCOUNT_EXPIRES_LOCATOR)
+				.getText();
+	}
+
+	public int getTotalNumber() {
+		return managersTable.findElements(MANAGER_ROWS_LOCATOR).size();
 	}
 
 	private WebElement getEditLink(String userId) {
-		return getElement(
-				getManagerRow(userId),
-				By.xpath(USER_NAME_XPATH.concat("[contains(.,'" + userId
-						+ "')]")));
+		return getManagerRow(userId).findElement(USER_NAME_LOCATOR);
 	}
 
 	private WebElement getResetPasswordLink(String userId) {
-		return getElement(getManagerRow(userId), By.xpath(RESET_PASSWORD_XPATH));
+		return getManagerRow(userId).findElement(RESET_PASSWORD_LOCATOR);
 	}
 
 	private WebElement getLockAccountLink(String userId) {
-		return getElement(getManagerRow(userId), By.xpath(LOCK_ACCOUNT_XPATH));
+		return getManagerRow(userId).findElement(LOCK_ACCOUNT_LOCATOR);
 	}
 
 	private WebElement getManagerRow(String userId) {
-		return getElement(managersTable, By.id(MANAGER_ROW_ID.concat(userId)));
+		return managersTable.findElement(By.id(MANAGER_ROW_ID_PREFIX
+				.concat(userId)));
 	}
-
-	public int getTotalManager() {
-		return managersTable.findElements(By.xpath(MANAGER_ROWS_XPATH)).size();
-	}
-
 }

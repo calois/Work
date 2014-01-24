@@ -15,11 +15,12 @@ public class LoginPage extends AbstractPageObject {
 	 */
 
 	private static final String URL = "login.jsp";
-	private static final String USER_NAME_NAME = "j_username";
-	private static final String PASSWORD_NAME = "j_password";
-	private static final String LOGIN_XPATH = "//input[@value='Login']";
-	private static final String INFO_MSG_ID = "infomessage";
-	private final String FORGOTTEN_PASSWORD_PARTIALLINKTEXT = "Forgotten your password";
+	private static final By USER_NAME_LOCATOR = By.name("j_username");
+	private static final By PASSWORD_LOCATOR = By.name("j_password");
+	private static final By LOGIN_LOCATOR = By.xpath("//input[@value='Login']");
+	private static final By INFO_MSG_LOCATOR = By.id("infomessage");
+	private final By FORGOTTEN_PASSWORD_LOCATOR = By
+			.partialLinkText("Forgotten your password");
 
 	private WebElement userName;
 	private WebElement password;
@@ -42,18 +43,17 @@ public class LoginPage extends AbstractPageObject {
 		}
 		assertUrl(URL, this.getSimpleUrl());
 		try {
-			userName = getElement(By.name(USER_NAME_NAME));
-			password = getElement(By.name(PASSWORD_NAME));
-			loginButton = getElement(By.xpath(LOGIN_XPATH));
-			forgottenPassword = getElement(By
-					.partialLinkText(FORGOTTEN_PASSWORD_PARTIALLINKTEXT));
+			userName = findElement(USER_NAME_LOCATOR);
+			password = findElement(PASSWORD_LOCATOR);
+			loginButton = findElement(LOGIN_LOCATOR);
+			forgottenPassword = findElement(FORGOTTEN_PASSWORD_LOCATOR);
 		} catch (NoSuchElementException e) {
 			fail(e.getMessage());
 		}
 	}
 
 	public String getInfoMsg() {
-		return getElement(By.id(INFO_MSG_ID)).getText();
+		return findElement(INFO_MSG_LOCATOR).getText();
 	}
 
 	public void typeUserName(String value) {

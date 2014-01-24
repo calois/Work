@@ -10,9 +10,8 @@ import com.nasdaqomx.test.selenium.base.page.AbstractPageObject;
 public class LogoutPage extends AbstractPageObject {
 
 	private static final String URL = "logout.view";
-	// <a href="index.view">Click here to log in again.</a>
-	private static final String LOGIN_LINK_PARTIALLINKTEXT = "log in again";
-	private static final String MESSAGE_XPATH = "//div[@id='content']/p";
+	private static final By LOGIN_LINK_LOCATOR = By.partialLinkText("log in again");
+	private static final By MESSAGE_LOCATOR = By.xpath("//div[@id='content']/p");
 
 	private WebElement loginLink;
 
@@ -20,7 +19,7 @@ public class LogoutPage extends AbstractPageObject {
 		super(testManager);
 		assertUrl(URL, this.getSimpleUrl());
 		try {
-			loginLink = getElement(By.partialLinkText(LOGIN_LINK_PARTIALLINKTEXT));
+			loginLink = findElement(LOGIN_LINK_LOCATOR);
 		} catch (NoSuchElementException e) {
 			fail(e.getMessage());
 		}
@@ -32,6 +31,6 @@ public class LogoutPage extends AbstractPageObject {
 	}
 
 	public String getMessage() {
-		return getElement(By.xpath(MESSAGE_XPATH)).getText();
+		return findElement(MESSAGE_LOCATOR).getText();
 	}
 }
