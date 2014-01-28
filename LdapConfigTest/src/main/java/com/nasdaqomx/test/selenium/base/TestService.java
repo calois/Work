@@ -9,9 +9,22 @@ public class TestService implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final String BASE_PACKAGE = "com.nasdaqomx.test.selenium.testcase.";
 
+	private TestResult setResult(TestResultStatus status, String message,
+			AbstractTest testCase) {
+		TestResult result = new TestResult();
+		result.setStatus(status);
+		result.setMessage(message);
+		if (null != testCase) {
+			result.setScreenshotList(testCase.getScreenshotList());
+			testCase.clearScreenshotList();
+			testCase.clearVerificationErrors();
+		}
+		return result;
+	}
+
 	public TestResult run(TestConfig testConfig, String automationKey,
 			TestData testData) {
-		TestResult result = new TestResult();
+		AbstractTest testCase = null;
 		TestManager testManager = new TestManager(testConfig);
 		try {
 			String className = BASE_PACKAGE.concat(automationKey.substring(0,
@@ -20,25 +33,21 @@ public class TestService implements Serializable {
 					.lastIndexOf(".") + 1);
 			try {
 				Class<?> clazz = Class.forName(className);
-				AbstractTest test = (AbstractTest) clazz.newInstance();
-				test.setTestData(testData);
-				test.setTestManager(testManager);
-				Method precondition = TestUtils.getTestBeforeMethod(test
+				testCase = (AbstractTest) clazz.newInstance();
+				testCase.setTestData(testData);
+				testCase.setTestManager(testManager);
+				Method precondition = TestUtils.getTestBeforeMethod(testCase
 						.getClass());
 				// run precondition first
 				if (null != precondition) {
 					try {
-						precondition.invoke(test);
+						precondition.invoke(testCase);
 					} catch (InvocationTargetException ie) {
 						if (ie.getTargetException() instanceof TestException) {
 							TestException e = (TestException) ie
 									.getTargetException();
-							result.setStatus(TestResultStatus.BLOCKED);
-							result.setMessage(TestUtils.getStackTrace(e));
-							result.setScreenshot(TestUtils
-									.takeScreenshot(testManager.getWebDriver(e
-											.getProject())));
-							return result;
+							return setResult(TestResultStatus.BLOCKED,
+									TestUtils.getStackTrace(e), testCase);
 						} else {
 							throw ie.getTargetException();
 						}
@@ -47,46 +56,26 @@ public class TestService implements Serializable {
 				// run test steps
 				Method method = clazz.getDeclaredMethod(methodName);
 				try {
-					method.invoke(test);
-					test.checkForVerificationErrors();
+					method.invoke(testCase);
+					testCase.checkForVerificationErrors();
 				} catch (InvocationTargetException ie) {
-					if (ie.getTargetException() instanceof TestException) {
-						TestException e = (TestException) ie
-								.getTargetException();
-						result.setStatus(TestResultStatus.FAILED);
-						result.setMessage(TestUtils.getStackTrace(e));
-						result.setScreenshot(TestUtils
-								.takeScreenshot(testManager.getWebDriver(e
-										.getProject())));
-						return result;
-					} else {
-						throw ie.getTargetException();
-					}
-				} catch (TestException e) {
-					result.setStatus(TestResultStatus.FAILED);
-					result.setMessage(TestUtils.getStackTrace(e));
-					result.setScreenshot(TestUtils.takeScreenshot(testManager
-							.getWebDriver(e.getProject())));
-					return result;
-
+					throw ie.getTargetException();
 				} finally {
-					Method afterMethod = TestUtils.getTestAfterMethod(test
+					Method afterMethod = TestUtils.getTestAfterMethod(testCase
 							.getClass());
 					if (null != afterMethod) {
-						test.clearVerificationErrors();
-						afterMethod.invoke(test);
-						test.checkForVerificationErrors();
+						afterMethod.invoke(testCase);
 					}
 				}
+			} catch (TestException e) {
+				return setResult(TestResultStatus.FAILED,
+						TestUtils.getStackTrace(e), testCase);
 			} catch (Throwable e) {
 				e.printStackTrace();
-				result.setStatus(TestResultStatus.INVALID);
-				result.setMessage(TestUtils.getStackTrace(e));
-				return result;
+				return setResult(TestResultStatus.INVALID,
+						TestUtils.getStackTrace(e), testCase);
 			}
-			result.setStatus(TestResultStatus.PASSED);
-			result.setMessage("");
-			return result;
+			return setResult(TestResultStatus.PASSED, "", testCase);
 		} finally {
 			testManager.close();
 		}

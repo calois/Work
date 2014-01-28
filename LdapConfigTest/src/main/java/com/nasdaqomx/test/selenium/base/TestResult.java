@@ -1,10 +1,11 @@
 package com.nasdaqomx.test.selenium.base;
 
+import java.util.List;
 
 public class TestResult {
 
 	private TestResultStatus status;
-	private String screenshot;
+	private List<String> screenshotList;
 	private String message;
 
 	@Override
@@ -28,11 +29,11 @@ public class TestResult {
 		this.status = status;
 	}
 
-	public String getScreenshot() {
-		return screenshot;
+	public List<String> getScreenshotList() {
+		return screenshotList;
 	}
 
-	public void setScreenshot(String screenshot) {
-		this.screenshot = screenshot;
+	public void setScreenshotList(List<String> screenshotList) {
+		this.screenshotList = screenshotList;
 	}
 }

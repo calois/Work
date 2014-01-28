@@ -1,5 +1,7 @@
 package com.nasdaqomx.test.selenium.base;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import com.nasdaqomx.test.selenium.base.page.AbstractPageObject;
@@ -10,6 +12,7 @@ public abstract class AbstractTest {
 	private TestData testData;
 
 	private StringBuilder verificationErrors = new StringBuilder();
+	private List<String> screenShotList = new ArrayList<String>();
 
 	public Project getProject() {
 		return TestUtils.getTestProject(this.getClass());
@@ -25,22 +28,26 @@ public abstract class AbstractTest {
 					testManager);
 			return o;
 		} catch (Exception e) {
-			throw new TestException(TestUtils.getTestProject(clazz),
-					String.format("Fail to create page object: '%s'",
-							clazz.getSimpleName()), e);
+			throw new TestException(String.format(
+					"Fail to create page object: '%s'", clazz.getSimpleName()),
+					e);
 		}
 	}
 
-	public void verifyTrue(String msg, boolean b) {
+	public void verifyTrue(String msg, boolean condition) {
 		try {
-			assertTrue(msg, b);
+			assertTrue(msg, condition);
 		} catch (TestException e) {
 			verificationErrors.append(TestUtils.getStackTrace(e));
 		}
 	}
 
 	public void assertTrue(String message, boolean condition) {
-		assertTrue(getProject(), message, condition);
+		if (!condition) {
+			screenShotList.add(TestUtils.takeScreenshot(testManager
+					.getWebDriver(getProject())));
+			fail(message);
+		}
 	}
 
 	public void verifyFalse(String msg, boolean b) {
@@ -52,13 +59,7 @@ public abstract class AbstractTest {
 	}
 
 	public void assertFalse(String message, boolean condition) {
-		assertTrue(getProject(), message, !condition);
-	}
-
-	private void assertTrue(Project testProject, String message,
-			boolean condition) {
-		if (!condition)
-			fail(testProject, message);
+		assertTrue(message, !condition);
 	}
 
 	public void verifyEquals(Object expected, Object actual) {
@@ -69,10 +70,6 @@ public abstract class AbstractTest {
 		}
 	}
 
-	public void assertEquals(Object expected, Object actual) {
-		assertEquals(this.getProject(), expected, actual);
-	}
-
 	public void verifyEquals(boolean expected, boolean actual) {
 		try {
 			assertEquals(Boolean.valueOf(expected), Boolean.valueOf(actual));
@@ -81,24 +78,23 @@ public abstract class AbstractTest {
 		}
 	}
 
-	private void assertEquals(Project testProject, Object expected,
-			Object actual) {
+	public void assertEquals(Object expected, Object actual) {
 		if (expected == null) {
-			assertTrue(testProject, String.format(
+			assertTrue(String.format(
 					"Expected result: '%s', but actual result: '%s'", expected,
 					actual), actual == null);
 		} else if (expected instanceof String && actual instanceof String) {
-			assertEquals(testProject, (String) expected, (String) actual);
+			assertEquals((String) expected, (String) actual);
 		} else if (expected instanceof String && actual instanceof String[]) {
-			assertEquals(testProject, (String) expected, (String[]) actual);
+			assertEquals((String) expected, (String[]) actual);
 		} else if (expected instanceof String && actual instanceof Number) {
-			assertEquals(testProject, (String) expected, actual.toString());
+			assertEquals((String) expected, actual.toString());
 		} else if (expected instanceof Number && actual instanceof String) {
-			assertEquals(testProject, expected.toString(), (String) actual);
+			assertEquals(expected.toString(), (String) actual);
 		} else if (expected instanceof String[] && actual instanceof String[]) {
-			assertEquals(testProject, (String[]) expected, (String[]) actual);
+			assertEquals((String[]) expected, (String[]) actual);
 		} else {
-			assertTrue(testProject, String.format(
+			assertTrue(String.format(
 					"Expected result: '%s', but actual result: '%s'", expected,
 					actual), expected.equals(actual));
 		}
@@ -116,22 +112,9 @@ public abstract class AbstractTest {
 	}
 
 	public void assertEquals(String expected, String actual) {
-		assertEquals(getProject(), expected, actual);
-	}
-
-	private void assertEquals(Project testProject, String expected,
-			String actual) {
-		assertTrue(testProject, String.format(
+		assertTrue(String.format(
 				"Expected result: '%s', but actual result: '%s'", expected,
 				actual), seleniumEquals(expected, actual));
-	}
-
-	public void assertEquals(String expected, String[] actual) {
-		assertEquals(getProject(), expected, actual);
-	}
-
-	public void assertEquals(String[] expected, String[] actual) {
-		assertEquals(getProject(), expected, actual);
 	}
 
 	public void verifyEquals(String[] expected, String[] actual) {
@@ -158,38 +141,28 @@ public abstract class AbstractTest {
 		}
 	}
 
-	public void assertNotEquals(Object expected, Object actual) {
-		assertNotEquals(getProject(), expected, actual);
-	}
-
-	private void fail(Project testProject, String message) {
-		throw new TestException(testProject, message);
-	}
-
 	public void fail(String message) {
-		fail(getProject(), message);
+		throw new TestException(message);
 	}
 
-	private void assertEquals(Project testProject, String expected,
-			String[] actual) {
-		assertEquals(testProject, expected, join(actual, ','));
+	public void assertEquals(String expected, String[] actual) {
+		assertEquals(expected, join(actual, ','));
 	}
 
-	private void assertEquals(Project testProject, String[] expected,
-			String[] actual) {
-		assertEquals(testProject, join(expected, ','), join(actual, ','));
+	public void assertEquals(String[] expected, String[] actual) {
+		assertEquals(join(expected, ','), join(actual, ','));
 	}
 
-	private void assertNotEquals(Project testProject, Object expected,
-			Object actual) {
+	public void assertNotEquals(Object expected, Object actual) {
 		if (expected == null) {
-			assertTrue(testProject,
+			assertTrue(
 					"Expected result: 'null', but actual result: 'not null'",
 					!(actual == null));
 		} else if (expected.equals(actual)) {
-			fail(testProject,
-					String.format(
-							"Expect result: '%s not equal to %s', but actual result is",
+			screenShotList.add(TestUtils.takeScreenshot(testManager
+					.getWebDriver(getProject())));
+			fail(String
+					.format("Expect result: '%s not equal to %s', but actual result is",
 							expected, actual));
 		}
 	}
@@ -215,13 +188,22 @@ public abstract class AbstractTest {
 		String verificationErrorString = verificationErrors.toString();
 		clearVerificationErrors();
 		if (!"".equals(verificationErrorString)) {
-			fail(this.getProject(), verificationErrorString);
+			fail(verificationErrorString);
 		}
+	}
+
+	public List<String> getScreenshotList() {
+		return screenShotList;
 	}
 
 	/** Clears out the list of verification errors */
 	public void clearVerificationErrors() {
 		verificationErrors = new StringBuilder();
+	}
+
+	/** Clears out the list of screenshots */
+	public void clearScreenshotList() {
+		screenShotList = new ArrayList<String>();
 	}
 
 	/**
