@@ -62,6 +62,13 @@ public class TestService implements Serializable {
 					} else {
 						throw ie.getTargetException();
 					}
+				} catch (TestException e) {
+					result.setStatus(TestResultStatus.FAILED);
+					result.setMessage(TestUtils.getStackTrace(e));
+					result.setScreenshot(TestUtils.takeScreenshot(testManager
+							.getWebDriver(e.getProject())));
+					return result;
+
 				} finally {
 					Method afterMethod = TestUtils.getTestAfterMethod(test
 							.getClass());
