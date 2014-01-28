@@ -122,12 +122,6 @@ public class EditManagerDetailsPage extends ManagerBasePage {
 		return this.userId.getText().trim();
 	}
 
-	public void typeUserId(String value) {
-		if (null != value) {
-			this.userId.sendKeys(value);
-		}
-	}
-
 	public String getUserIdErrMsg() {
 		return this.userIdErrMsg.getText();
 	}
@@ -136,7 +130,12 @@ public class EditManagerDetailsPage extends ManagerBasePage {
 		return this.surname.getAttribute("value");
 	}
 
+	public void clearSurname() {
+		this.surname.clear();
+	}
+
 	public void typeSurname(String value) {
+		clearSurname();
 		if (null != value) {
 			this.surname.sendKeys(value);
 		}
@@ -150,7 +149,12 @@ public class EditManagerDetailsPage extends ManagerBasePage {
 		return this.fullName.getAttribute("value");
 	}
 
+	public void clearFullName() {
+		this.fullName.clear();
+	}
+
 	public void typeFullName(String value) {
+		clearFullName();
 		if (null != value) {
 			this.fullName.sendKeys(value);
 		}
@@ -164,7 +168,12 @@ public class EditManagerDetailsPage extends ManagerBasePage {
 		return this.email.getAttribute("value");
 	}
 
+	public void clearEmail() {
+		this.email.clear();
+	}
+
 	public void typeEmail(String value) {
+		clearEmail();
 		if (null != value) {
 			this.email.sendKeys(value);
 		}
@@ -178,7 +187,12 @@ public class EditManagerDetailsPage extends ManagerBasePage {
 		return this.phone.getAttribute("value");
 	}
 
+	public void clearPhone() {
+		this.phone.clear();
+	}
+
 	public void typePhone(String value) {
+		clearPhone();
 		if (null != value) {
 			this.phone.sendKeys(value);
 		}
@@ -192,7 +206,12 @@ public class EditManagerDetailsPage extends ManagerBasePage {
 		return this.mobile.getAttribute("value");
 	}
 
+	public void clearMobile() {
+		this.mobile.clear();
+	}
+
 	public void typeMobile(String value) {
+		clearMobile();
 		if (null != value) {
 			this.mobile.sendKeys(value);
 		}
@@ -206,7 +225,7 @@ public class EditManagerDetailsPage extends ManagerBasePage {
 		return this.userTimezone.getFirstSelectedOption().getText();
 	}
 
-	public void typeUserTimezone(String value) {
+	public void selectUserTimezone(String value) {
 		if (null != value) {
 			this.userTimezone.selectByVisibleText(value);
 		}
@@ -220,7 +239,7 @@ public class EditManagerDetailsPage extends ManagerBasePage {
 		return this.userLanguage.getFirstSelectedOption().getText();
 	}
 
-	public void typeUserLanguage(String value) {
+	public void selectUserLanguage(String value) {
 		if (null != value) {
 			this.userLanguage.selectByVisibleText(value);
 		}
@@ -234,7 +253,12 @@ public class EditManagerDetailsPage extends ManagerBasePage {
 		return this.comments.getAttribute("value");
 	}
 
+	public void clearComments() {
+		this.comments.clear();
+	}
+
 	public void typeComments(String value) {
+		clearComments();
 		if (null != value) {
 			this.comments.sendKeys(value);
 		}
@@ -257,4 +281,8 @@ public class EditManagerDetailsPage extends ManagerBasePage {
 		return createPageObject(EditManagerPermissionsPage.class);
 	}
 
+	public EditManagerDetailsPage submitEditExpectingFailure() {
+		this.updateBtn.click();
+		return createPageObject(EditManagerDetailsPage.class);
+	}
 }

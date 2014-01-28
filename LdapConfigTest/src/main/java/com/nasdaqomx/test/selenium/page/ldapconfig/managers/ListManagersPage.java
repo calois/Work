@@ -47,8 +47,14 @@ public class ListManagersPage extends LdapconfigBasePage {
 	}
 
 	public boolean isManagerListed(String userId) {
-		return isTextContainedAfterWait(
-				getManagerRow(userId).findElement(USER_NAME_LOCATOR), userId);
+		try {
+			return isTextContainedAfterWait(
+					getManagerRow(userId).findElement(USER_NAME_LOCATOR),
+					userId);
+		} catch (NoSuchElementException e) {
+			return false;
+		}
+
 	}
 
 	public EditManagerDetailsPage toEditManager(String userId) {

@@ -50,7 +50,18 @@ public class TestService implements Serializable {
 					method.invoke(test);
 					test.checkForVerificationErrors();
 				} catch (InvocationTargetException ie) {
-					throw ie.getTargetException();
+					if (ie.getTargetException() instanceof TestException) {
+						TestException e = (TestException) ie
+								.getTargetException();
+						result.setStatus(TestResultStatus.FAILED);
+						result.setMessage(TestUtils.getStackTrace(e));
+						result.setScreenshot(TestUtils
+								.takeScreenshot(testManager.getWebDriver(e
+										.getProject())));
+						return result;
+					} else {
+						throw ie.getTargetException();
+					}
 				} finally {
 					Method afterMethod = TestUtils.getTestAfterMethod(test
 							.getClass());
@@ -60,12 +71,6 @@ public class TestService implements Serializable {
 						test.checkForVerificationErrors();
 					}
 				}
-			} catch (TestException e) {
-				result.setStatus(TestResultStatus.FAILED);
-				result.setMessage(TestUtils.getStackTrace(e));
-				result.setScreenshot(TestUtils.takeScreenshot(testManager
-						.getWebDriver(e.getProject())));
-				return result;
 			} catch (Throwable e) {
 				e.printStackTrace();
 				result.setStatus(TestResultStatus.INVALID);

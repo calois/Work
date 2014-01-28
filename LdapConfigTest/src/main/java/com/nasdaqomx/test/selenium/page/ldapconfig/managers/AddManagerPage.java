@@ -117,7 +117,12 @@ public class AddManagerPage extends LdapconfigBasePage {
 		return this.userId.getAttribute("value");
 	}
 
+	public void clearUserId() {
+		this.userId.clear();
+	}
+
 	public void typeUserId(String value) {
+		clearUserId();
 		if (null != value) {
 			this.userId.sendKeys(value);
 		}
@@ -131,7 +136,12 @@ public class AddManagerPage extends LdapconfigBasePage {
 		return this.surname.getAttribute("value");
 	}
 
+	public void clearSurname() {
+		this.surname.clear();
+	}
+
 	public void typeSurname(String value) {
+		clearSurname();
 		if (null != value) {
 			this.surname.sendKeys(value);
 		}
@@ -145,7 +155,12 @@ public class AddManagerPage extends LdapconfigBasePage {
 		return this.fullName.getAttribute("value");
 	}
 
+	public void clearFullName() {
+		this.fullName.clear();
+	}
+
 	public void typeFullName(String value) {
+		clearFullName();
 		if (null != value) {
 			this.fullName.sendKeys(value);
 		}
@@ -159,7 +174,12 @@ public class AddManagerPage extends LdapconfigBasePage {
 		return this.email.getAttribute("value");
 	}
 
+	public void clearEmail() {
+		this.email.clear();
+	}
+
 	public void typeEmail(String value) {
+		clearEmail();
 		if (null != value) {
 			this.email.sendKeys(value);
 		}
@@ -173,7 +193,12 @@ public class AddManagerPage extends LdapconfigBasePage {
 		return this.phone.getAttribute("value");
 	}
 
+	public void clearPhone() {
+		this.phone.clear();
+	}
+
 	public void typePhone(String value) {
+		clearPhone();
 		if (null != value) {
 			this.phone.sendKeys(value);
 		}
@@ -187,7 +212,12 @@ public class AddManagerPage extends LdapconfigBasePage {
 		return this.mobile.getAttribute("value");
 	}
 
+	public void clearMobile() {
+		this.mobile.clear();
+	}
+
 	public void typeMobile(String value) {
+		clearMobile();
 		if (null != value) {
 			this.mobile.sendKeys(value);
 		}
@@ -229,7 +259,12 @@ public class AddManagerPage extends LdapconfigBasePage {
 		return this.comments.getAttribute("value");
 	}
 
+	public void clearComments() {
+		this.comments.clear();
+	}
+
 	public void typeComments(String value) {
+		clearComments();
 		if (null != value) {
 			this.comments.sendKeys(value);
 		}
