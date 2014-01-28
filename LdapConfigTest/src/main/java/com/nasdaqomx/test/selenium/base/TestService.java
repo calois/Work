@@ -9,8 +9,8 @@ public class TestService implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final String BASE_PACKAGE = "com.nasdaqomx.test.selenium.testcase.";
 
-	private TestResult createTestResult(TestResultStatus status, String message,
-			AbstractTest testCase) {
+	private TestResult createTestResult(TestResultStatus status,
+			String message, AbstractTest testCase) {
 		TestResult result = new TestResult();
 		result.setStatus(status);
 		result.setMessage(message);
@@ -46,6 +46,7 @@ public class TestService implements Serializable {
 						if (ie.getTargetException() instanceof TestException) {
 							TestException e = (TestException) ie
 									.getTargetException();
+							e.printStackTrace();
 							return createTestResult(TestResultStatus.BLOCKED,
 									TestUtils.getStackTrace(e), testCase);
 						} else {
@@ -54,26 +55,33 @@ public class TestService implements Serializable {
 					}
 				}
 				// run test steps
-				Method method = clazz.getDeclaredMethod(methodName);
 				try {
+					Method method = clazz.getDeclaredMethod(methodName);
 					method.invoke(testCase);
 					testCase.checkForVerificationErrors();
 				} catch (InvocationTargetException ie) {
 					throw ie.getTargetException();
-				} finally {
-					Method afterMethod = TestUtils.getTestAfterMethod(testCase
-							.getClass());
-					if (null != afterMethod) {
-						afterMethod.invoke(testCase);
-					}
 				}
 			} catch (TestException e) {
+				e.printStackTrace();
 				return createTestResult(TestResultStatus.FAILED,
 						TestUtils.getStackTrace(e), testCase);
 			} catch (Throwable e) {
 				e.printStackTrace();
 				return createTestResult(TestResultStatus.INVALID,
 						TestUtils.getStackTrace(e), testCase);
+			} finally {
+				Method afterMethod = TestUtils.getTestAfterMethod(testCase
+						.getClass());
+				if (null != afterMethod) {
+					try {
+						afterMethod.invoke(testCase);
+					} catch (Throwable e) {
+						e.printStackTrace();
+						return createTestResult(TestResultStatus.INVALID,
+								TestUtils.getStackTrace(e), testCase);
+					}
+				}
 			}
 			return createTestResult(TestResultStatus.PASSED, "", testCase);
 		} finally {

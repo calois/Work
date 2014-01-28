@@ -32,7 +32,7 @@ body {
 	height: 6em;
 }
 
-#console{
+#console {
 	margin: auto;
 	margin-left: 5em;
 	margin-right: 5em;
@@ -55,6 +55,7 @@ body {
 .listingOptions {
 	margin-bottom: 1.5em;
 	margin-left: 0.5em;
+	width: 100%;
 }
 
 /*---- footer --------------------- */
