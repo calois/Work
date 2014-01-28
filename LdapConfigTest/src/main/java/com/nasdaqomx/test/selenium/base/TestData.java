@@ -3,6 +3,7 @@ package com.nasdaqomx.test.selenium.base;
 import java.util.Properties;
 
 public class TestData {
+
 	private Properties inputData;
 	private Properties outputData;
 

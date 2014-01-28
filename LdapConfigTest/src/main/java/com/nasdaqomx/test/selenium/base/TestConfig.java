@@ -5,9 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TestConfig implements Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	private String chromeDriver;
 	private DriverType driverType;

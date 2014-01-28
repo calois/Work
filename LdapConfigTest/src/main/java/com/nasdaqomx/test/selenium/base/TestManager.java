@@ -14,8 +14,9 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class TestManager {
+
 	private TestConfig testConfig;
-	private List<String> screenShotList = new ArrayList<String>();
+	private List<String> screenShotList = new ArrayList<>();
 	private Map<Project, WebDriver> driverMap = new HashMap<>();
 
 	public TestManager(TestConfig testConfig) {
@@ -27,7 +28,7 @@ public class TestManager {
 	}
 
 	public void clearScreenshotList() {
-		screenShotList = new ArrayList<String>();
+		screenShotList.clear();
 	}
 
 	public void takeScreenshot(Project project) {
