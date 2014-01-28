@@ -1,16 +1,37 @@
 package com.nasdaqomx.test.selenium.base;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class TestManager {
 	private TestConfig testConfig;
+	private List<String> screenShotList = new ArrayList<String>();
 	private Map<Project, WebDriver> driverMap = new HashMap<>();
 
 	public TestManager(TestConfig testConfig) {
 		this.testConfig = testConfig;
+	}
+
+	public List<String> getScreenshotList() {
+		return screenShotList;
+	}
+
+	public void clearScreenshotList() {
+		screenShotList = new ArrayList<String>();
+	}
+
+	public void takeScreenshot(Project project) {
+		screenShotList.add(takeScreenshot(driverMap.get(project)));
 	}
 
 	public String getChromeDriver() {
@@ -37,10 +58,41 @@ public class TestManager {
 		if (driverMap.containsKey(project)) {
 			return driverMap.get(project);
 		} else {
-			WebDriver webDriver = TestUtils.getWebDriver(testConfig);
+			WebDriver webDriver = getWebDriver();
 			driverMap.put(project, webDriver);
 			return webDriver;
 		}
+	}
+
+	private WebDriver getWebDriver() {
+		DesiredCapabilities capabilities;
+		WebDriver driver;
+		switch (testConfig.getDriverType()) {
+		case CHROME:
+			System.setProperty("webdriver.chrome.driver",
+					testConfig.getChromeDriver());
+			capabilities = DesiredCapabilities.chrome();
+			driver = new ChromeDriver(capabilities);
+			driver.manage()
+					.timeouts()
+					.implicitlyWait(testConfig.getImplicitWait(),
+							TimeUnit.SECONDS);
+			return driver;
+		case FIREFOX:
+			capabilities = DesiredCapabilities.firefox();
+			driver = new FirefoxDriver(capabilities);
+			driver.manage()
+					.timeouts()
+					.implicitlyWait(testConfig.getImplicitWait(),
+							TimeUnit.SECONDS);
+			return driver;
+		default:
+			return null;
+		}
+	}
+
+	private String takeScreenshot(WebDriver driver) {
+		return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
 	}
 
 	public void close() {

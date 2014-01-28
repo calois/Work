@@ -55,9 +55,16 @@ body {
 .listingOptions {
 	margin-bottom: 1.5em;
 	margin-left: 0.5em;
+}
+
+#testCaseTable {
+	table-layout: fixed;
 	width: 100%;
 }
 
+#testCaseTable td {
+	word-wrap: break-word;
+}
 /*---- footer --------------------- */
 #footer {
 	color: #808080;

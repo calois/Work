@@ -13,19 +13,13 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.StringTokenizer;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.nasdaqomx.test.selenium.base.anno.TestAfter;
 import com.nasdaqomx.test.selenium.base.anno.TestBefore;
+import com.nasdaqomx.test.selenium.base.page.AbstractPageObject;
 
 public class TestUtils {
 	private static final Log LOGGER = LogFactory.getLog(TestUtils.class);
@@ -41,35 +35,17 @@ public class TestUtils {
 		}
 	}
 
-	public static WebDriver getWebDriver(TestConfig testConfig) {
-		DesiredCapabilities capabilities;
-		WebDriver driver;
-		switch (testConfig.getDriverType()) {
-		case CHROME:
-			System.setProperty("webdriver.chrome.driver",
-					testConfig.getChromeDriver());
-			capabilities = DesiredCapabilities.chrome();
-			driver = new ChromeDriver(capabilities);
-			driver.manage()
-					.timeouts()
-					.implicitlyWait(testConfig.getImplicitWait(),
-							TimeUnit.SECONDS);
-			return driver;
-		case FIREFOX:
-			capabilities = DesiredCapabilities.firefox();
-			driver = new FirefoxDriver(capabilities);
-			driver.manage()
-					.timeouts()
-					.implicitlyWait(testConfig.getImplicitWait(),
-							TimeUnit.SECONDS);
-			return driver;
-		default:
-			return null;
+	public static <T extends AbstractPageObject> T createPageObject(
+			Class<T> clazz, TestManager testManager) {
+		try {
+			T o = clazz.getDeclaredConstructor(TestManager.class).newInstance(
+					testManager);
+			return o;
+		} catch (Exception e) {
+			throw new TestException(String.format(
+					"Fail to create page object: '%s'", clazz.getSimpleName()),
+					e);
 		}
-	}
-
-	public static String takeScreenshot(WebDriver driver) {
-		return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
 	}
 
 	public static Properties toProperties(String s) {

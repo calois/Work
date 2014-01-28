@@ -15,6 +15,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.nasdaqomx.test.selenium.base.Project;
+import com.nasdaqomx.test.selenium.base.TestException;
 import com.nasdaqomx.test.selenium.base.TestManager;
 import com.nasdaqomx.test.selenium.base.TestUtils;
 
@@ -33,15 +34,7 @@ public abstract class AbstractPageObject {
 	}
 
 	protected <T extends AbstractPageObject> T createPageObject(Class<T> clazz) {
-		try {
-			T o = clazz.getDeclaredConstructor(TestManager.class).newInstance(
-					testManager);
-			return o;
-		} catch (Exception e) {
-			throw new RuntimeException(
-					String.format("Fail to create page object: '%s'",
-							clazz.getSimpleName()), e);
-		}
+		return TestUtils.createPageObject(clazz, testManager);
 	}
 
 	protected String getCurrentUrl() {
@@ -224,7 +217,8 @@ public abstract class AbstractPageObject {
 	}
 
 	protected void fail(String message) {
-		throw new RuntimeException(message);
+		testManager.takeScreenshot(getProject());
+		throw new TestException(message);
 	}
 
 	private ExpectedCondition<Boolean> textToBePresentInElement(

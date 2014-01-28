@@ -1,7 +1,5 @@
 package com.nasdaqomx.test.selenium.base;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Pattern;
 
 import com.nasdaqomx.test.selenium.base.page.AbstractPageObject;
@@ -9,10 +7,10 @@ import com.nasdaqomx.test.selenium.base.page.AbstractPageObject;
 public abstract class AbstractTest {
 
 	private TestManager testManager;
+
 	private TestData testData;
 
 	private StringBuilder verificationErrors = new StringBuilder();
-	private List<String> screenShotList = new ArrayList<String>();
 
 	public Project getProject() {
 		return TestUtils.getTestProject(this.getClass());
@@ -23,15 +21,7 @@ public abstract class AbstractTest {
 	}
 
 	protected <T extends AbstractPageObject> T createPageObject(Class<T> clazz) {
-		try {
-			T o = clazz.getDeclaredConstructor(TestManager.class).newInstance(
-					testManager);
-			return o;
-		} catch (Exception e) {
-			throw new TestException(String.format(
-					"Fail to create page object: '%s'", clazz.getSimpleName()),
-					e);
-		}
+		return TestUtils.createPageObject(clazz, testManager);
 	}
 
 	public void verifyTrue(String msg, boolean condition) {
@@ -44,8 +34,7 @@ public abstract class AbstractTest {
 
 	public void assertTrue(String message, boolean condition) {
 		if (!condition) {
-			fail(message, TestUtils.takeScreenshot(testManager
-					.getWebDriver(getProject())));
+			fail(message);
 		}
 	}
 
@@ -140,13 +129,9 @@ public abstract class AbstractTest {
 		}
 	}
 
-	public void fail(String message) {
+	protected void fail(String message) {
+		testManager.takeScreenshot(getProject());
 		throw new TestException(message);
-	}
-
-	public void fail(String message, String screenShot) {
-		screenShotList.add(screenShot);
-		fail(message);
 	}
 
 	public void assertEquals(String expected, String[] actual) {
@@ -163,10 +148,9 @@ public abstract class AbstractTest {
 					"Expected result: 'null', but actual result: 'not null'",
 					!(actual == null));
 		} else if (expected.equals(actual)) {
-			fail(String.format(
-					"Expect result: '%s not equal to %s', but actual result is",
-					expected, actual), TestUtils.takeScreenshot(testManager
-					.getWebDriver(getProject())));
+			fail(String
+					.format("Expect result: '%s not equal to %s', but actual result is",
+							expected, actual));
 		}
 	}
 
@@ -195,18 +179,9 @@ public abstract class AbstractTest {
 		}
 	}
 
-	public List<String> getScreenshotList() {
-		return screenShotList;
-	}
-
 	/** Clears out the list of verification errors */
-	public void clearVerificationErrors() {
+	private void clearVerificationErrors() {
 		verificationErrors = new StringBuilder();
-	}
-
-	/** Clears out the list of screenshots */
-	public void clearScreenshotList() {
-		screenShotList = new ArrayList<String>();
 	}
 
 	/**

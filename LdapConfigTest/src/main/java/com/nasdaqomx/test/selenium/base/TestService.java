@@ -10,15 +10,12 @@ public class TestService implements Serializable {
 	private static final String BASE_PACKAGE = "com.nasdaqomx.test.selenium.testcase.";
 
 	private TestResult createTestResult(TestResultStatus status,
-			String message, AbstractTest testCase) {
+			String message, TestManager testManager) {
 		TestResult result = new TestResult();
 		result.setStatus(status);
 		result.setMessage(message);
-		if (null != testCase) {
-			result.setScreenshotList(testCase.getScreenshotList());
-			testCase.clearScreenshotList();
-			testCase.clearVerificationErrors();
-		}
+		result.setScreenshotList(testManager.getScreenshotList());
+		testManager.clearScreenshotList();
 		return result;
 	}
 
@@ -48,7 +45,7 @@ public class TestService implements Serializable {
 									.getTargetException();
 							e.printStackTrace();
 							return createTestResult(TestResultStatus.BLOCKED,
-									TestUtils.getStackTrace(e), testCase);
+									TestUtils.getStackTrace(e), testManager);
 						} else {
 							throw ie.getTargetException();
 						}
@@ -65,11 +62,11 @@ public class TestService implements Serializable {
 			} catch (TestException e) {
 				e.printStackTrace();
 				return createTestResult(TestResultStatus.FAILED,
-						TestUtils.getStackTrace(e), testCase);
+						TestUtils.getStackTrace(e), testManager);
 			} catch (Throwable e) {
 				e.printStackTrace();
 				return createTestResult(TestResultStatus.INVALID,
-						TestUtils.getStackTrace(e), testCase);
+						TestUtils.getStackTrace(e), testManager);
 			} finally {
 				Method afterMethod = TestUtils.getTestAfterMethod(testCase
 						.getClass());
@@ -78,12 +75,10 @@ public class TestService implements Serializable {
 						afterMethod.invoke(testCase);
 					} catch (Throwable e) {
 						e.printStackTrace();
-						return createTestResult(TestResultStatus.INVALID,
-								TestUtils.getStackTrace(e), testCase);
 					}
 				}
 			}
-			return createTestResult(TestResultStatus.PASSED, "", testCase);
+			return createTestResult(TestResultStatus.PASSED, "", testManager);
 		} finally {
 			testManager.close();
 		}

@@ -4,18 +4,18 @@
 		role="button">Reset Test Config</a> <a id="runAll"
 		class="btn btn-default btn-sm" role="button">Run All Test Cases</a>
 </div>
-<table class="table table-striped table-bordered table-condensed">
+<table class="table table-striped table-bordered table-condensed" id="testCaseTable">
 	<thead>
 		<tr>
-			<th>Id</th>
-			<th>Test Case Summary</th>
-			<th>Automation Key</th>
-			<th>Input Data</th>
-			<th>Output Data</th>
-			<th>Test Result</th>
-			<th>Result Note</th>
-			<th>Execution Status</th>
-			<th>Action</th>
+			<th width="5%">Id</th>
+			<th width="10%">Test Case Summary</th>
+			<th width="9%">Automation Key</th>
+			<th width="20%">Input Data</th>
+			<th width="20%">Output Data</th>
+			<th width="6%">Test Result</th>
+			<th width="20%">Result Note</th>
+			<th width="5%">Execution Status</th>
+			<th width="5%">Action</th>
 		</tr>
 	</thead>
 	<tbody>
