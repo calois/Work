@@ -44,9 +44,8 @@ public abstract class AbstractTest {
 
 	public void assertTrue(String message, boolean condition) {
 		if (!condition) {
-			screenShotList.add(TestUtils.takeScreenshot(testManager
+			fail(message, TestUtils.takeScreenshot(testManager
 					.getWebDriver(getProject())));
-			fail(message);
 		}
 	}
 
@@ -145,6 +144,11 @@ public abstract class AbstractTest {
 		throw new TestException(message);
 	}
 
+	public void fail(String message, String screenShot) {
+		screenShotList.add(screenShot);
+		fail(message);
+	}
+
 	public void assertEquals(String expected, String[] actual) {
 		assertEquals(expected, join(actual, ','));
 	}
@@ -159,11 +163,10 @@ public abstract class AbstractTest {
 					"Expected result: 'null', but actual result: 'not null'",
 					!(actual == null));
 		} else if (expected.equals(actual)) {
-			screenShotList.add(TestUtils.takeScreenshot(testManager
+			fail(String.format(
+					"Expect result: '%s not equal to %s', but actual result is",
+					expected, actual), TestUtils.takeScreenshot(testManager
 					.getWebDriver(getProject())));
-			fail(String
-					.format("Expect result: '%s not equal to %s', but actual result is",
-							expected, actual));
 		}
 	}
 
