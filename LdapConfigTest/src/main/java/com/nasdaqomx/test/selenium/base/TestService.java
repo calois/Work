@@ -9,7 +9,7 @@ public class TestService implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final String BASE_PACKAGE = "com.nasdaqomx.test.selenium.testcase.";
 
-	private TestResult setResult(TestResultStatus status, String message,
+	private TestResult createTestResult(TestResultStatus status, String message,
 			AbstractTest testCase) {
 		TestResult result = new TestResult();
 		result.setStatus(status);
@@ -46,7 +46,7 @@ public class TestService implements Serializable {
 						if (ie.getTargetException() instanceof TestException) {
 							TestException e = (TestException) ie
 									.getTargetException();
-							return setResult(TestResultStatus.BLOCKED,
+							return createTestResult(TestResultStatus.BLOCKED,
 									TestUtils.getStackTrace(e), testCase);
 						} else {
 							throw ie.getTargetException();
@@ -68,14 +68,14 @@ public class TestService implements Serializable {
 					}
 				}
 			} catch (TestException e) {
-				return setResult(TestResultStatus.FAILED,
+				return createTestResult(TestResultStatus.FAILED,
 						TestUtils.getStackTrace(e), testCase);
 			} catch (Throwable e) {
 				e.printStackTrace();
-				return setResult(TestResultStatus.INVALID,
+				return createTestResult(TestResultStatus.INVALID,
 						TestUtils.getStackTrace(e), testCase);
 			}
-			return setResult(TestResultStatus.PASSED, "", testCase);
+			return createTestResult(TestResultStatus.PASSED, "", testCase);
 		} finally {
 			testManager.close();
 		}

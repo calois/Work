@@ -67,7 +67,7 @@ public class ManagersTest extends AbstractTest {
 		originalEmail = getInputData("preEmail");
 		originalPhone = getInputData("prePhone");
 		originalMobile = getInputData("preMobile");
-		originalUserTimezone = getInputData("preUserTimeZone");
+		originalUserTimezone = getInputData("preUserTimezone");
 		originalUserLanguage = getInputData("preUserLanguage");
 		surname = getInputData("surname");
 		fullName = getInputData("fullName");
@@ -75,7 +75,6 @@ public class ManagersTest extends AbstractTest {
 		phone = getInputData("phone");
 		mobile = getInputData("mobile");
 		userTimezone = getInputData("userTimezone");
-		userLanguage = getInputData("userLanguage");
 		userLanguage = getInputData("userLanguage");
 		expectedSurname = TestUtils.isEmpty(surname) ? getOutputData("surname")
 				: surname;
@@ -125,23 +124,37 @@ public class ManagersTest extends AbstractTest {
 		EditManagerDetailsPage editPage = listManagersPage
 				.toEditManager(userId);
 		// edit
-		if (!originalSurname.equals(surname)) {
+		if (null == surname) {
+			editPage.clearSurname();
+		} else if (!originalSurname.equals(surname)) {
 			editPage.typeSurname(surname);
 		}
-		if (!originalFullName.equals(fullName)) {
+		if (null == fullName) {
+			editPage.clearFullName();
+		} else if (!originalFullName.equals(fullName)) {
 			editPage.typeFullName(fullName);
 		}
-		if (!originalEmail.equals(email)) {
+		if (null == email) {
+			editPage.clearEmail();
+		} else if (!originalEmail.equals(email)) {
 			editPage.typeEmail(email);
 		}
-		if (!originalPhone.equals(phone)) {
+		if (null == phone) {
+			editPage.clearPhone();
+		} else if (!originalPhone.equals(phone)) {
 			editPage.typePhone(phone);
 		}
-		if (!originalMobile.equals(mobile)) {
+		if (null == mobile) {
+			editPage.clearMobile();
+		} else if (!originalMobile.equals(mobile)) {
 			editPage.typeMobile(mobile);
 		}
-		editPage.selectUserTimezone(userTimezone);
-		editPage.selectUserLanguage(userLanguage);
+		if (!originalUserTimezone.equals(userTimezone)) {
+			editPage.selectUserTimezone(userTimezone);
+		}
+		if (!originalUserLanguage.equals(userLanguage)) {
+			editPage.selectUserLanguage(userLanguage);
+		}
 		// submit add and stay in the same page
 		editPage = editPage.submitEditExpectingFailure();
 		// verify error message
@@ -159,6 +172,8 @@ public class ManagersTest extends AbstractTest {
 				editPage.getUserLanguageErrMsg());
 		verifyEquals(getOutputData("commentsErrMsg"),
 				editPage.getCommentsErrMsg());
+		verifyEquals(getOutputData("pwdExpiresErrMsg"),
+				editPage.getPasswordExpiresErrMsg());
 		// verify the values in each field
 		verifyEquals(expectedSurname, editPage.getSurname());
 		verifyEquals(expectedFullName, editPage.getFullName());

@@ -135,8 +135,8 @@ public class EditManagerDetailsPage extends ManagerBasePage {
 	}
 
 	public void typeSurname(String value) {
-		clearSurname();
 		if (null != value) {
+			clearSurname();
 			this.surname.sendKeys(value);
 		}
 	}
@@ -154,8 +154,8 @@ public class EditManagerDetailsPage extends ManagerBasePage {
 	}
 
 	public void typeFullName(String value) {
-		clearFullName();
 		if (null != value) {
+			clearFullName();
 			this.fullName.sendKeys(value);
 		}
 	}
@@ -173,8 +173,8 @@ public class EditManagerDetailsPage extends ManagerBasePage {
 	}
 
 	public void typeEmail(String value) {
-		clearEmail();
 		if (null != value) {
+			clearEmail();
 			this.email.sendKeys(value);
 		}
 	}
@@ -192,8 +192,8 @@ public class EditManagerDetailsPage extends ManagerBasePage {
 	}
 
 	public void typePhone(String value) {
-		clearPhone();
 		if (null != value) {
+			clearPhone();
 			this.phone.sendKeys(value);
 		}
 	}
@@ -211,8 +211,8 @@ public class EditManagerDetailsPage extends ManagerBasePage {
 	}
 
 	public void typeMobile(String value) {
-		clearMobile();
 		if (null != value) {
+			clearMobile();
 			this.mobile.sendKeys(value);
 		}
 	}
@@ -231,6 +231,12 @@ public class EditManagerDetailsPage extends ManagerBasePage {
 		}
 	}
 
+	public void deselectUserTimezone(String value) {
+		if (null != value) {
+			this.userTimezone.deselectByVisibleText(value);
+		}
+	}
+
 	public String getUserTimezoneErrMsg() {
 		return this.userTimezoneErrMsg.getText();
 	}
@@ -242,6 +248,12 @@ public class EditManagerDetailsPage extends ManagerBasePage {
 	public void selectUserLanguage(String value) {
 		if (null != value) {
 			this.userLanguage.selectByVisibleText(value);
+		}
+	}
+
+	public void deselectUserLanguage(String value) {
+		if (null != value) {
+			this.userLanguage.deselectByVisibleText(value);
 		}
 	}
 
@@ -258,8 +270,8 @@ public class EditManagerDetailsPage extends ManagerBasePage {
 	}
 
 	public void typeComments(String value) {
-		clearComments();
 		if (null != value) {
+			clearComments();
 			this.comments.sendKeys(value);
 		}
 	}

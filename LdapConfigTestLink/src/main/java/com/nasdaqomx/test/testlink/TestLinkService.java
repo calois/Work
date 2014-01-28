@@ -2,6 +2,8 @@ package com.nasdaqomx.test.testlink;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.eti.kinoshita.testlinkjavaapi.TestLinkAPI;
 import br.eti.kinoshita.testlinkjavaapi.constants.ExecutionStatus;
@@ -116,11 +118,25 @@ public class TestLinkService {
 
 	public Attachment uploadExecutionAttachment(Integer executionId,
 			String fileName, String fileContent) {
+		return api.uploadExecutionAttachment(executionId, null, null, fileName,
+				"image/png", fileContent);
+	}
+
+	public List<Attachment> uploadExecutionAttachments(Integer executionId,
+			List<String> fileContentList) {
 		if (debug) {
 			return null;
 		}
-		return api.uploadExecutionAttachment(executionId, null, null, fileName,
-				"image/png", fileContent);
+		List<Attachment> attachmentList = new ArrayList<Attachment>();
+		if (null != fileContentList && !fileContentList.isEmpty()) {
+			for (String screenshot : fileContentList) {
+				attachmentList
+						.add(uploadExecutionAttachment(executionId,
+								"Screenshot_" + System.currentTimeMillis(),
+								screenshot));
+			}
+		}
+		return attachmentList;
 	}
 
 	public TestProject[] getTestProjects() {

@@ -122,8 +122,8 @@ public class AddManagerPage extends LdapconfigBasePage {
 	}
 
 	public void typeUserId(String value) {
-		clearUserId();
 		if (null != value) {
+			clearUserId();
 			this.userId.sendKeys(value);
 		}
 	}
@@ -141,8 +141,8 @@ public class AddManagerPage extends LdapconfigBasePage {
 	}
 
 	public void typeSurname(String value) {
-		clearSurname();
 		if (null != value) {
+			clearSurname();
 			this.surname.sendKeys(value);
 		}
 	}
@@ -160,8 +160,8 @@ public class AddManagerPage extends LdapconfigBasePage {
 	}
 
 	public void typeFullName(String value) {
-		clearFullName();
 		if (null != value) {
+			clearFullName();
 			this.fullName.sendKeys(value);
 		}
 	}
@@ -179,8 +179,8 @@ public class AddManagerPage extends LdapconfigBasePage {
 	}
 
 	public void typeEmail(String value) {
-		clearEmail();
 		if (null != value) {
+			clearEmail();
 			this.email.sendKeys(value);
 		}
 	}
@@ -198,8 +198,8 @@ public class AddManagerPage extends LdapconfigBasePage {
 	}
 
 	public void typePhone(String value) {
-		clearPhone();
 		if (null != value) {
+			clearPhone();
 			this.phone.sendKeys(value);
 		}
 	}
@@ -217,8 +217,8 @@ public class AddManagerPage extends LdapconfigBasePage {
 	}
 
 	public void typeMobile(String value) {
-		clearMobile();
 		if (null != value) {
+			clearMobile();
 			this.mobile.sendKeys(value);
 		}
 	}
@@ -237,6 +237,12 @@ public class AddManagerPage extends LdapconfigBasePage {
 		}
 	}
 
+	public void deselectUserTimezone(String value) {
+		if (null != value) {
+			this.userTimezone.deselectByVisibleText(value);
+		}
+	}
+
 	public String getUserTimezoneErrMsg() {
 		return this.userTimezoneErrMsg.getText();
 	}
@@ -248,6 +254,12 @@ public class AddManagerPage extends LdapconfigBasePage {
 	public void selectUserLanguage(String value) {
 		if (null != value) {
 			this.userLanguage.selectByVisibleText(value);
+		}
+	}
+
+	public void deselectUserLanguage(String value) {
+		if (null != value) {
+			this.userLanguage.deselectByVisibleText(value);
 		}
 	}
 
@@ -264,8 +276,8 @@ public class AddManagerPage extends LdapconfigBasePage {
 	}
 
 	public void typeComments(String value) {
-		clearComments();
 		if (null != value) {
+			clearComments();
 			this.comments.sendKeys(value);
 		}
 	}

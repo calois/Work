@@ -1,6 +1,5 @@
 package com.nasdaqomx.test.web;
 
-import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -210,14 +209,8 @@ public class HomeController {
 			public void finish(TestResult result) {
 				Integer executionId = testLinkService.reportResult(tc.getId(),
 						result);
-				List<String> screenshotList = result.getScreenshotList();
-				if (null != screenshotList && !screenshotList.isEmpty()) {
-					for (String screenshot : screenshotList) {
-						testLinkService.uploadExecutionAttachment(executionId,
-								"Screenshot_" + System.currentTimeMillis(),
-								screenshot);
-					}
-				}
+				testLinkService.uploadExecutionAttachments(executionId,
+						result.getScreenshotList());
 			}
 		});
 	}
