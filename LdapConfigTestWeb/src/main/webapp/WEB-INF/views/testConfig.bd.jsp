@@ -39,6 +39,7 @@
 						<label for="browser">Test Browser:</label> <select required
 							class="form-control" id="browser" name="browserType">
 							<option value="CHROME">Chrome</option>
+							<option value="FIREFOX">Firefox</option>
 						</select>
 					</div>
 					<div class="form-group">
