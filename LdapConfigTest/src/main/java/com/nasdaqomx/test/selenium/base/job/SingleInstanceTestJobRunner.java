@@ -1,18 +1,21 @@
 package com.nasdaqomx.test.selenium.base.job;
 
+import com.nasdaqomx.test.selenium.base.DriverType;
 import com.nasdaqomx.test.selenium.base.TestResult;
 import com.nasdaqomx.test.selenium.base.TestService;
 
 public class SingleInstanceTestJobRunner extends AbstractTestJobRunner {
 
-	public SingleInstanceTestJobRunner(String id) {
+	private DriverType supportDriverType;
+
+	public SingleInstanceTestJobRunner(DriverType supportDriverType, String id) {
 		super(id);
+		this.supportDriverType = supportDriverType;
 	}
 
 	@Override
 	public void run() {
 		final TestJob testJob = SingleInstanceTestJobRunner.this.getTestJob();
-		setAvailable(testJob.getTestConfig().getDriverType(), false);
 		Thread thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -26,11 +29,19 @@ public class SingleInstanceTestJobRunner extends AbstractTestJobRunner {
 				} catch (Throwable e) {
 					e.printStackTrace();
 				} finally {
-					setAvailable(testJob.getTestConfig().getDriverType(), true);
 					setTestJob(null);
 				}
 			}
 		});
 		thread.start();
+	}
+
+	@Override
+	public boolean accept(TestJob testJob) {
+		if (this.getTestJob() != null
+				|| supportDriverType != testJob.getTestConfig().getDriverType()) {
+			return false;
+		}
+		return true;
 	}
 }

@@ -1,5 +1,6 @@
 package com.nasdaqomx.test.selenium.base.job;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,6 +11,7 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.stereotype.Service;
 
+import com.nasdaqomx.test.selenium.base.DriverType;
 import com.nasdaqomx.test.selenium.base.TestConfig;
 import com.nasdaqomx.test.selenium.base.TestData;
 
@@ -17,14 +19,20 @@ import com.nasdaqomx.test.selenium.base.TestData;
 public class TestJobManager {
 	private ConcurrentLinkedQueue<TestJob> queue = new ConcurrentLinkedQueue<>();
 
-	private TestJobRunner[] testJobRunnerList = new TestJobRunner[] { new SingleInstanceTestJobRunner(
-			"1") };
+	private List<TestJobRunner> testJobRunnerList = new ArrayList<>();
+	{
+		int id = 1;
+		for (DriverType driverType : DriverType.values()) {
+			testJobRunnerList.add(new SingleInstanceTestJobRunner(driverType,
+					String.valueOf(id++)));
+		}
+	}
 
 	private List<TestJob> runningList = new LinkedList<TestJob>();
 
 	private Map<String, TestJob> completeList = new HashMap<>();
 
-	public TestJobRunner[] getTestJobRunnerList() {
+	public List<TestJobRunner> getTestJobRunnerList() {
 		return testJobRunnerList;
 	}
 
@@ -106,8 +114,7 @@ public class TestJobManager {
 					if (!queue.isEmpty()) {
 						TestJob testJob = queue.peek();
 						for (TestJobRunner testJobRunner : testJobRunnerList) {
-							if (testJobRunner.isAvailable(testJob
-									.getTestConfig().getDriverType())) {
+							if (testJobRunner.accept(testJob)) {
 								testJobRunner.setTestJob(testJob);
 								testJobRunner.run();
 								queue.poll();
