@@ -14,6 +14,8 @@ public class TestLinkConfig {
 	private Integer planId;
 	private Integer suiteId;
 	private String planName;
+	private String build;
+	private String platform;
 
 	public String getAutomationKeyFieldName() {
 		return automationKeyFieldName;
@@ -87,8 +89,6 @@ public class TestLinkConfig {
 		this.build = build;
 	}
 
-	private String build;
-
 	public String getUrl() {
 		return baseUrl.endsWith("/") ? baseUrl.concat(XMLRPC_URL) : baseUrl
 				.concat("/").concat(XMLRPC_URL);
@@ -109,4 +109,13 @@ public class TestLinkConfig {
 	public void setDevKey(String devKey) {
 		this.devKey = devKey;
 	}
+
+	public String getPlatform() {
+		return platform;
+	}
+
+	public void setPlatform(String platform) {
+		this.platform = platform;
+	}
+
 }

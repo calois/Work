@@ -129,6 +129,8 @@ public class HomeController {
 		testLinkConfig.setProjectId(projectId);
 		testLinkConfig.setPlanId(planId);
 		testLinkConfig.setBuild(build);
+		testLinkConfig.setPlatform(browserType.toString().charAt(0)
+				+ browserType.toString().substring(1).toLowerCase());
 		TestLinkService testLinkService = new TestLinkService();
 		testLinkService.setTestLinkConfig(testLinkConfig);
 		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan();
@@ -149,6 +151,8 @@ public class HomeController {
 		testLinkConfig.setProjectId(projectId);
 		testLinkConfig.setPlanId(planId);
 		testLinkConfig.setBuild(build);
+		testLinkConfig.setPlatform(browserType.toString().charAt(0)
+				+ browserType.toString().substring(1).toLowerCase());
 		testLinkService.setTestLinkConfig(testLinkConfig);
 		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan();
 		for (AutomationTestCase t : testCases) {

@@ -10,6 +10,7 @@ import br.eti.kinoshita.testlinkjavaapi.constants.ExecutionStatus;
 import br.eti.kinoshita.testlinkjavaapi.constants.ExecutionType;
 import br.eti.kinoshita.testlinkjavaapi.model.Attachment;
 import br.eti.kinoshita.testlinkjavaapi.model.Build;
+import br.eti.kinoshita.testlinkjavaapi.model.Platform;
 import br.eti.kinoshita.testlinkjavaapi.model.TestCase;
 import br.eti.kinoshita.testlinkjavaapi.model.TestPlan;
 import br.eti.kinoshita.testlinkjavaapi.model.TestProject;
@@ -111,8 +112,8 @@ public class TestLinkService {
 					testLinkConfig.getPlanId(),
 					ExecutionStatus.valueOf(result.getStatus().toString()),
 					null, testLinkConfig.getBuild(), result.getMessage(),
-					false, null, null, null, null, OVERWRITE_TEST_RESULT)
-					.getExecutionId();
+					false, null, null, testLinkConfig.getPlatform(), null,
+					OVERWRITE_TEST_RESULT).getExecutionId();
 		}
 	}
 
@@ -157,6 +158,15 @@ public class TestLinkService {
 			return new TestPlan[] { testPlan };
 		}
 		return api.getProjectTestPlans(testLinkConfig.getProjectId());
+	}
+
+	public Platform[] getPlatforms() {
+		if (debug) {
+			Platform platform = new Platform();
+			platform.setName("asdasd");
+			return new Platform[] { platform };
+		}
+		return api.getTestPlanPlatforms(testLinkConfig.getPlanId());
 	}
 
 	public Build[] getBuildsForPlan() {
