@@ -24,15 +24,15 @@ public class TestManager {
 	}
 
 	public List<String> getScreenshotList() {
-		return screenShotList;
+		return this.screenShotList;
 	}
 
 	public void clearScreenshotList() {
-		screenShotList.clear();
+		this.screenShotList = new ArrayList<>();
 	}
 
 	public void takeScreenshot(Project project) {
-		screenShotList.add(takeScreenshot(driverMap.get(project)));
+		this.screenShotList.add(takeScreenshot(driverMap.get(project)));
 	}
 
 	public String getChromeDriver() {
