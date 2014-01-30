@@ -1,16 +1,12 @@
 package com.nasdaqomx.test.selenium.base.job;
 
-import com.nasdaqomx.test.selenium.base.DriverType;
 import com.nasdaqomx.test.selenium.base.TestResult;
 import com.nasdaqomx.test.selenium.base.TestService;
 
 public class SingleInstanceTestJobRunner extends AbstractTestJobRunner {
 
-	private DriverType supportDriverType;
-
-	public SingleInstanceTestJobRunner(DriverType supportDriverType, String id) {
+	public SingleInstanceTestJobRunner(String id) {
 		super(id);
-		this.supportDriverType = supportDriverType;
 	}
 
 	@Override
@@ -29,19 +25,10 @@ public class SingleInstanceTestJobRunner extends AbstractTestJobRunner {
 				} catch (Throwable e) {
 					e.printStackTrace();
 				} finally {
-					setTestJob(null);
+					clear();
 				}
 			}
 		});
 		thread.start();
-	}
-
-	@Override
-	public boolean accept(TestJob testJob) {
-		if (this.getTestJob() != null
-				|| supportDriverType != testJob.getTestConfig().getDriverType()) {
-			return false;
-		}
-		return true;
 	}
 }

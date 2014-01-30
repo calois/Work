@@ -1,8 +1,6 @@
 package com.nasdaqomx.test.selenium.base.job;
 
 public interface TestJobRunner {
-	public void setTestJob(TestJob testJob);
-
 	public TestJob getTestJob();
 
 	public void run();

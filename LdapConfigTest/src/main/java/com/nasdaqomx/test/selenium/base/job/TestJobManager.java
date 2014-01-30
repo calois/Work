@@ -11,7 +11,6 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.stereotype.Service;
 
-import com.nasdaqomx.test.selenium.base.DriverType;
 import com.nasdaqomx.test.selenium.base.TestConfig;
 import com.nasdaqomx.test.selenium.base.TestData;
 
@@ -21,11 +20,8 @@ public class TestJobManager {
 
 	private List<TestJobRunner> testJobRunnerList = new ArrayList<>();
 	{
-		int id = 1;
-		for (DriverType driverType : DriverType.values()) {
-			testJobRunnerList.add(new SingleInstanceTestJobRunner(driverType,
-					String.valueOf(id++)));
-		}
+		testJobRunnerList
+				.add(new SingleInstanceTestJobRunner(String.valueOf(1)));
 	}
 
 	private List<TestJob> runningList = new LinkedList<TestJob>();
@@ -115,7 +111,6 @@ public class TestJobManager {
 						TestJob testJob = queue.peek();
 						for (TestJobRunner testJobRunner : testJobRunnerList) {
 							if (testJobRunner.accept(testJob)) {
-								testJobRunner.setTestJob(testJob);
 								testJobRunner.run();
 								queue.poll();
 								synchronized (TestJobManager.class) {

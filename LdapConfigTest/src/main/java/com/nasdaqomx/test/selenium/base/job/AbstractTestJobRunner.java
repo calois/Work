@@ -10,9 +10,8 @@ public abstract class AbstractTestJobRunner implements TestJobRunner {
 		this.id = id;
 	}
 
-	@Override
-	public synchronized void setTestJob(TestJob testJob) {
-		this.testJob = testJob;
+	protected synchronized void clear() {
+		this.testJob = null;
 	}
 
 	public synchronized TestJob getTestJob() {
@@ -27,5 +26,14 @@ public abstract class AbstractTestJobRunner implements TestJobRunner {
 	@Override
 	public String getId() {
 		return id;
+	}
+
+	@Override
+	public synchronized boolean accept(TestJob testJob) {
+		if (this.getTestJob() != null) {
+			return false;
+		}
+		this.testJob = testJob;
+		return true;
 	}
 }
