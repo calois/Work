@@ -21,7 +21,7 @@ var testList = {};
 			function checkResult() {
 				$.ajax({
 					type : "get",
-					url : test.getUrl('/testJob/' + id)
+					url : test.getUrl('testJob/' + id + testList.idSuffix)
 				}).done(function(data) {
 					$('#' + id + '_jobStatus').text(data.status);
 					if (data.result) {

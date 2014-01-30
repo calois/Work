@@ -3,6 +3,7 @@ package com.nasdaqomx.test.web;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -119,8 +120,9 @@ public class HomeController {
 			@RequestParam Long explicitWait, @RequestParam Long implicitWait,
 			@RequestParam String url, @RequestParam Integer projectId,
 			@RequestParam Integer planId, @RequestParam String build,
-			Model model, @ModelAttribute("testConfig") TestConfig testConfig,
-			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig) {
+			@ModelAttribute("testConfig") TestConfig testConfig,
+			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig,
+			Model model, HttpSession session) {
 		testConfig.getProjectConfigMap().get(Project.LDAP_CONFIG)
 				.setBaseUrl(url);
 		testConfig.setDriverType(browserType);
@@ -135,6 +137,8 @@ public class HomeController {
 		testLinkService.setTestLinkConfig(testLinkConfig);
 		AutomationTestCase[] testCases = testLinkService.getTestCasesForPlan();
 		model.addAttribute("testCases", testCases);
+		model.addAttribute("idSuffix",
+				browserType.toString().concat(session.getId()));
 		model.addAttribute("runAll", true);
 		return "testList";
 	}
@@ -143,8 +147,9 @@ public class HomeController {
 	public String viewTestCases(@RequestParam DriverType browserType,
 			@RequestParam String url, @RequestParam Integer projectId,
 			@RequestParam Integer planId, @RequestParam String build,
-			Model model, @ModelAttribute("testConfig") TestConfig testConfig,
-			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig) {
+			@ModelAttribute("testConfig") TestConfig testConfig,
+			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig,
+			Model model, HttpSession session) {
 		testConfig.getProjectConfigMap().get(Project.LDAP_CONFIG)
 				.setBaseUrl(url);
 		testConfig.setDriverType(browserType);
@@ -159,19 +164,22 @@ public class HomeController {
 			t.setStatus(testJobManager.getStatus(String.valueOf(t.getId())));
 		}
 		model.addAttribute("testCases", testCases);
+		model.addAttribute("idSuffix",
+				browserType.toString().concat(session.getId()));
 		return "testList";
 	}
 
 	@RequestMapping(value = "/run/{testCaseId}", method = RequestMethod.GET)
 	@ResponseBody
 	public AutomationTestCase runTestCase(@PathVariable Integer testCaseId,
-			Model model, @ModelAttribute("testConfig") TestConfig testConfig,
-			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig) {
+			@ModelAttribute("testConfig") TestConfig testConfig,
+			@ModelAttribute("testLinkConfig") TestLinkConfig testLinkConfig,
+			Model model, HttpSession session) {
 		TestLinkService testLinkService = new TestLinkService();
 		testLinkService.setTestLinkConfig(testLinkConfig);
 		AutomationTestCase testCase = testLinkService.getTestCase(testCaseId);
 		createTestLinkBuild(testLinkService, testLinkConfig.getBuild());
-		run(testLinkService, testConfig, testCase);
+		run(session.getId(), testLinkService, testConfig, testCase);
 		return testCase;
 	}
 
@@ -204,18 +212,23 @@ public class HomeController {
 		}
 	}
 
-	private void run(final TestLinkService testLinkService,
+	private void run(String sessionId, final TestLinkService testLinkService,
 			TestConfig testConfig, final AutomationTestCase tc) {
-		testJobManager.push(String.valueOf(tc.getId()), testConfig, tc
-				.getAutomationKey(), new TestData(tc.getInputDataProperties(),
-				tc.getOutputProperties()), new TestJobCallback() {
-			@Override
-			public void finish(TestResult result) {
-				Integer executionId = testLinkService.reportResult(tc.getId(),
-						result);
-				testLinkService.uploadExecutionAttachments(executionId,
-						result.getScreenshotList());
-			}
-		});
+		testJobManager.push(
+				String.valueOf(tc.getId())
+						.concat(testConfig.getDriverType().toString())
+						.concat(sessionId),
+				testConfig,
+				tc.getAutomationKey(),
+				new TestData(tc.getInputDataProperties(), tc
+						.getOutputProperties()), new TestJobCallback() {
+					@Override
+					public void finish(TestResult result) {
+						Integer executionId = testLinkService.reportResult(
+								tc.getId(), result);
+						testLinkService.uploadExecutionAttachments(executionId,
+								result.getScreenshotList());
+					}
+				});
 	}
 }

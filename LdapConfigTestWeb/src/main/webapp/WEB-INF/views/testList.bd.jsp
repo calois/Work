@@ -4,7 +4,8 @@
 		role="button">Reset Test Config</a> <a id="runAll"
 		class="btn btn-default btn-sm" role="button">Run All Test Cases</a>
 </div>
-<table class="table table-striped table-bordered table-condensed" id="testCaseTable">
+<table class="table table-striped table-bordered table-condensed"
+	id="testCaseTable">
 	<thead>
 		<tr>
 			<th width="5%">Id</th>
@@ -37,6 +38,7 @@
 </table>
 <test:js src="/resources/js/testList.js" />
 <script>
+	testList.idSuffix = '${idSuffix}';
 	if ('${runAll}' == 'true') {
 		testList.runAll();
 	}
