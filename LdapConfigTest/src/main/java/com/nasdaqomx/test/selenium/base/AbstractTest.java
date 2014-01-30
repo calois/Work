@@ -175,7 +175,7 @@ public abstract class AbstractTest {
 		String verificationErrorString = verificationErrors.toString();
 		clearVerificationErrors();
 		if (!"".equals(verificationErrorString)) {
-			fail(verificationErrorString);
+			throw new TestException(verificationErrorString);
 		}
 	}
 
