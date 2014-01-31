@@ -42,19 +42,21 @@ public class ManagersTest extends AbstractTest {
 	@TestBefore
 	public void before() {
 		setData();
-		AddManagerPage addManagerPage = createPageObject(LoginPage.class)
+		listManagersPage=createPageObject(LoginPage.class)
 				.loginAs(getInputData("username"), getInputData("password"))
-				.toManagers().toAddManager();
-		userId = getInputData("userId");
-		addManagerPage.typeUserId(userId);
-		addManagerPage.typeSurname(originalSurname);
-		addManagerPage.typeFullName(originalFullName);
-		addManagerPage.typeEmail(originalEmail);
-		addManagerPage.typePhone(originalPhone);
-		addManagerPage.typeMobile(originalMobile);
-		addManagerPage.selectUserTimezone(originalUserTimezone);
-		addManagerPage.selectUserLanguage(originalUserLanguage);
-		listManagersPage = addManagerPage.submitAdd().toManagers();
+				.toManagers();
+		if(!listManagersPage.isManagerListed(userId)){
+			AddManagerPage addManagerPage = listManagersPage.toAddManager();
+			addManagerPage.typeUserId(userId);
+			addManagerPage.typeSurname(originalSurname);
+			addManagerPage.typeFullName(originalFullName);
+			addManagerPage.typeEmail(originalEmail);
+			addManagerPage.typePhone(originalPhone);
+			addManagerPage.typeMobile(originalMobile);
+			addManagerPage.selectUserTimezone(originalUserTimezone);
+			addManagerPage.selectUserLanguage(originalUserLanguage);
+			listManagersPage = addManagerPage.submitAdd().toManagers();
+		}
 		// for purpose of removing the added user
 		removeUserId = userId;
 		lastPage = listManagersPage;

@@ -10,17 +10,17 @@ import com.nasdaqomx.test.selenium.page.ldapconfig.LdapconfigBasePage;
 public class ManagerBasePage extends LdapconfigBasePage {
 
 	private static final By ID_LOCATOR = By
-			.xpath("//div[@id='mainMenu']//tr[3]/td[@class='LdapClientName']");
+			.xpath("//div[@id='mainMenu']/table//tr[3]/td[@class='LdapClientName']");
 	private static final By DETAILS_LOCATOR = By
-			.xpath("//div[@id='mainMenu']//a[text()='Details']");
+			.xpath("//div[@id='mainMenu']/table//tr[3]//a[text()='Details']");
 	private static final By PERMISSIONS_LOCATOR = By
-			.xpath("//div[@id='mainMenu']//a[text()='Permissions']");
+			.xpath("//div[@id='mainMenu']/table//tr[3]//a[text()='Permissions']");
 	private static final By RESET_PASSWORD_LOCATOR = By
-			.xpath("//div[@id='mainMenu']//a[text()='Reset Password']");
+			.xpath("//div[@id='mainMenu']/table//tr[3]//a[text()='Reset Password']");
 	private static final By LOCK_ACCOUNT_LOCATOR = By
-			.xpath("//div[@id='mainMenu']//a[text()='Lock Account']");
+			.xpath("//div[@id='mainMenu']/table//tr[3]//a[text()='Lock Account']");
 	private static final By REMOVE_MANAGER_LOCATOR = By
-			.xpath("//div[@id='mainMenu']//a[text()='Remove Manager']");
+			.xpath("//div[@id='mainMenu']/table//tr[3]//a[text()='Remove Manager']");
 
 	private WebElement id;
 	private WebElement details;
