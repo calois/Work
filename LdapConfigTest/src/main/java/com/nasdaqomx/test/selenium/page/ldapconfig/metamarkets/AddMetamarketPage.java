@@ -1,4 +1,4 @@
-package com.nasdaqomx.test.selenium.page.ldapconfig.markets;
+package com.nasdaqomx.test.selenium.page.ldapconfig.metamarkets;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -7,9 +7,9 @@ import org.openqa.selenium.WebElement;
 import com.nasdaqomx.test.selenium.base.TestManager;
 import com.nasdaqomx.test.selenium.page.ldapconfig.LdapconfigBasePage;
 
-public class AddMarketPage extends LdapconfigBasePage {
+public class AddMetamarketPage extends LdapconfigBasePage {
 
-	private static final String URL = "addMarket.view";
+	private static final String URL = "addMetaMarket.view";
 
 	private static final By MARKET_CODE_LOCATOR = By
 			.xpath("//form/table[@class='LdapListing']//td[text()='Market code:']/following-sibling::td/input");
@@ -46,7 +46,7 @@ public class AddMarketPage extends LdapconfigBasePage {
 	private WebElement addMarketBtn;
 	private WebElement addMarketMenu;
 
-	public AddMarketPage(TestManager testManager) {
+	public AddMetamarketPage(TestManager testManager) {
 		super(testManager);
 		assertUrl(URL, this.getSimpleUrl());
 		try {
@@ -141,12 +141,12 @@ public class AddMarketPage extends LdapconfigBasePage {
 		return this.supportEmailAddressErrMsg.getText();
 	}
 
-	public ListMarketsPage submitAdd() {
+	public ListMetamarketsPage submitAdd() {
 		this.addMarketBtn.click();
-		return createPageObject(ListMarketsPage.class);
+		return createPageObject(ListMetamarketsPage.class);
 	}
 
-	public AddMarketPage reset() {
+	public AddMetamarketPage reset() {
 		this.addMarketMenu.click();
 		return this;
 	}

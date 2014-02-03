@@ -5,9 +5,8 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 import com.nasdaqomx.test.selenium.base.TestManager;
-import com.nasdaqomx.test.selenium.page.ldapconfig.LdapconfigBasePage;
 
-public class ListClientsPage extends LdapconfigBasePage {
+public class ListClientsPage extends ClientBasePage {
 
 	private static final String URL = "listClients.view";
 
