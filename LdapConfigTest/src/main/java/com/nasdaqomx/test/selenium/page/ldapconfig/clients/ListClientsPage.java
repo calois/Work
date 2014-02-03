@@ -5,6 +5,8 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 import com.nasdaqomx.test.selenium.base.TestManager;
+import com.nasdaqomx.test.selenium.page.ldapconfig.clients.users.ListClientUsersPage;
+import com.nasdaqomx.test.selenium.page.smartsbroker.LoginPage;
 
 public class ListClientsPage extends ClientBasePage {
 
@@ -66,35 +68,34 @@ public class ListClientsPage extends ClientBasePage {
 
 	}
 
-	// TODO return client details page
-	public void toEditClientByClickingImage(String clientName) {
+	public EditClientDetailsPage toEditClientByClickingImage(String clientName) {
 		this.getClientImageLink(clientName).click();
+		return createPageObject(EditClientDetailsPage.class);
 	}
 
-	// TODO return client details page
-	public void toEditClientByClickingEdit(String clientName) {
+	public EditClientDetailsPage toEditClientByClickingEdit(String clientName) {
 		this.getEditLink(clientName).click();
+		return createPageObject(EditClientDetailsPage.class);
 	}
 
-	// TODO return client users page
-	public void toUsersByClickingName(String clientName) {
+	public ListClientUsersPage toUsersByClickingName(String clientName) {
 		this.getClientNameLink(clientName).click();
+		return createPageObject(ListClientUsersPage.class);
 	}
 
-	// TODO return copy client page
-	public void toCopyClient(String clientName) {
+	public CopyClientPage toCopyClient(String clientName) {
 		this.getCopyLink(clientName).click();
+		return createPageObject(CopyClientPage.class);
 	}
 
-	// TODO return remove client page
 	public RemoveClientPage toRemoveClient(String clientName) {
 		this.getRemoveLink(clientName).click();
 		return createPageObject(RemoveClientPage.class);
 	}
 
-	// TODO return SMARTS broker login page
-	public void toSmartsBrokerLogn(String clientName) {
+	public LoginPage toSmartsBrokerLogn(String clientName) {
 		this.getClientUrlLink(clientName).click();
+		return createPageObject(LoginPage.class);
 	}
 
 	private WebElement getClientImageLink(String clientName) {

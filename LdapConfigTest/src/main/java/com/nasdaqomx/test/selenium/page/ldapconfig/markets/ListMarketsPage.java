@@ -62,14 +62,14 @@ public class ListMarketsPage extends LdapconfigBasePage {
 
 	}
 
-	// TODO return market details page
-	public void toEditMarketByClickingImage(String marketCode) {
+	public EditMarketDetailsPage toEditMarketByClickingImage(String marketCode) {
 		this.getMarketImageLink(marketCode).click();
+		return createPageObject(EditMarketDetailsPage.class);
 	}
 
-	// TODO return market details page
-	public void toEditMarketByClickingCode(String marketCode) {
+	public EditMarketDetailsPage toEditMarketByClickingCode(String marketCode) {
 		this.getMarketCodeLink(marketCode).click();
+		return createPageObject(EditMarketDetailsPage.class);
 	}
 
 	public RemoveMarketPage toRemoveMarket(String marketCode) {

@@ -11,86 +11,86 @@ public class ListMetamarketsPage extends LdapconfigBasePage {
 
 	private static final String URL = "listMetaMarkets.view";
 
-	private static final By ADD_MARKET_LOCATOR = By
-			.xpath("//div[@class='LdapListingOptions']/span[@class='LdapSubMenu']/a[text()='Add market']");
+	private static final By ADD_METAMARKET_LOCATOR = By
+			.xpath("//div[@class='LdapListingOptions']/span[@class='LdapSubMenu']/a[text()='Add metamarket']");
 
-	private static final By MARKETS_LIST_LOCATOR = By.className("LdapListing");
-	private static final By MARKET_ROWS_LOCATOR = By.xpath("//tr[@id]");
-	// followed by market name
-	private static final String MARKET_ROW_ID_PREFIX = "row-";
-	private static final By MARKET_IMAGE_LOCATOR = By.xpath("./td[1]//a");
-	private static final By MARKET_CODE_LOCATOR = By.xpath("./td[2]//a");
+	private static final By METAMARKETS_LIST_LOCATOR = By.className("LdapListing");
+	private static final By METAMARKET_ROWS_LOCATOR = By.xpath("//tr[@id]");
+	// followed by metamarket name
+	private static final String METAMARKET_ROW_ID_PREFIX = "row-";
+	private static final By METAMARKET_IMAGE_LOCATOR = By.xpath("./td[1]//a");
+	private static final By METAMARKET_CODE_LOCATOR = By.xpath("./td[2]//a");
 	private static final By DESCRIPTION_LOCATOR = By.xpath("./td[3]");
 	private static final By REMOVE_LOCATOR = By
-			.xpath("./td[4]//a[contains(.,'Remove') and contains(.,'market')]");
+			.xpath("./td[4]//a[contains(.,'Remove') and contains(.,'metamarket')]");
 
-	private WebElement addMarket;
-	private WebElement marketsTable;
+	private WebElement addMetamarket;
+	private WebElement metamarketsTable;
 
 	public ListMetamarketsPage(TestManager testManager) {
 		super(testManager);
 		assertUrl(URL, this.getSimpleUrl());
 		try {
-			addMarket = findElement(ADD_MARKET_LOCATOR);
-			marketsTable = findElement(MARKETS_LIST_LOCATOR);
+			addMetamarket = findElement(ADD_METAMARKET_LOCATOR);
+			metamarketsTable = findElement(METAMARKETS_LIST_LOCATOR);
 		} catch (NoSuchElementException e) {
 			fail(e.getMessage());
 		}
 	}
 
-	public String getDescription(String marketCode) {
-		return getMarketRow(marketCode).findElement(DESCRIPTION_LOCATOR)
+	public String getDescription(String metamarketCode) {
+		return getMetamarketRow(metamarketCode).findElement(DESCRIPTION_LOCATOR)
 				.getText();
 	}
 
-	public AddMetamarketPage toAddMarket() {
-		this.addMarket.click();
+	public AddMetamarketPage toAddMetamarket() {
+		this.addMetamarket.click();
 		return createPageObject(AddMetamarketPage.class);
 	}
 
 	public int getTotalNumber() {
-		return marketsTable.findElements(MARKET_ROWS_LOCATOR).size();
+		return metamarketsTable.findElements(METAMARKET_ROWS_LOCATOR).size();
 	}
 
-	public boolean isMarketListed(String marketCode) {
+	public boolean isMetamarketListed(String metamarketCode) {
 		try {
-			return isTextContainedAfterWait(getMarketRow(marketCode)
-					.findElement(MARKET_CODE_LOCATOR), marketCode);
+			return isTextContainedAfterWait(getMetamarketRow(metamarketCode)
+					.findElement(METAMARKET_CODE_LOCATOR), metamarketCode);
 		} catch (NoSuchElementException e) {
 			return false;
 		}
 
 	}
 
-	// TODO return market details page
-	public void toEditMarketByClickingImage(String marketCode) {
-		this.getMarketImageLink(marketCode).click();
+	public EditMetamarketDetailsPage toEditMetamarketByClickingImage(String metamarketCode) {
+		this.getMetamarketImageLink(metamarketCode).click();
+		return createPageObject(EditMetamarketDetailsPage.class);
 	}
 
-	// TODO return market details page
-	public void toEditMarketByClickingCode(String marketCode) {
-		this.getMarketCodeLink(marketCode).click();
+	public EditMetamarketDetailsPage toEditMetamarketByClickingCode(String metamarketCode) {
+		this.getMetamarketCodeLink(metamarketCode).click();
+		return createPageObject(EditMetamarketDetailsPage.class);
 	}
 
-	public RemoveMetamarketPage toRemoveMarket(String marketCode) {
-		this.getRemoveLink(marketCode).click();
+	public RemoveMetamarketPage toRemoveMetamarket(String metamarketCode) {
+		this.getRemoveLink(metamarketCode).click();
 		return createPageObject(RemoveMetamarketPage.class);
 	}
 
-	private WebElement getMarketImageLink(String marketCode) {
-		return getMarketRow(marketCode).findElement(MARKET_IMAGE_LOCATOR);
+	private WebElement getMetamarketImageLink(String metamarketCode) {
+		return getMetamarketRow(metamarketCode).findElement(METAMARKET_IMAGE_LOCATOR);
 	}
 
-	private WebElement getMarketCodeLink(String marketCode) {
-		return getMarketRow(marketCode).findElement(MARKET_CODE_LOCATOR);
+	private WebElement getMetamarketCodeLink(String metamarketCode) {
+		return getMetamarketRow(metamarketCode).findElement(METAMARKET_CODE_LOCATOR);
 	}
 
-	private WebElement getRemoveLink(String marketCode) {
-		return getMarketRow(marketCode).findElement(REMOVE_LOCATOR);
+	private WebElement getRemoveLink(String metamarketCode) {
+		return getMetamarketRow(metamarketCode).findElement(REMOVE_LOCATOR);
 	}
 
-	private WebElement getMarketRow(String marketCode) {
-		return marketsTable.findElement(By.id(MARKET_ROW_ID_PREFIX
+	private WebElement getMetamarketRow(String marketCode) {
+		return metamarketsTable.findElement(By.id(METAMARKET_ROW_ID_PREFIX
 				.concat(marketCode)));
 	}
 

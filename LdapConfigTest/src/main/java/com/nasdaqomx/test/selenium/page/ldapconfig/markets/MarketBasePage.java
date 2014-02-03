@@ -35,12 +35,14 @@ public class MarketBasePage extends LdapconfigBasePage {
 		return this.code.getText();
 	}
 
-	public void toDetails() {
+	public EditMarketDetailsPage toMarketDetails() {
 		this.details.click();
+		return createPageObject(EditMarketDetailsPage.class);
 	}
 
-	public void toRemoveMarket() {
+	public RemoveMarketPage toRemoveMarket() {
 		this.removeMarket.click();
+		return createPageObject(RemoveMarketPage.class);
 	}
 
 }

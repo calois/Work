@@ -13,7 +13,7 @@ public class ReLoginTest extends AbstractTest {
 	public void before() {
 		logoutPage = createPageObject(LoginPage.class).loginAs(
 				getInputData("username"), getInputData("password"))
-				.logout();
+				.toLogout();
 	}
 
 	public void testLoginLink() {

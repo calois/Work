@@ -70,12 +70,14 @@ public class ListManagersPage extends LdapconfigBasePage {
 		return getManagerRow(userId).findElement(COMMON_NAME_LOCATOR).getText();
 	}
 
-	public void toResetPassword(String userId) {
+	public ResetManagerPasswordPage toResetPassword(String userId) {
 		this.getResetPasswordLink(userId).click();
+		return createPageObject(ResetManagerPasswordPage.class);
 	}
 
-	public void toLockAccount(String userId) {
+	public LockAccountPage toLockAccount(String userId) {
 		this.getLockAccountLink(userId).click();
+		return createPageObject(LockAccountPage.class);
 	}
 
 	public String getStatus(String userId) {

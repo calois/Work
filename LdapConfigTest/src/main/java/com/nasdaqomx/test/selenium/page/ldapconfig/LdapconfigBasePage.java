@@ -8,6 +8,11 @@ import com.nasdaqomx.test.selenium.base.TestManager;
 import com.nasdaqomx.test.selenium.base.page.AbstractPageObject;
 import com.nasdaqomx.test.selenium.page.ldapconfig.clients.ListClientsPage;
 import com.nasdaqomx.test.selenium.page.ldapconfig.managers.ListManagersPage;
+import com.nasdaqomx.test.selenium.page.ldapconfig.markets.ListMarketsPage;
+import com.nasdaqomx.test.selenium.page.ldapconfig.metamarkets.ListMetamarketsPage;
+import com.nasdaqomx.test.selenium.page.ldapconfig.notifications.EditMessagePage;
+import com.nasdaqomx.test.selenium.page.ldapconfig.remoteadmin.RemoteAdminPage;
+import com.nasdaqomx.test.selenium.page.ldapconfig.reports.ReportsPage;
 
 public class LdapconfigBasePage extends AbstractPageObject {
 
@@ -44,14 +49,14 @@ public class LdapconfigBasePage extends AbstractPageObject {
 		return createPageObject(ListManagersPage.class);
 	}
 
-	// TODO should return markets page
-	public void toMarkets() {
+	public ListMarketsPage toMarkets() {
 		findElement(MARKETS_LOCATOR).click();
+		return createPageObject(ListMarketsPage.class);
 	}
 
-	// TODO should return metamarkets page
-	public void toMetamarkets() {
+	public ListMetamarketsPage toMetamarkets() {
 		findElement(METARMARKETS_LOCATOR).click();
+		return createPageObject(ListMetamarketsPage.class);
 	}
 
 	public ListClientsPage toClients() {
@@ -59,28 +64,27 @@ public class LdapconfigBasePage extends AbstractPageObject {
 		return createPageObject(ListClientsPage.class);
 	}
 
-	// TODO should return reports page
-	public void toReports() {
+	public ReportsPage toReports() {
 		findElement(REPORTS_LOCATOR).click();
+		return createPageObject(ReportsPage.class);
 	}
 
-	// TODO should return notifications page
-	public void toNotifications() {
+	public EditMessagePage toNotifications() {
 		findElement(NOTIFICATIONS_LOCATOR).click();
+		return createPageObject(EditMessagePage.class);
 	}
 
-	// TODO should return RemoteAdmins page
-	public void toRemoteAdmins() {
+	public RemoteAdminPage toRemoteAdmins() {
 		findElement(REMOTE_ADMIN_LOCATOR).click();
+		return createPageObject(RemoteAdminPage.class);
 	}
 
-	public LogoutPage logout() {
+	public LogoutPage toLogout() {
 		this.logout.click();
 		return createPageObject(LogoutPage.class);
 	}
 
-	public String getCurrentTitle() {
+	public String getPageTitle() {
 		return findElement(TITLE_LOCATOR).getText();
 	}
-
 }

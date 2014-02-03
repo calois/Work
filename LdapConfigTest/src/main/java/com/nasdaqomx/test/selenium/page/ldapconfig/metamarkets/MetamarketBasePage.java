@@ -13,34 +13,34 @@ public class MetamarketBasePage extends LdapconfigBasePage {
 			.xpath("//div[@id='mainMenu']/table//tr[3]/td[@class='LdapClientName']");
 	private static final By DETAILS_LOCATOR = By
 			.xpath("//div[@id='mainMenu']/table//tr[3]//a[text()='Details']");
-	private static final By REMOVE_MARKET_LOCATOR = By
-			.xpath("//div[@id='mainMenu']/table//tr[3]//a[text()='Remove Market']");
+	private static final By REMOVE_METAMARKET_LOCATOR = By
+			.xpath("//div[@id='mainMenu']/table//tr[3]//a[text()='Remove Metamarket']");
 
 	private WebElement code;
 	private WebElement details;
-	private WebElement removeMarket;
+	private WebElement removeMetamarket;
 
 	public MetamarketBasePage(TestManager testManager) {
 		super(testManager);
 		try {
 			code = findElement(CODE_LOCATOR);
 			details = findElement(DETAILS_LOCATOR);
-			removeMarket = findElement(REMOVE_MARKET_LOCATOR);
+			removeMetamarket = findElement(REMOVE_METAMARKET_LOCATOR);
 		} catch (NoSuchElementException e) {
 			fail(e.getMessage());
 		}
 	}
 
-	public String getMarketCodeInMenu() {
+	public String getMetamarketCodeInMenu() {
 		return this.code.getText();
 	}
 
-	public void toDetails() {
+	public void toMetamarketDetails() {
 		this.details.click();
 	}
 
-	public void toRemoveMarket() {
-		this.removeMarket.click();
+	public void toRemoveMetamarket() {
+		this.removeMetamarket.click();
 	}
 
 }

@@ -6,6 +6,10 @@ import org.openqa.selenium.WebElement;
 
 import com.nasdaqomx.test.selenium.base.TestManager;
 import com.nasdaqomx.test.selenium.page.ldapconfig.LdapconfigBasePage;
+import com.nasdaqomx.test.selenium.page.ldapconfig.clients.contacts.ListClientContactsPage;
+import com.nasdaqomx.test.selenium.page.ldapconfig.clients.markets.ListClientMarketsPage;
+import com.nasdaqomx.test.selenium.page.ldapconfig.clients.metamarkets.ListClientMetamarketsPage;
+import com.nasdaqomx.test.selenium.page.ldapconfig.clients.users.ListClientUsersPage;
 
 public class ClientBasePage extends LdapconfigBasePage {
 
@@ -67,44 +71,54 @@ public class ClientBasePage extends LdapconfigBasePage {
 		return this.name.getText();
 	}
 
-	public void toDetails() {
+	public EditClientDetailsPage toClientDetails() {
 		this.details.click();
+		return createPageObject(EditClientDetailsPage.class);
 	}
 
-	public void toAuthorisation() {
+	public EditClientAuthenticationPage toClientAuthorisation() {
 		this.authorisation.click();
+		return createPageObject(EditClientAuthenticationPage.class);
 	}
 
-	public void toUploads() {
+	public EditUploadConfigsPage toClientUploads() {
 		this.uploads.click();
+		return createPageObject(EditUploadConfigsPage.class);
 	}
 
-	public void toAlertStatuses() {
+	public AlertManagementStatusesPage toClientAlertStatuses() {
 		this.alertStatuses.click();
+		return createPageObject(AlertManagementStatusesPage.class);
 	}
 
-	public void toUsers() {
+	public ListClientUsersPage toClientUsers() {
 		this.users.click();
+		return createPageObject(ListClientUsersPage.class);
 	}
 
-	public void toContacts() {
+	public ListClientContactsPage toClientContacts() {
 		this.contacts.click();
+		return createPageObject(ListClientContactsPage.class);
 	}
 
-	public void toMarkets() {
+	public ListClientMarketsPage toClientMarkets() {
 		this.markets.click();
+		return createPageObject(ListClientMarketsPage.class);
 	}
 
-	public void toMetamarkets() {
+	public ListClientMetamarketsPage toClientMetamarkets() {
 		this.metamarkets.click();
+		return createPageObject(ListClientMetamarketsPage.class);
 	}
 
-	public void toCopyClient() {
+	public CopyClientPage toCopyClient() {
 		this.copyClient.click();
+		return createPageObject(CopyClientPage.class);
 	}
 
-	public void toRemoveClient() {
+	public RemoveClientPage toRemoveClient() {
 		this.removeClient.click();
+		return createPageObject(RemoveClientPage.class);
 	}
 
 }
