@@ -1,5 +1,6 @@
 package com.nasdaqomx.test.selenium.base.page;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -219,6 +220,23 @@ public abstract class AbstractPageObject {
 	protected void fail(String message) {
 		testManager.takeScreenshot(getProject());
 		throw new TestException(message);
+	}
+
+	public List<String> getTextList(List<WebElement> elements) {
+		List<String> values = new ArrayList<>();
+		for (WebElement element : elements) {
+			values.add(element.getText().trim());
+		}
+		return values;
+	}
+
+	public List<String> getAttributeList(List<WebElement> elements,
+			String attributeName) {
+		List<String> values = new ArrayList<>();
+		for (WebElement element : elements) {
+			values.add(element.getAttribute(attributeName));
+		}
+		return values;
 	}
 
 	private ExpectedCondition<Boolean> textToBePresentInElement(

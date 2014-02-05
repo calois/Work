@@ -5,10 +5,11 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 import com.nasdaqomx.test.selenium.base.TestManager;
+import com.nasdaqomx.test.selenium.page.ldapconfig.LdapconfigBasePage;
 import com.nasdaqomx.test.selenium.page.ldapconfig.clients.users.ListClientUsersPage;
 import com.nasdaqomx.test.selenium.page.smartsbroker.LoginPage;
 
-public class ListClientsPage extends ClientBasePage {
+public class ListClientsPage extends LdapconfigBasePage {
 
 	private static final String URL = "listClients.view";
 
@@ -44,8 +45,8 @@ public class ListClientsPage extends ClientBasePage {
 		}
 	}
 
-	public String getDescription(String clientName) {
-		return getClientRow(clientName).findElement(DESCRIPTION_LOCATOR)
+	public String getDescription(String clientId) {
+		return getClientRow(clientId).findElement(DESCRIPTION_LOCATOR)
 				.getText();
 	}
 
@@ -58,73 +59,73 @@ public class ListClientsPage extends ClientBasePage {
 		return clientsTable.findElements(CLIENT_ROWS_LOCATOR).size();
 	}
 
-	public boolean isClientListed(String clientName) {
+	public boolean isClientListed(String clientId) {
 		try {
-			return isTextContainedAfterWait(getClientRow(clientName)
-					.findElement(CLIENT_NAME_LOCATOR), clientName);
+			return isTextContainedAfterWait(getClientRow(clientId)
+					.findElement(CLIENT_NAME_LOCATOR), clientId);
 		} catch (NoSuchElementException e) {
 			return false;
 		}
 
 	}
 
-	public EditClientDetailsPage toEditClientByClickingImage(String clientName) {
-		this.getClientImageLink(clientName).click();
+	public EditClientDetailsPage toEditClientByClickingImage(String clientId) {
+		this.getClientImageLink(clientId).click();
 		return createPageObject(EditClientDetailsPage.class);
 	}
 
-	public EditClientDetailsPage toEditClientByClickingEdit(String clientName) {
-		this.getEditLink(clientName).click();
+	public EditClientDetailsPage toEditClientByClickingEdit(String clientId) {
+		this.getEditLink(clientId).click();
 		return createPageObject(EditClientDetailsPage.class);
 	}
 
-	public ListClientUsersPage toUsersByClickingName(String clientName) {
-		this.getClientNameLink(clientName).click();
+	public ListClientUsersPage toUsersByClickingName(String clientId) {
+		this.getClientNameLink(clientId).click();
 		return createPageObject(ListClientUsersPage.class);
 	}
 
-	public CopyClientPage toCopyClient(String clientName) {
-		this.getCopyLink(clientName).click();
+	public CopyClientPage toCopyClient(String clientId) {
+		this.getCopyLink(clientId).click();
 		return createPageObject(CopyClientPage.class);
 	}
 
-	public RemoveClientPage toRemoveClient(String clientName) {
-		this.getRemoveLink(clientName).click();
+	public RemoveClientPage toRemoveClient(String clientId) {
+		this.getRemoveLink(clientId).click();
 		return createPageObject(RemoveClientPage.class);
 	}
 
-	public LoginPage toSmartsBrokerLogn(String clientName) {
-		this.getClientUrlLink(clientName).click();
+	public LoginPage toSmartsBrokerLogn(String clientId) {
+		this.getClientUrlLink(clientId).click();
 		return createPageObject(LoginPage.class);
 	}
 
-	private WebElement getClientImageLink(String clientName) {
-		return getClientRow(clientName).findElement(CLIENT_IMAGE_LOCATOR);
+	private WebElement getClientImageLink(String clientId) {
+		return getClientRow(clientId).findElement(CLIENT_IMAGE_LOCATOR);
 	}
 
-	private WebElement getClientNameLink(String clientName) {
-		return getClientRow(clientName).findElement(CLIENT_NAME_LOCATOR);
+	private WebElement getClientNameLink(String clientId) {
+		return getClientRow(clientId).findElement(CLIENT_NAME_LOCATOR);
 	}
 
-	private WebElement getClientUrlLink(String clientName) {
-		return getClientRow(clientName).findElement(CLIENT_URL_LOCATOR);
+	private WebElement getClientUrlLink(String clientId) {
+		return getClientRow(clientId).findElement(CLIENT_URL_LOCATOR);
 	}
 
-	private WebElement getEditLink(String clientName) {
-		return getClientRow(clientName).findElement(EDIT_LOCATOR);
+	private WebElement getEditLink(String clientId) {
+		return getClientRow(clientId).findElement(EDIT_LOCATOR);
 	}
 
-	private WebElement getCopyLink(String clientName) {
-		return getClientRow(clientName).findElement(COPY_LOCATOR);
+	private WebElement getCopyLink(String clientId) {
+		return getClientRow(clientId).findElement(COPY_LOCATOR);
 	}
 
-	private WebElement getRemoveLink(String clientName) {
-		return getClientRow(clientName).findElement(REMOVE_LOCATOR);
+	private WebElement getRemoveLink(String clientId) {
+		return getClientRow(clientId).findElement(REMOVE_LOCATOR);
 	}
 
-	private WebElement getClientRow(String clientName) {
+	private WebElement getClientRow(String clientId) {
 		return clientsTable.findElement(By.id(CLIENT_ROW_ID_PREFIX
-				.concat(clientName)));
+				.concat(clientId)));
 	}
 
 }

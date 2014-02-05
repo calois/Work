@@ -42,10 +42,10 @@ public class ManagersTest extends AbstractTest {
 	@TestBefore
 	public void before() {
 		setData();
-		listManagersPage=createPageObject(LoginPage.class)
-				.loginAs(getInputData("username"), getInputData("password"))
+		listManagersPage = createPageObject(LoginPage.class).loginAs(
+				getInputData("username"), getInputData("password"))
 				.toManagers();
-		if(!listManagersPage.isManagerListed(userId)){
+		if (!listManagersPage.isManagerListed(userId)) {
 			AddManagerPage addManagerPage = listManagersPage.toAddManager();
 			addManagerPage.typeUserId(userId);
 			addManagerPage.typeSurname(originalSurname);
@@ -186,6 +186,69 @@ public class ManagersTest extends AbstractTest {
 		verifyEquals(expectedUserLanguage, editPage.getUserLanguage());
 		// check the details are not overridden
 		editPage = editPage.toManagers().toEditManager(userId);
+		verifyEquals(originalSurname, editPage.getSurname());
+		verifyEquals(originalFullName, editPage.getFullName());
+		verifyEquals(originalEmail, editPage.getEmail());
+		verifyEquals(originalPhone, editPage.getPhone());
+		verifyEquals(originalMobile, editPage.getMobile());
+		verifyEquals(originalUserTimezone, editPage.getUserTimezone());
+		verifyEquals(originalUserLanguage, editPage.getUserLanguage());
+		// for purpose of removing the added user
+		lastPage = editPage;
+	}
+
+	public void testAddSameManager() {
+		// get the total number of managers in the list before add
+		int totalManager = listManagersPage.getTotalNumber();
+
+		// go to add manager page
+		AddManagerPage addManagerPage = listManagersPage.toAddManager();
+		// fill in the page
+		addManagerPage.typeUserId(userId);
+		addManagerPage.typeSurname(surname);
+		addManagerPage.typeFullName(fullName);
+		addManagerPage.typeEmail(email);
+		addManagerPage.typePhone(phone);
+		addManagerPage.typeMobile(mobile);
+		addManagerPage.selectUserTimezone(userTimezone);
+		addManagerPage.selectUserLanguage(userLanguage);
+		// submit add and stay in the same page
+		addManagerPage = addManagerPage.submitAddExpectingFailure();
+		// verify error message
+		verifyEquals(getOutputData("userIdErrMsg"),
+				addManagerPage.getUserIdErrMsg());
+		verifyEquals(getOutputData("surnameErrMsg"),
+				addManagerPage.getSurnameErrMsg());
+		verifyEquals(getOutputData("fullNameErrMsg"),
+				addManagerPage.getFullNameErrMsg());
+		verifyEquals(getOutputData("emailErrMsg"),
+				addManagerPage.getEmailErrMsg());
+		verifyEquals(getOutputData("phoneErrMsg"),
+				addManagerPage.getPhoneErrMsg());
+		verifyEquals(getOutputData("mobileErrMsg"),
+				addManagerPage.getMobileErrMsg());
+		verifyEquals(getOutputData("userTimezoneErrMsg"),
+				addManagerPage.getUserTimezoneErrMsg());
+		verifyEquals(getOutputData("userLanguageErrMsg"),
+				addManagerPage.getUserLanguageErrMsg());
+		verifyEquals(getOutputData("commentsErrMsg"),
+				addManagerPage.getCommentsErrMsg());
+		// verify the values in each field
+		verifyEquals(userId, addManagerPage.getUserId());
+		verifyEquals(expectedSurname, addManagerPage.getSurname());
+		verifyEquals(expectedFullName, addManagerPage.getFullName());
+		verifyEquals(expectedEmail, addManagerPage.getEmail());
+		verifyEquals(expectedPhone, addManagerPage.getPhone());
+		verifyEquals(expectedMobile, addManagerPage.getMobile());
+		verifyEquals(expectedUserTimezone, addManagerPage.getUserTimezone());
+		verifyEquals(expectedUserLanguage, addManagerPage.getUserLanguage());
+		// go to managers tab
+		listManagersPage = addManagerPage.toManagers();
+		// no managers are added
+		verifyEquals(totalManager, listManagersPage.getTotalNumber());
+		// check the details are not overridden
+		EditManagerDetailsPage editPage = listManagersPage
+				.toEditManager(userId);
 		verifyEquals(originalSurname, editPage.getSurname());
 		verifyEquals(originalFullName, editPage.getFullName());
 		verifyEquals(originalEmail, editPage.getEmail());

@@ -16,66 +16,67 @@ import com.nasdaqomx.test.selenium.page.ldapconfig.reports.ReportsPage;
 
 public class LdapconfigBasePage extends AbstractPageObject {
 
-	private static final By TITLE_LOCATOR = By.className("LdapHeader");
-	private static final By MANAGERS_LOCATOR = By
-			.xpath("//div[@id='mainMenu']//a[text()='Managers']");
-	private static final By MARKETS_LOCATOR = By
-			.xpath("//div[@id='mainMenu']//a[text()='Markets']");
-	private static final By METARMARKETS_LOCATOR = By
-			.xpath("//div[@id='mainMenu']//a[text()='Metamarkets']");
-	private static final By CLIENTS_LOCATOR = By
-			.xpath("//div[@id='mainMenu']//a[text()='Clients']");
-	private static final By REPORTS_LOCATOR = By
-			.xpath("//div[@id='mainMenu']//a[text()='Reports']");
+	private static final By MAIN_MENU_LOCATOR = By.id("mainMenu");
+	private static final By SELECTED_MENU_LOCATOR = By
+			.className("LdapSubMenuSelected");
+	private static final By MANAGERS_LOCATOR = By.linkText("Managers");
+	private static final By MARKETS_LOCATOR = By.linkText("Markets");
+	private static final By METARMARKETS_LOCATOR = By.linkText("Metamarkets");
+	private static final By CLIENTS_LOCATOR = By.linkText("Clients");
+	private static final By REPORTS_LOCATOR = By.linkText("Reports");
 	private static final By NOTIFICATIONS_LOCATOR = By
-			.xpath("//div[@id='mainMenu']//a[text()='Notifications']");
-	private static final By REMOTE_ADMIN_LOCATOR = By
-			.xpath("//div[@id='mainMenu']//a[text()='Remote Admin']");
+			.linkText("Notifications");
+	private static final By REMOTE_ADMIN_LOCATOR = By.linkText("Remote Admin");
 	private static final By LOGOUT_LOCATOR = By.id("logout");
 
+	private static final By TITLE_LOCATOR = By.className("LdapHeader");
+	private static final By CONTENT_LOCATOR = By.id("content");
+
 	private WebElement logout;
+	private WebElement mainMenu;
 
 	public LdapconfigBasePage(TestManager testManager) {
 		super(testManager);
 		try {
-			logout = findElement(LOGOUT_LOCATOR);
+			mainMenu = findElement(MAIN_MENU_LOCATOR);
+			logout = mainMenu.findElement(LOGOUT_LOCATOR);
 		} catch (NoSuchElementException e) {
 			fail(e.getMessage());
 		}
 	}
 
 	public ListManagersPage toManagers() {
-		findElement(MANAGERS_LOCATOR).click();
+		mainMenu.findElement(MANAGERS_LOCATOR).click();
 		return createPageObject(ListManagersPage.class);
 	}
 
 	public ListMarketsPage toMarkets() {
-		findElement(MARKETS_LOCATOR).click();
+		mainMenu.findElement(MARKETS_LOCATOR).click();
 		return createPageObject(ListMarketsPage.class);
 	}
 
 	public ListMetamarketsPage toMetamarkets() {
-		findElement(METARMARKETS_LOCATOR).click();
+		mainMenu.findElement(METARMARKETS_LOCATOR).click();
 		return createPageObject(ListMetamarketsPage.class);
 	}
 
 	public ListClientsPage toClients() {
-		findElement(CLIENTS_LOCATOR).click();
+		mainMenu.findElement(CLIENTS_LOCATOR).click();
 		return createPageObject(ListClientsPage.class);
 	}
 
 	public ReportsPage toReports() {
-		findElement(REPORTS_LOCATOR).click();
+		mainMenu.findElement(REPORTS_LOCATOR).click();
 		return createPageObject(ReportsPage.class);
 	}
 
 	public EditMessagePage toNotifications() {
-		findElement(NOTIFICATIONS_LOCATOR).click();
+		mainMenu.findElement(NOTIFICATIONS_LOCATOR).click();
 		return createPageObject(EditMessagePage.class);
 	}
 
 	public RemoteAdminPage toRemoteAdmins() {
-		findElement(REMOTE_ADMIN_LOCATOR).click();
+		mainMenu.findElement(REMOTE_ADMIN_LOCATOR).click();
 		return createPageObject(RemoteAdminPage.class);
 	}
 
@@ -85,6 +86,12 @@ public class LdapconfigBasePage extends AbstractPageObject {
 	}
 
 	public String getPageTitle() {
-		return findElement(TITLE_LOCATOR).getText();
+		return findElement(CONTENT_LOCATOR).findElement(TITLE_LOCATOR)
+				.getText();
+	}
+
+	public String getSelectedMenu() {
+		return mainMenu.findElement(SELECTED_MENU_LOCATOR)
+				.findElement(By.tagName("a")).getText();
 	}
 }
