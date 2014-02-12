@@ -1,11 +1,25 @@
 package com.nasdaqomx.test.selenium.base.page;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.cookie.BasicClientCookie;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -23,6 +37,8 @@ import com.nasdaqomx.test.selenium.base.TestUtils;
 public abstract class AbstractPageObject {
 	private static final Log LOGGER = LogFactory
 			.getLog(AbstractPageObject.class);
+
+	private static final String SESSION_COOKIE_NAME = "JSESSIONID";
 
 	private TestManager testManager;
 
@@ -197,8 +213,28 @@ public abstract class AbstractPageObject {
 	}
 
 	protected void doubleClick(final By by) {
-		new Actions(getWebDriver()).doubleClick(getElementUntilClickable(by))
-				.build().perform();
+		doubleClick(getElementUntilClickable(by));
+	}
+
+	protected void doubleClick(WebElement element) {
+		new Actions(getWebDriver()).doubleClick(element).build().perform();
+	}
+
+	protected void hoverOver(final By by) {
+		hoverOver(getElementUntilClickable(by));
+	}
+
+	protected void hoverOver(WebElement element) {
+		new Actions(getWebDriver()).clickAndHold(element).release().build()
+				.perform();
+	}
+
+	protected void selectMultiple(List<WebElement> elements) {
+		Actions builder = new Actions(getWebDriver());
+		for (WebElement element : elements) {
+			builder = builder.clickAndHold(element);
+		}
+		builder.click().build().perform();
 	}
 
 	protected void pause(long millis) {
@@ -287,5 +323,71 @@ public abstract class AbstractPageObject {
 								text, element);
 			}
 		};
+	}
+
+	protected boolean isResourceAvailableByUrl(String resourceUrl)
+			throws IOException {
+		CloseableHttpResponse httpResponse = getHttpResponse(resourceUrl);
+		if (null == httpResponse) {
+			return false;
+		} else {
+			try {
+				return httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK;
+			} finally {
+				httpResponse.close();
+			}
+		}
+	}
+
+	protected InputStream getResourceInputStream(String resourceUrl)
+			throws IOException {
+		CloseableHttpResponse httpResponse = getHttpResponse(resourceUrl);
+		if (null == httpResponse) {
+			return null;
+		} else {
+			try {
+				return getHttpResponse(resourceUrl).getEntity().getContent();
+			} finally {
+				httpResponse.close();
+			}
+		}
+	}
+
+	protected CloseableHttpResponse getHttpResponse(String resourceUrl) {
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		HttpGet httpGet = new HttpGet(resourceUrl);
+
+		HttpContext localContext = new BasicHttpContext();
+		BasicCookieStore cookieStore = new BasicCookieStore();
+		// apply jsessionid cookie if it exists
+		cookieStore.addCookie(getSessionCookie());
+		localContext.setAttribute(HttpClientContext.COOKIE_STORE, cookieStore);
+		// resourceUrl - is url which leads to image
+		try {
+			return httpclient.execute(httpGet, localContext);
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+			return null;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	protected BasicClientCookie getSessionCookie() {
+		Cookie originalCookie = getWebDriver().manage().getCookieNamed(
+				SESSION_COOKIE_NAME);
+		if (originalCookie == null) {
+			return null;
+		}
+		// just build new apache-like cookie based on webDriver's one
+		String cookieName = originalCookie.getName();
+		String cookieValue = originalCookie.getValue();
+		BasicClientCookie resultCookie = new BasicClientCookie(cookieName,
+				cookieValue);
+		resultCookie.setDomain(originalCookie.getDomain());
+		resultCookie.setExpiryDate(originalCookie.getExpiry());
+		resultCookie.setPath(originalCookie.getPath());
+		return resultCookie;
 	}
 }
