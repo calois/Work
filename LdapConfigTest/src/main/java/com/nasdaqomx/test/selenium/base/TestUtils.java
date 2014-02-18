@@ -16,13 +16,28 @@ import java.util.StringTokenizer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import com.nasdaqomx.test.selenium.base.anno.TestAfter;
 import com.nasdaqomx.test.selenium.base.anno.TestBefore;
 import com.nasdaqomx.test.selenium.base.page.AbstractPageObject;
 
-public class TestUtils {
+public class TestUtils implements ApplicationContextAware {
 	private static final Log LOGGER = LogFactory.getLog(TestUtils.class);
+
+	private static ApplicationContext APPLICATION_CONTEXT;
+
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext)
+			throws BeansException {
+		APPLICATION_CONTEXT = applicationContext;
+	}
+
+	public static ApplicationContext getApplicationContext() {
+		return APPLICATION_CONTEXT;
+	}
 
 	public static Project getTestProject(Class<?> clazz) {
 		if (clazz.getName().startsWith(

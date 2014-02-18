@@ -16,4 +16,14 @@
 	</bean>
 	<bean class="com.nasdaqomx.test.selenium.base.job.TestJobManager">
 	</bean>
+
+	<bean class="com.nasdaqomx.test.selenium.base.TestUtils"></bean>
+	<bean
+		class="com.nasdaqomx.test.selenium.testcase.ldapconfig.utils.LdapEmailService"
+		scope="prototype">
+		<constructor-arg name="host" value="outlook-au.nasdaqomx.com" />
+		<constructor-arg name="username" value="ORG\\autsmb" />
+		<constructor-arg name="password" value="87TrW34Xv7" />
+	</bean>
+
 </beans>
